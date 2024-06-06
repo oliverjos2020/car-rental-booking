@@ -105,23 +105,20 @@
                             @if($editingID === $priceSetup->id)
                             <tr>
                                 <td colspan="2">
-                                    <input type="text" wire:model="editingpriceSetup" placeholder="priceSetup.." id=""
-                                        class="form-control mx-1">
-                                    @error('editingpriceSetup')
+                                    <input type="text" wire:model="editingitem" placeholder="Item" class="form-control mx-1">
+                                    @error('editingitem')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </td>
                                 <td colspan="2">
-                                    <input type="text" wire:model="editingpriceSetup" placeholder="priceSetup.." id=""
-                                        class="form-control mx-1">
-                                    @error('editingpriceSetup')
+                                    <input type="text" wire:model="editingduration" placeholder="Duration" class="form-control mx-1">
+                                    @error('editingduration')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </td>
                                 <td colspan="2">
-                                    <input type="text" wire:model="editingpriceSetup" placeholder="priceSetup.." id=""
-                                        class="form-control mx-1">
-                                    @error('editingpriceSetup')
+                                    <input type="text" wire:model="editingamount" placeholder="Amount" class="form-control mx-1">
+                                    @error('editingamount')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </td>

@@ -40,9 +40,9 @@ class PriceSetupManagement extends Component
     {
         $validateData = $this->validate([
             // 'brand' => ['required', 'unique:car_brands,brand', 'min:2', 'max:50']
-            'item' => ['required', 'min:2', 'max:50'],
-            'duration' => ['required', 'max:50'],
-            'amount' => ['required', 'max:50']
+            'item' => ['required'],
+            'duration' => ['required'],
+            'amount' => ['required']
         ]);
         try{
         PriceSetup::create($validateData);
@@ -75,12 +75,12 @@ class PriceSetupManagement extends Component
 
     public function update()
     {
-        try {
+        // try {
             // $this->validateOnly('editingitem', ['editingitem' => 'required', 'editingduration' => 'required', 'editingamount' => 'required']);
             $this->validate([
-                'editingitem' => ['required', 'min:2', 'max:50'],
-                'editingduration' => ['required', 'min:2', 'max:50'],
-                'editingamount' => ['required', 'min:2', 'max:50'],
+                'editingitem' => ['required',],
+                'editingduration' => ['required',],
+                'editingamount' => ['required',],
             ]);
 
             PriceSetup::find($this->editingID)->update([
@@ -89,14 +89,14 @@ class PriceSetupManagement extends Component
                 'amount' => $this->editingamount,
             ]);
             $this->cancelEdit();
-        }catch(Exception $e){
-            $this->dispatchBrowserEvent('notify', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-            return;
+        // }catch(Exception $e){
+        //     $this->dispatchBrowserEvent('notify', [
+        //         'type' => 'error',
+        //         'message' => $e->getMessage(),
+        //     ]);
+        //     return;
 
-        }
+        // }
     }
 
     public function delete($id)
