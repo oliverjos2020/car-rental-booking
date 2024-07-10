@@ -17,12 +17,13 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'image'
-    ];
+    protected $guarded = [];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'password',
+    //     'role'
+    // ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -34,6 +35,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function vehicle(){
+        return $this->hasMany(Vehicle::class);
+    }
+
+//     public function vehicle() {
+//     return $this->hasOne(Vehicle::class, 'user_id');
+// }
+
+
     /**
      * The attributes that should be cast.
      *
@@ -42,4 +52,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hasRole($role): bool
+    {
+        return $this->role_id === $role;
+    }
 }

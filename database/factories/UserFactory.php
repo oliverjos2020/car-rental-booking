@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Faker\Provider\Fakecar;
+
 
 class UserFactory extends Factory
 {
@@ -18,8 +20,19 @@ class UserFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'created_at' => now(),
+            'role_id' => $this->faker->numberBetween(2, 4),
+            'address' => $this->faker->address(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'phone_no' => $this->faker->phoneNumber(),
+            'passport' => 'img/team/3.jpg',
+            'bank' => $this->faker->name(),
+            'meansOfIdentification' => $this->faker->randomElement(['International Passport', 'Voters Card', 'National Identification Number']),
+            'identificationDocument' => 'img/passport.jpg',
+            'accountNumber' => $this->faker->numerify('###-###-####'),
+            'accountName' => $this->faker->name(),
+            'accountType' => $this->faker->randomElement(['savings','current'])
         ];
     }
 

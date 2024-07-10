@@ -4,8 +4,9 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\PriceSetup;
-use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
+
 use Exception;
 
 class PriceSetupManagement extends Component
@@ -45,7 +46,13 @@ class PriceSetupManagement extends Component
             'amount' => ['required']
         ]);
         try{
-        PriceSetup::create($validateData);
+        // PriceSetup::create($validateData);
+        PriceSetup::create([
+            'item' => $this->item,
+            'slug' => Str::of(Str::lower($this->item))->slug('-'),
+            'duration' => $this->duration,
+            'amount' => $this->amount
+        ]);
         $this->reset(['item', 'duration', 'amount']);
         $this->dispatchBrowserEvent('notify', [
             'type' => 'success',
@@ -79,14 +86,15 @@ class PriceSetupManagement extends Component
             // $this->validateOnly('editingitem', ['editingitem' => 'required', 'editingduration' => 'required', 'editingamount' => 'required']);
             $this->validate([
                 'editingitem' => ['required',],
-                'editingduration' => ['required',],
+                'editingduration' => ['required'],
                 'editingamount' => ['required',],
             ]);
 
             PriceSetup::find($this->editingID)->update([
                 'item' => $this->editingitem,
+                'slug' => Str::of(Str::lower($this->editingitem))->slug('-'),
                 'duration' => $this->editingduration,
-                'amount' => $this->editingamount,
+                'amount' => $this->editingamount
             ]);
             $this->cancelEdit();
         // }catch(Exception $e){

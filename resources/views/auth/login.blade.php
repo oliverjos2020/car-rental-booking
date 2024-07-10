@@ -1,8 +1,9 @@
-{{-- <x-guest-layout>
+<x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                <img src="logo/logo-dark.png" class="logo-img" alt="" style="max-height:100px;">
+                {{-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
             </a>
         </x-slot>
 
@@ -53,10 +54,10 @@
             </div>
         </form>
     </x-auth-card>
-</x-guest-layout> --}}
+</x-guest-layout>
 
 
-<!doctype html>
+{{-- <!doctype html>
 <html lang="en">
 
 <head>
@@ -75,16 +76,16 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-    {{-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <style>
         input{
             border:1px solid #d0d0d0 !important;
         }
     </style>
-</head>
+</head> --}}
 
-<body>
+{{-- <body>
     <div class="home-btn d-none d-sm-block">
         <a href="index.html" class="text-reset"><i class="fas fa-home h2"></i></a>
     </div>
@@ -136,8 +137,8 @@
                                     </div>
 
                                     <div class="mt-4 text-center">
-                                        {{-- <a href="pages-recoverpw.html" class="text-muted"><i
-                                                class="mdi mdi-lock me-1"></i> Forgot your password?</a> --}}
+                                        <a href="pages-recoverpw.html" class="text-muted"><i
+                                                class="mdi mdi-lock me-1"></i> Forgot your password?</a>
                                     </div>
                                 </form>
                             </div>
@@ -145,7 +146,7 @@
                         </div>
                     </div>
                     <div class="mt-5 text-center">
-                        {{-- <p>Don't have an account ? <a href="pages-register.html" class="fw-medium text-primary"> Signup now </a> </p> --}}
+                        <p>Don't have an account ? <a href="pages-register.html" class="fw-medium text-primary"> Signup now </a> </p>
                         <p>© 
                             <script>
                                 document.write(new Date().getFullYear())
@@ -169,6 +170,6 @@
 
     <script src="assets/js/app.js"></script>
 
-</body>
+</body> --}}
 
-</html>
+{{-- </html> --}}

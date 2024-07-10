@@ -22,9 +22,9 @@ class LocationManagement extends Component
     protected $queryString = ['limit', 'search'];
 
      public function updatingSearch()
-    {
+     {
         $this->resetPage();
-    }
+     }
 
     public function updatingLimit()
     {

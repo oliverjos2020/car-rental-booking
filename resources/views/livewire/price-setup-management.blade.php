@@ -27,22 +27,22 @@
             <div class="card-body">
 
                 <div class="form-group">
-                    <label for="priceSetup">Item name</label>
-                    <input type="text" wire:model="item" class="form-control" placeholder="Item Name">
+                    <label for="priceSetup">Vehicle category/Class </label>
+                    <input type="text" wire:model="item" class="form-control" placeholder="Vehicle category/Class">
                     @error('item')
                     <span class="text-danger"> {{ $message }} </span>
                     @enderror
                 </div>
                 <div class="form-group mt-3">
                     <label for="priceSetup">Duration [in hours]</label>
-                    <input type="number" wire:model="duration" class="form-control" placeholder="Duration">
+                    <input type="number" wire:model="duration" class="form-control" value="1" placeholder="Duration">
                     @error('duration')
                     <span class="text-danger"> {{ $message }} </span>
                     @enderror
                 </div>
                 <div class="form-group mt-3">
-                    <label for="priceSetup">Amount</label>
-                    <input type="number" wire:model="amount" class="form-control" placeholder="Amount">
+                    <label for="priceSetup">Price per hour</label>
+                    <input type="number" wire:model="amount" class="form-control" placeholder="Price per hour">
                     @error('amount')
                     <span class="text-danger"> {{ $message }} </span>
                     @enderror
@@ -80,7 +80,7 @@
                             <tr>
                                 <th>#ID</th>
                                 <th>Item</th>
-                                <th>Duration</th>
+                                <th>Duration [hours]</th>
                                 <th>Amount</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -134,7 +134,7 @@
 
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center text-danger"> No record available</td>
+                                <td colspan="6" class="text-center text-danger"> No record available</td>
                             </tr>
                             @endforelse
                         </tbody>

@@ -83,7 +83,6 @@ class RoleManagement extends Component
                 'message' => $e->getMessage(),
             ]);
             return;
-
         }
     }
 

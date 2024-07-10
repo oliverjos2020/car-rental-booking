@@ -25,11 +25,14 @@
   
     @livewireStyles
 <style>
-    input, select {
+    input, select, textarea {
         border: 1px solid #ced4da !important;
     }
-    input::placeholder {
+    input::placeholder, textarea::placeholder {
     color: #7c7e81 !important;
+    }
+    .bg-not-active{
+        background:#c3cef8 !important;
     }
 </style>
 </head>
@@ -86,7 +89,7 @@
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     <img class="rounded-circle header-profile-user"
-                                        src="assets/images/users/avatar-2.jpg" alt="Header Avatar">
+                                        src="http://127.0.0.1:8000/assets/images/users/avatar-2.jpg" alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->name }}</span>
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
@@ -95,7 +98,7 @@
                                     <a class="dropdown-item" href="#"><i
                                             class="bx bx-user font-size-16 align-middle me-1"></i>
                                         Profile</a>
-                                    <a class="dropdown-item" href="#"><i
+                                    {{-- <a class="dropdown-item" href="#"><i
                                             class="bx bx-wallet font-size-16 align-middle me-1"></i> My
                                         Wallet</a>
                                     <a class="dropdown-item d-block" href="#"><span
@@ -103,7 +106,7 @@
                                             class="bx bx-wrench font-size-16 align-middle me-1"></i> Settings</a>
                                     <a class="dropdown-item" href="#"><i
                                             class="bx bx-lock-open font-size-16 align-middle me-1"></i>
-                                        Lock screen</a>
+                                        Lock screen</a> --}}
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item text-danger" href="#"><i
                                             class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
@@ -117,21 +120,25 @@
                         <div>
                             <!-- LOGO -->
                             <div class="navbar-brand-box">
-                                <a href="index.html" class="logo logo-dark">
+                                <a href="/" class="logo logo-dark">
                                     <span class="logo-sm">
-                                        <img src="assets/images/logo-sm.png" alt="" height="20">
+                                        
+                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="50">
                                     </span>
                                     <span class="logo-lg">
-                                        <img src="assets/images/logo-dark.png" alt="" height="17">
+                                        
+                                        <img src="{{asset('logo/d-logo-dark.png')}}" alt="" height="50">
                                     </span>
                                 </a>
 
-                                <a href="index.html" class="logo logo-light">
+                                <a href="/" class="logo logo-light">
                                     <span class="logo-sm">
-                                        <img src="assets/images/logo-sm.png" alt="" height="20">
+                                        
+                                        <img src="{{asset('logo/d-logo-dark.png')}}" alt="" height="50">
                                     </span>
                                     <span class="logo-lg">
-                                        <img src="assets/images/logo-light.png" alt="" height="19">
+                                        
+                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="50">
                                     </span>
                                 </a>
                             </div>
@@ -157,13 +164,13 @@
 
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
+                            <img src="{{asset('assets/images/users/avatar-2.jpg')}}" alt="" class="avatar-md mx-auto rounded-circle">
                         </div>
 
                         <div class="mt-3">
 
                             <a href="#" class="text-body fw-medium font-size-16">{{ Auth::user()->name }}</a>
-                            <p class="text-muted mt-1 mb-0 font-size-13">UI/UX Designer</p>
+                            <p class="text-muted mt-1 mb-0 font-size-13"></p>
 
                         </div>
                     </div>
@@ -181,6 +188,20 @@
                                 </a>
                                 
                             </li>
+                            @if(Auth::user()->role_id == 1)
+                            
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effecxt">
+                                    <i class="mdi mdi-account-supervisor-outline"></i>
+                                    <span>User Management</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="/users">All Users</a></li>
+                                    <li><a href="/vendorManagement/pending">Pending Requests</a></li>
+                                    <li><a href="/vendorManagement/declined">Declined Requests</a></li>
+                                    <li><a href="/vendorManagement/approved">Approved Requests </a></li>
+                                </ul>
+                            </li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effecxt">
                                     <i class="mdi mdi-settings-outline"></i>
@@ -197,22 +218,30 @@
                                     <span>Setup</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="/category">Category</a></li>
-                                    <li><a href="/location">Location</a></li>
+                                    {{-- <li><a href="/category">Category</a></li> --}}
+                                    <li><a href="/location">Pickup Location</a></li>
                                     <li><a href="/brand">Car Brand</a></li>
                                     <li><a href="/priceSetup">Price Setup</a></li>
                                 </ul>
                             </li>
+                            @endif
 
                             <li class="menu-title">Components</li>
 
                             
 
                             <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                {{-- <a href="javascript: void(0);" class="waves-effect">
                                     <i class="mdi mdi-file-tree"></i>
                                     <span>Logout</span>
-                                </a>
+                                </a> --}}
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                
+                                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </form>
                                 
                             </li>
 
@@ -233,7 +262,7 @@
                     <!-- start page title -->
                     
                     <!-- end page title -->
-                    @yield('content')
+                    {{-- @yield('content') --}}
                     {{ $slot }}
 
               
@@ -283,12 +312,16 @@
     <!-- jquery.vectormap map -->
     <script src="{{asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
     <script src="{{asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js')}}"></script>
+    <script src="{{asset('assets/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
+    
+    <!-- form wizard init -->
+    <script src="{{asset('assets/js/pages/form-wizard.init.js')}}"></script>
 
     <script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>
 
     <script src="{{asset('assets/js/app.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>
-    @livewireScripts
+    
 
    <script>
     document.addEventListener('livewire:load', function () {
@@ -296,7 +329,9 @@
             toastr[event.detail.type](event.detail.message);
         });
     });
+    
 </script>
+@livewireScripts
 </body>
 
 </html>

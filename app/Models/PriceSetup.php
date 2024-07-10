@@ -11,7 +11,13 @@ class PriceSetup extends Model
 
     protected $fillable = [
         'item',
+        'slug',
         'duration',
         'amount'
     ];
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

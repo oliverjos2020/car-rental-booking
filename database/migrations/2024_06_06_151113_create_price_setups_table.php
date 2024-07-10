@@ -16,6 +16,7 @@ class CreatePriceSetupsTable extends Migration
         Schema::create('price_setups', function (Blueprint $table) {
             $table->id();
             $table->string('item')->unique();
+            $table->string('slug')->unique();
             $table->integer('duration');
             $table->decimal('amount');
             $table->timestamps();
