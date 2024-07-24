@@ -2567,7 +2567,7 @@ body.my-account #bbpress-forums {
 .b-goods-f__table th {
   background-color: #f4f4f4;
   color: #222222;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -4716,7 +4716,7 @@ body.my-account #bbpress-forums {
 
 .section-title-page {
   position: relative;
-  margin-top: 170px;
+  margin-top: 130px;
   padding-top: 60px;
   padding-bottom: 60px;
   background-image: url("../media/content/b-title-page/bg-1.jpg");
@@ -5344,7 +5344,7 @@ body.my-account #bbpress-forums {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .widget-card-number__item {
@@ -5364,7 +5364,7 @@ body.my-account #bbpress-forums {
 }
 
 .widget-card-descr__item {
-  padding: 16px 35px;
+  padding: 8px 15px;
 }
 
 .widget-card-descr__item:not(:first-child) {

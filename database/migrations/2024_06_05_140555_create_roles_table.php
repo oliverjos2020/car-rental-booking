@@ -29,9 +29,8 @@ class CreateRolesTable extends Migration
     {
         $data = [
             ['role' => 'Admin', 'slug' => Str::of(Str::lower('Admin'))->slug('-')],
-            ['role' => 'Car Renters', 'slug' => Str::of(Str::lower('Car Renters'))->slug('-')],
-            ['role' => 'Ride Providers', 'slug' => Str::of(Str::lower('Ride Providers'))->slug('-')],
-            ['role' => 'Users', 'slug' => Str::of(Str::lower('Users'))->slug('-')]
+            ['role' => 'partner', 'slug' => Str::of(Str::lower('Partner'))->slug('-')],
+            ['role' => 'User', 'slug' => Str::of(Str::lower('User'))->slug('-')]
             // Add more default data as needed
         ];
 

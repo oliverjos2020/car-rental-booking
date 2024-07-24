@@ -45,42 +45,15 @@
                                     @enderror
                                 </div>
                             </div>
-                            {{-- <div class="col-md-4">
-                                <div class="form-group">
-                                    <select class="selectpicker" data-width="100%" title="Make Year" multiple="multiple"
-                                        data-max-options="1" data-style="ui-select">
-                                        <option>Select 1</option>
-                                        <option>Select 2</option>
-                                        <option>Select 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <select class="selectpicker" data-width="100%" title="Body Type" multiple="multiple"
-                                        data-max-options="1" data-style="ui-select">
-                                        <option>Select 1</option>
-                                        <option>Select 2</option>
-                                        <option>Select 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4 align-self-end">
-                                <div class="form-group">
-                                    <div class="b-main-filter-slider ui-filter-slider pb-3">
-                                        <div id="filterPrice"></div>
-                                        <div class="b-main-filter__row">
-                                            <input class="b-main-filter__item" id="input-with-keypress-0" />
-                                            <input class="b-main-filter__item" id="input-with-keypress-1" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                            
                         </div>
                     </div>
                     <div class="col-lg-auto">
-                        <button class="btn btn-secondary btn-lg ml-lg-3" wire:click.prevent="submitRequest"><i
-                                class="ic icon-magnifier"></i> search</button>
+                        @if(auth()->check())
+                            <button class="btn btn-secondary btn-lg ml-lg-3" wire:click.prevent="submitRequest"><i class="ic icon-magnifier"></i> search</button>
+                        @else
+                            <a class="btn btn-secondary btn-lg ml-lg-3" href="/login"><i class="ic icon-magnifier"></i> search</a>
+                        @endif
                     </div>
                 </div>
             </div>

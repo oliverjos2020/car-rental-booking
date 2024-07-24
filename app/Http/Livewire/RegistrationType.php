@@ -49,6 +49,7 @@ class RegistrationType extends Component
     public $vehicleYear;
     public $vehImage = [];
     public $existingvehImage = [];
+    public $category = null;
     public function mount($type)
     {
         $vehicle = Vehicle::where('id', $this->vehID)->first();
@@ -112,7 +113,7 @@ class RegistrationType extends Component
             'location' => 'required',
             'vehicleYear' => 'required'
         ];
-        try{
+        // try{
             $slugBrand = Str::of(Str::lower($this->vehicleMake))->slug('-');
             $existingBrand = CarBrand::where('slug', $slugBrand)->first();
             if(!$existingBrand):
@@ -128,10 +129,15 @@ class RegistrationType extends Component
             endif;
             $data = $this->validate($rules);
 
-            if ($this->type == 'rental'):
+            if ($this->type == 'rental' || $this->type == 'booking' || $this->type == 'entertainment'):
                 $data['role_id'] = 2;
+            endif;
+            if ($this->type == 'rental'):
+                $this->category = 1;
             elseif ($this->type == 'booking'):
-                $data['role_id'] = 3;
+                $this->category = 2;
+            elseif ($this->type == 'entertainment'):
+                $this->category = 3;
             endif;
 
             if (empty($this->existingPassport)):
@@ -210,6 +216,7 @@ class RegistrationType extends Component
                     'driverLicense' => $this->driverLicense,
                     'vehicleYear' => $this->vehicleYear,
                     'status' => 1,
+                    'category_id' => $this->category
                 ]);
             endif;
             
@@ -238,13 +245,13 @@ class RegistrationType extends Component
             ]);
             return redirect()->to('/dashboard2');
 
-        }catch(Exception $e){
-            $this->dispatchBrowserEvent('notify', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-            return;
-        }
+        // }catch(Exception $e){
+        //     $this->dispatchBrowserEvent('notify', [
+        //         'type' => 'error',
+        //         'message' => $e->getMessage(),
+        //     ]);
+        //     return;
+        // }
        
     }
 

@@ -92,7 +92,7 @@
                             <tr>
                                 <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
                                 </td>
-                                <td>{{ $user->name }}</td>
+                                <td><a href="/profile/{{ $user->id }}">{{ $user->name }}</a></td>
                                 <td>{{ $user->email }}</td>
                                 <td>
                                     {{-- <a href="/vendor/{{$user->email}}" class="btn btn-primary btn-sm text-light" style="cursor:pointer;">
@@ -107,7 +107,7 @@
                                         Delete</a></a></td>
                             </tr>
 
-                            @if($editingID === $user->id)
+                            @if($editingID === $user->id) 
                             <tr>
                                 <td colspan="2">
                                     <input type="text" wire:model="editingName" placeholder="Name"

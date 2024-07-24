@@ -82,7 +82,7 @@
                                 <td>{{ $category->category }}</td>
                                 <td><a class="btn btn-primary btn-sm text-light" style="cursor:pointer;"
                                         wire:click="edit({{$category->id}})"><i class="fa fa-edit"></i> Edit</a> </td>
-                                <td><a class="text-light btn btn-danger btn-sm" wire:click="delete({{$category->id}})"><i
+                                <td><a @if(in_array($category->slug, ['hire', 'booking', 'entertainment'])) class="text-light btn btn-secondary btn-sm" @else class="text-light btn btn-danger btn-sm" wire:click="delete({{$category->id}})" @endif><i
                                             class="fa fa-trash"></i> Delete</a></a></td>
                             </tr>
 

@@ -14,7 +14,7 @@ class VehicleFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->numberBetween(2, 17),
+            'user_id' => $this->faker->numberBetween(2, 11),
             'status' => $this->faker->numberBetween(2, 3),
             'driverLicense' => $this->faker->randomElement(['yes','no']),
             'transmission' => $this->faker->randomElement(['automatic','manual']),
@@ -65,6 +65,7 @@ class VehicleFactory extends Factory
                 "488"
             ]),
             'passengers' => $this->faker->numberBetween(2, 16),
+            'category_id' => $this->faker->numberBetween(1, 3),
             'airCondition' => $this->faker->randomElement(['yes','no']),
             'location' => $this->faker->city(),
             'price_setup_id' => $this->faker->numberBetween(1, 4),

@@ -36,14 +36,16 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone_no' => ['required', 'max:15', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $roleId = 4;
+        $roleId = 3;
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone_no' => $request->phone_no,
             'password' => Hash::make($request->password),
             'role_id' => $roleId
         ]);
@@ -52,6 +54,12 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        if ($user->role_id == 1) {
+            return redirect(RouteServiceProvider::HOME); // Redirect to dashboard for admin
+        } else {
+            return redirect(RouteServiceProvider::HOMEUSER); // Redirect to homepage for others
+        }
+
+        // return redirect(RouteServiceProvider::HOME);
     }
 }

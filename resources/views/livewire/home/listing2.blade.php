@@ -76,6 +76,16 @@
                                                 @endforelse
                                             </select>
                                         </div>
+                                        <div class="b-filter__row">
+                                            <select wire:model="hire" class="home-input" data-width="100%">
+                                                <option value="">Select Hire Type</option>
+                                                @forelse($hireTypes as $hire)
+                                                <option value="{{ $hire->id }}">{{$hire->category}}</option>
+                                                @empty
+
+                                                @endforelse
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <button wire:click.prevent="resetButton"
@@ -84,8 +94,6 @@
                             </div>
                         </div>
                     </div>
-                   
-
                 </aside>
             </div>
             <div class="col-xl-9">

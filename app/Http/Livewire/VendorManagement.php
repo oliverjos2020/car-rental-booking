@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\User;
 use App\Models\Vehicle;
 use Livewire\WithPagination;
 use Exception;
@@ -17,6 +16,8 @@ class VendorManagement extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search;
+    public $uid;
+    public $vehID;
     public $status;
     // public $email;
     // public $password;
@@ -32,7 +33,7 @@ class VendorManagement extends Component
         $this->type = $type;
     }
 
-    protected $queryString = ['limit', 'search'];
+    protected $queryString = ['limit', 'search', 'uid', 'vehID'];
 
      public function updatingSearch()
     {
@@ -55,7 +56,17 @@ class VendorManagement extends Component
                 $status = 2;
             endif;
 
-            $vehicleManagement = Vehicle::query()->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', $status)->latest()->paginate($this->limit);
+            $vehicleManagement = Vehicle::query()->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', $status);
+
+            if (!empty($this->uid)) {
+                $vehicleManagement->where('user_id', $this->uid);
+            }
+ 
+            if (!empty($this->vehID)) {
+                $vehicleManagement->where('id', $this->vehID);
+            }
+
+            $vehicleManagement = $vehicleManagement->latest()->paginate($this->limit);
         // dd($vehicleManagement);
             return view('livewire.vendor-management', [
                 'vehicles' => $vehicleManagement,

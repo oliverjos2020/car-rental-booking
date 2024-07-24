@@ -214,7 +214,7 @@
                             @if ($passport instanceof \Livewire\TemporaryUploadedFile)
                             <img src="{{ $passport->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
                             @elseif ($existingPassport)
-                            <img src="{{ $passport }}" class="image mt-3" style="max-width: 300px">
+                            <img src="{{ asset($passport) }}" class="image mt-3" style="max-width: 300px">
                             @endif
                             <br>
                             <span class="text-warning">allowed extensions *jpg, jpeg, png</span>
@@ -247,7 +247,7 @@
                             @if ($identificationDocument instanceof \Livewire\TemporaryUploadedFile)
                             <img src="{{ $identificationDocument->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
                             @elseif ($existingDocument)
-                            <img src="{{ $identificationDocument }}" class="image mt-3" style="max-width: 300px">
+                            <img src="{{ asset($identificationDocument) }}" class="image mt-3" style="max-width: 300px">
                             @endif
                             <br>
                             <span class="text-warning">allowed extensions *jpg, jpeg, png</span>

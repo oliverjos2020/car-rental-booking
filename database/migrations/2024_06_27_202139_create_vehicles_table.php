@@ -28,9 +28,11 @@ class CreateVehiclesTable extends Migration
             $table->enum('airCondition', ['yes', 'no'])->nullable();
             $table->string('seats')->nullable();
             // $table->integer('category')->nullable();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->nullable();
             $table->foreignId('price_setup_id')->constrained()->cascadeOnDelete()->nullable();
             $table->char('status', 1)->default('0')->nullable();
             $table->dateTime('dateApproved')->nullable();
+            $table->char('on_trip', 1)->default('0')->nullable();
             $table->timestamps();
         });
     }
@@ -44,7 +46,7 @@ class CreateVehiclesTable extends Migration
     {
         Schema::dropIfExists('vehicles');
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            // $table->dropColumn('user_id');
             // $table->dropColumn('product_id');
         });
 

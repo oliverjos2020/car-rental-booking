@@ -24,6 +24,8 @@ class AddExtraFieldsToUsersTable extends Migration
             $table->string('accountName')->nullable();
             $table->string('accountType')->nullable();
             $table->string('passport')->nullable();
+            $table->string('driverLicense')->nullable();
+            $table->string('insurance')->nullable();
         });
 
         $this->insertDefaultData();
@@ -45,7 +47,7 @@ class AddExtraFieldsToUsersTable extends Migration
     private function insertDefaultData()
     {
         $data = [
-            ['name' => 'Admin DPL', 'email' => 'admin@dpl.com', 'phone_no' => '07062902972', 'password' => Hash::make(12345678), 'role_id' => 1, 'created_at' => Carbon::now(),]
+            ['name' => 'Admin DPL', 'email' => 'admin@dpl.com', 'phone_no' => '07062902972', 'password' => Hash::make(12345678), 'role_id' => 1, 'created_at' => Carbon::now()]
             // Add more default data as needed
         ];
 

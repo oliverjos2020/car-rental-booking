@@ -73,8 +73,11 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-12">
-                                            <button class="btn btn-primary"
-                                                wire:click.prevent="submitRequest">Submit</button>
+                                            @if(auth()->check())
+                                            <button class="btn btn-primary" wire:click.prevent="submitRequest">Submit</button>
+                                            @else
+                                                <a class="btn btn-primary" href="/login">Submit</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

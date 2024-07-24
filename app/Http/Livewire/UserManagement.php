@@ -129,7 +129,7 @@ class UserManagement extends Component
     }
     public function render()
     {
-        $userManagement = User::where('email', 'like', '%' . $this->search . '%')->latest()->paginate($this->limit);
+        $userManagement = User::where('name', 'like', '%' . $this->search . '%')->latest()->paginate($this->limit);
         return view('livewire.user-management', [
             'users' => $userManagement,
         ])->layout('components.dashboard.dashboard-master');

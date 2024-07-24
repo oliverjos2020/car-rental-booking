@@ -34,15 +34,15 @@
                     @enderror
                 </div>
                 <div class="form-group mt-3">
-                    <label for="priceSetup">Duration [in hours]</label>
+                    <label for="priceSetup">Duration [in days]</label>
                     <input type="number" wire:model="duration" class="form-control" value="1" placeholder="Duration">
                     @error('duration')
                     <span class="text-danger"> {{ $message }} </span>
                     @enderror
                 </div>
                 <div class="form-group mt-3">
-                    <label for="priceSetup">Price per hour</label>
-                    <input type="number" wire:model="amount" class="form-control" placeholder="Price per hour">
+                    <label for="priceSetup">Price</label>
+                    <input type="number" wire:model="amount" class="form-control" placeholder="Price">
                     @error('amount')
                     <span class="text-danger"> {{ $message }} </span>
                     @enderror

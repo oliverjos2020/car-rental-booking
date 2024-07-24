@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
-            <h4 class="page-title mb-0 font-size-18">Vendor Management</h4>
+            <h4 class="page-title mb-0 font-size-18">My Vehicles</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-7"></div>
                     <div class="col-md-4">
-                        <input type="search" wire:model.live.debounce.500ms="search" placeholder="Search by name..."
+                        <input type="search" wire:model.live.debounce.500ms="search" placeholder="Search by make..."
                             class="form-control form-control-sm mt-2">
                     </div>
                 </div>
@@ -36,34 +36,44 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
-                                <th>#ID</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Vehicle</th>
+                                <th>#</th>
+                                <th>Make</th>
                                 <th>Model</th>
-                                <th>Action</th>
+                                <th>Year</th>
+                                <th>Category</th>
+                                <th>Air Condition</th>
+                                <th>Transmission</th>
+                                <th>Seats</th>
+                                <th>Booking Price</th>
+                                <th>Vehicle Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($vehicles as $vehicle)
                             <tr>
-                                <td>{{ ($vehicles->currentPage() - 1) * $vehicles->perPage() + $loop->iteration }}
-                                </td>
-                                <td>{{ $vehicle->user->name }}</td>
-                                <td>{{ $vehicle->category->category }}</td>
+                                <td><img src="{{ asset($vehicle->photos->first()->image_path) }}" style="height:50px; width:70px;" alt="{{ $vehicle->vehicleMake }}"></td>
                                 <td>{{ $vehicle->vehicleMake }}</td>
                                 <td>{{ $vehicle->vehicleModel }}</td>
+                                <td>{{ $vehicle->vehicleYear }}</td>
+                                <td><span class="badge bg-{{ $vehicle->category->slug == 'booking'? 'primary': 'success'}}">{{ $vehicle->category->category }}</span></td>
+                                <td>{{ $vehicle->airCondition }}</td>
+                                <td><span class="badge bg-{{ $vehicle->transmission == 'automatic' ? 'warning' : 'danger'}}">{{ $vehicle->transmission }}</span></td>
+                                <td>{{ $vehicle->seats }}</td>
+                                <td>{{ $vehicle->priceSetup->amount }}</td>
                                 <td>
-                                    <a href="/vendor/{{$vehicle->id}}" class="btn btn-primary btn-sm text-light" style="cursor:pointer;">
-                                        <i class="fa fa-edit"></i> 
-                                        View information
-                                    </a> 
+                                    @if($vehicle->status == 1)
+                                        <a class="btn btn-primary btn-sm"><i class="fas fa-sync-alt"> Pending</a>
+                                    @elseif($vehicle->status == 2)
+                                        <a class="btn btn-success btn-sm"><i class="fa fa-check"></i> Approved</a>
+                                    @elseif($vehicle->status == 3)
+                                        <a class="btn btn-danger btn-sm"><i class="fas fa-info-circle"></i> Declined</a>
+                                    @endif
                                 </td>
                             </tr>
 
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center text-danger"> No record available</td>
+                                <td colspan="10" class="text-center text-danger"> No record available</td>
                             </tr>
                             @endforelse
                         </tbody>

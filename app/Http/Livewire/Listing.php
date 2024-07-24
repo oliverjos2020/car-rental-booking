@@ -7,6 +7,7 @@ use App\Models\CarBrand;
 use App\Models\PriceSetup;
 use App\Models\Vehicle;
 use App\Models\Location;
+use App\Models\Category;
 use Livewire\WithPagination;
 
 
@@ -21,8 +22,9 @@ class Listing extends Component
     public $transmission;
     public $category;
     public $location;
+    public $hire;
 
-    protected $queryString = ['limit', 'search', 'make', 'transmission', 'location', 'category'];
+    protected $queryString = ['limit', 'search', 'make', 'transmission', 'location', 'category', 'hire'];
     public function updatingSearch()
     {
         $this->resetPage();
@@ -38,6 +40,7 @@ class Listing extends Component
         $this->transmission = null;
         $this->category = null;
         $this->location = null;
+        $this->hire = null;
         $this->resetPage();
 
     }
@@ -54,20 +57,23 @@ class Listing extends Component
             return $query->where('vehicleMake', $this->make);
         })->when($this->transmission, function ($query) {
                 return $query->where('transmission', $this->transmission);
-            })->when($this->location, function ($query) {
+        })->when($this->location, function ($query) {
                 return $query->where('location', $this->location);
-            })->when($this->category, function ($query) {
+        })->when($this->category, function ($query) {
                 return $query->whereHas('priceSetup', function ($query) {
                     $query->where('id', $this->category);
                 });
             })
-        ->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', 2)
-        ->latest()
-        ->paginate($this->limit);
+        ->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', 2)->where('on_trip', 0);
+        if (!empty($this->hire)) {
+            $vehicles->where('category_id', $this->hire);
+        }
+        $vehicles = $vehicles->latest()->paginate($this->limit);
         $brands = CarBrand::all();
         $categories = PriceSetup::all();
         $locations = Location::all();
-            return view('livewire.home.listing2', compact('brands', 'categories', 'vehicles', 'locations'))
+        $hireTypes = Category::all();
+            return view('livewire.home.listing2', compact('brands', 'categories', 'vehicles', 'locations', 'hireTypes'))
     ->layout('components.home.home-master-3');
 
 

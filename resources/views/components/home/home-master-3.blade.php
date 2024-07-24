@@ -27,9 +27,26 @@
             border-radius: 2px;
             color:#888;
         } 
+        .review-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 2px;
+            color:#888;
+        } 
         .b-goods__img img{
             width: 100%;
             height: 200px;
+            object-fit: cover;
+        }
+        .ui-slider-nav img{
+            width: 100% !important;
+            height: 100px;
+            object-fit: cover;
+        }
+        .ui-slider-main img{
+            width: 100% !important;
+            height: 500px;
             object-fit: cover;
         }
         .pagination{
@@ -38,7 +55,7 @@
     </style>
 
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}">
     <!--[if lt IE 9 ]>
 <script src="/assets/js/separate-js/html5shiv-3.7.2.min.js" type="text/javascript"></script><meta content="no" http-equiv="imagetoolbar">
 <![endif]-->
@@ -93,7 +110,7 @@
         <!-- MOBILE MENU-->
         <!-- ==========================-->
         <div data-off-canvas="mobile-slidebar left overlay">
-            <a class="navbar-brand scroll" href="/"><img class="scroll-logo" src="{{asset('logo/d-logo-dark.png')}}"
+            <a class="navbar-brand scroll" href="/"><img class="scroll-logo" src="{{asset('logo/d-logo-light.png')}}"
                     height="40" alt="logo" /></a>
 
             <ul class="navbar-nav">
@@ -103,16 +120,29 @@
                     
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="/listing">Listing</a>
+
+                    <a class="nav-link" href="/listing">Car Rentals</a>
                     
                 </li>
                 <li class="nav-item "><a class="nav-link" href="/register">Register</a>
                   
                 </li>
-                <li class="nav-item "><a class="nav-link" href="/login">Login</a>
-                 
-                </li>
+                
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    <li class="nav-item">
+                        @if(Auth::check())
+                        <li class="nav-item">
+                            <a class="nav-link" href="/mybooking-orders">My Trips</a>
+                        </li>
+                        @csrf
+                        <button type="submit" class="btn btn-light btn-sm">Logout</button>
+                        @else
+                        <a class="nav-link" href="/login">Login</a>
+                        @endif
+                    </li>
+                </form>
             </ul>
         </div>
         <header class="header">
@@ -120,20 +150,43 @@
                 <div class="container">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">
-                            <div class="top-bar__item"><a class="top-bar__link" href="mailto:support@dpresidentialluxxetour.com"><i
-                                        class="ic fas fa-envelope text-primary"></i> support@dpresidentialluxxetour.com</a></div>
-                            <div class="top-bar__item"><i class="ic fas fa-clock text-primary"></i> Mon to Fri : 9:00am
-                                to
-                                6:00pm</div>
+                            <div class="top-bar__item">
+                                <a class="top-bar__link" href="mailto:support@dpresidentialluxxetour.com">
+                                    <i class="ic fas fa-envelope text-primary"></i> support@dpresidentialluxxetour.com
+                                </a>
+                            </div>
                             <div class="top-bar__item"><i class="ic fas fa-map-marker-alt text-primary"></i> Fairview
                                 Ave, El
                                 Monte, CA 91732</div>
                         </div>
+                        <form method="POST" action="{{ route('logout') }}">
                         <div class="col-auto">
-                            {{-- <div class="top-bar__item"><a class="top-bar__link" href="home.html"><i
-                                        class="ic fas fa-user text-primary"></i> My Account</a></div> --}}
-                            <button class="top-bar__btn"><i class="ic icon-list"></i> Add Listings</button>
+                            <div class="top-bar__item">
+                                @if(Auth::user())
+                                
+                                    @csrf
+                                    
+                                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                        <i class="ic fas fa-user text-primary"></i> {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                {{-- </form> --}}
+                                <a href="/mybooking-orders" class="top-bar__btn" style="color:#fff; background:transparent;">
+                                    <i class="ic icon-list"></i> My Trips
+                                </a>
+                                @else
+                                <a class="top-bar__link" href="/login">
+                                    <i class="ic fas fa-user text-primary"></i> Login
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="top-bar__link" href="/register">
+                                    <i class="ic fas fa-user text-primary"></i> Register
+                                </a>
+                                @endif
+                            </div>
+                            <a class="top-bar__btn" style="color:#fff; background:transparent;">
+                                {{-- <i class="ic icon-list-x">Register</i> --}}
+                            </a>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -159,21 +212,24 @@
                         <div class="col-lg d-none d-lg-block">
                             <nav class="navbar navbar-expand-md justify-content-end" id="nav">
                                 <ul class="yamm main-menu navbar-nav">
-                                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/">Home</a>
+                                    </li>
                                     <li class="nav-item ">
                                         <a class="nav-link" href="#">About</a>
-                                    
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/listing">Listing</a>
-                                    
+                                        <a class="nav-link" href="/listing">Car Rentals</a>
                                     </li>
-                                    <li class="nav-item "><a class="nav-link" href="/register">Register</a>
                                     
+                                    @if(!Auth::check())
+                                    {{-- <li class="nav-item ">
+                                        <a class="nav-link" href="/login">Login</a>
                                     </li>
-                                    <li class="nav-item "><a class="nav-link" href="/login">Login</a>
-                                    
-                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/register">Register</a>
+                                    </li> --}}
+                                    @endif
                                     <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                                 </ul>
                                 {{-- <span class="header-main__link btn_header_search"><i
@@ -202,9 +258,9 @@
         </div>
         <!-- end .b-title-page-->
 
-        
+        <div class="xyz">
                 {{ $slot }}
-           
+            </div>
         <footer class="footer">
             <div class="container">
                 <div class="row">
@@ -306,6 +362,7 @@
     <!-- MAIN SCRIPTS-->
     <!-- ++++++++++++-->
     <script src="{{asset('assets-ii/js/jquery-3.3.1.min.js')}}"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="{{asset('assets-ii/js/jquery-migrate-1.4.1.min.js')}}"></script>
     <!-- Bootstrap-->
     <script src="{{asset('assets-ii/js/popper.min.js')}}"></script>

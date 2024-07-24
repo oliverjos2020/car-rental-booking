@@ -79,7 +79,7 @@
                                     <td>{{ ($roles->currentPage() - 1) * $roles->perPage() + $loop->iteration }}</td>
                                     <td>{{ $role->role }}</td>
                                     <td><a class="btn btn-primary btn-sm text-light" style="cursor:pointer;" wire:click="edit({{$role->id}})"><i class="fa fa-edit"></i> Edit</a> </td>
-                                    <td><a class="text-light btn btn-danger btn-sm" wire:click="delete({{$role->id}})"><i class="fa fa-trash"></i> Delete</a></a></td>
+                                    <td><a  @if(in_array($role->slug, ['admin', 'users', 'partners'])) class="text-light btn btn-secondary btn-sm" @else class="text-light btn btn-danger btn-sm" wire:click="delete({{$role->id}})" @endif ><i class="fa fa-trash"></i> Delete</a></a></td>
                                 </tr>
                                 
                                     @if($editingID === $role->id)

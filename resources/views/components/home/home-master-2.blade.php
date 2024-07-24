@@ -18,25 +18,25 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color2.css')}}" rel="alternate stylesheet" title="color2">
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
-    {{-- <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
+    {{--
+    <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
     {{-- @livewireStyles --}}
     <style>
-        .home-input{
+        .home-input {
             width: 100%;
             padding: 15px;
             border: none;
             border-radius: 1px;
         }
-        .text-light{
-            color:#fff;
+
+        .text-light {
+            color: #fff;
+        }
+        .nav-link{
+            color:#fff !important;
         }
     </style>
-
-
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!--[if lt IE 9 ]>
-<script src="/assets/js/separate-js/html5shiv-3.7.2.min.js" type="text/javascript"></script><meta content="no" http-equiv="imagetoolbar">
-<![endif]-->
+<link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}">
 </head>
 
 <body class="page">
@@ -97,50 +97,33 @@
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item ">
                     <a class="nav-link" href="#">About</a>
-                
+
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="/listing">Listing</a>
-                
+                    <a class="nav-link" href="/listing">Car Rentals</a>
+
                 </li>
                 <li class="nav-item "><a class="nav-link" href="/register">Register</a>
-                
+
                 </li>
                 <li class="nav-item "><a class="nav-link" href="/login">Login</a>
-                
+
                 </li>
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
             </ul>
         </div>
 
-
+        
         <header class="header header_main-pg">
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            <div class="top-bar__item"><a class="top-bar__link" href="mailto:support@dpresidentialluxxetour.com"><i
-                                        class="ic fas fa-envelope text-primary"></i> support@dpresidentialluxxetour.com</a></div>
-                            <div class="top-bar__item"><i class="ic fas fa-clock text-primary"></i> Mon to Fri : 9:00am
-                                to 6:00pm</div>
-                            <div class="top-bar__item"><i class="ic fas fa-map-marker-alt text-primary"></i> Fairview
-                                Ave, El Monte, CA 91732</div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="top-bar__item"><a class="top-bar__link" href="home.html"><i
-                                        class="ic fas fa-user text-primary"></i> My Account</a></div>
-                            <button class="top-bar__btn"><i class="ic icon-list"></i> Add Listings</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="header-main">
                 <div class="container">
                     <div class="row align-items-center justify-content-between">
                         <div class="col-auto"><a class="navbar-brand navbar-brand_light scroll" href="/"><img
-                                    class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40" alt="logo" /></a><a
-                                class="navbar-brand navbar-brand_dark scroll" href="/"><img class="normal-logo"
-                                    src="{{asset('logo/d-logo-light.png')}}" height="40" alt="logo" /></a></div>
+                                    class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
+                                    alt="logo" /></a><a class="navbar-brand navbar-brand_dark scroll" href="/"><img
+                                    class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
+                                    alt="logo" /></a></div>
                         <div class="col-auto">
                             <div class="header-contacts d-none d-md-block d-lg-none d-xl-block"><i
                                     class="ic text-primary fas fa-phone"></i><span class="header-contacts__inner"><span
@@ -158,29 +141,45 @@
                                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                                     <li class="nav-item ">
                                         <a class="nav-link" href="#">About</a>
-                                    
+
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/listing">Listing</a>
-                                    
+                                        <a class="nav-link" href="/listing">Car Rentals</a>
+
                                     </li>
-                                    <li class="nav-item "><a class="nav-link" href="/register">Register</a>
+                                    @if(!Auth::check())
+                                        <li class="nav-item ">
+                                            <a class="nav-link" href="/register">Register</a>
+                                        </li>
+                                        <li class="nav-item ">
+                                            <a class="nav-link" href="/login">Login</a>
+                                        </li>
+                                    @else
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Contact</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/mybooking-orders">My Trips</a>
+                                        </li>
+                                    @endif
                                     
-                                    </li>
-                                    <li class="nav-item "><a class="nav-link" href="/login">Login</a>
+                                    @if(Auth::check())
+                                        
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-light btn-sm">Logout</button>
+                                        </form>
+                                    @endif
                                     
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
 
                                 </ul>
-                                {{-- <span class="header-main__link btn_header_search"><i
-                                        class="ic fas fa-search"></i></span> --}}
                             </nav>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
+       
         <div class="main-slider slider-pro" id="main-slider" data-slider-width="100%" data-slider-height="900px"
             data-slider-arrows="true" data-slider-buttons="false">
             <div class="sp-slides">
@@ -197,8 +196,8 @@
                             class="main-slider__figure-1 img-fluid"
                             src="{{asset('assets-ii/media/content/b-main-slider/fig-1.png')}}" alt="foto" /></div>
                     <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a class="main-slider__link"
-                            href="/listing">explore inventory</a></div>
+                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a
+                            class="main-slider__link" href="/listing">explore inventory</a></div>
                 </div>
             </div>
             <div class="sp-slides">
@@ -215,8 +214,8 @@
                             class="main-slider__figure-1 img-fluid"
                             src="{{asset('assets-ii/media/content/b-main-slider/fig-1.png')}}" alt="foto" /></div>
                     <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a class="main-slider__link"
-                            href="/listing">explore inventory</a></div>
+                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a
+                            class="main-slider__link" href="/listing">explore inventory</a></div>
                 </div>
             </div>
         </div>
@@ -271,8 +270,8 @@
                     <div class="ui-decor bg-primary"></div>
                 </div>
             </div>
-        
-        
+
+
             <div class="b-goods-slider js-slider"
                 data-slick="{&quot;slidesToShow&quot;: 3, &quot;slidesToScroll&quot;: 1, &quot;autoplay&quot;: false, &quot;responsive&quot;: [{&quot;breakpoint&quot;: 768, &quot;settings&quot;: {&quot;slidesToShow&quot;: 1, &quot;slidesToScroll&quot;: 1}}]}">
                 <div class="b-goods-slider__item">
@@ -291,7 +290,7 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
                 <div class="b-goods-slider__item">
                     <div class="b-goods-slider__img"><img class="img-scale"
                             src="{{asset('assets-ii/media/content/b-goods-slider/2.png')}}" alt="foto" /></div>
@@ -308,7 +307,7 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
                 <div class="b-goods-slider__item">
                     <div class="b-goods-slider__img"><img class="img-scale"
                             src="{{asset('assets-ii/media/content/b-goods-slider/3.png')}}" alt="foto" /></div>
@@ -325,7 +324,7 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
                 <div class="b-goods-slider__item">
                     <div class="b-goods-slider__img"><img class="img-scale"
                             src="{{asset('assets-ii/media/content/b-goods-slider/1.png')}}" alt="foto" /></div>
@@ -342,7 +341,7 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
                 <div class="b-goods-slider__item">
                     <div class="b-goods-slider__img"><img class="img-scale"
                             src="{{asset('assets-ii/media/content/b-goods-slider/2.png')}}" alt="foto" /></div>
@@ -359,7 +358,7 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
                 <div class="b-goods-slider__item">
                     <div class="b-goods-slider__img"><img class="img-scale"
                             src="{{asset('assets-ii/media/content/b-goods-slider/3.png')}}" alt="foto" /></div>
@@ -376,9 +375,9 @@
                     </div>
                 </div>
                 <!-- end .b-goods-->
-        
+
             </div>
-        
+
         </section>
         <footer class="footer">
             <div class="container">
@@ -395,7 +394,8 @@
                                         class="ic fas fa-map-marker-alt text-primary"></i>Fairview
                                     Ave, El Monte, CA 91732</div>
                                 <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
-                                        href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a></div>
+                                        href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a>
+                                </div>
                                 <div class="footer-contacts__item"><i class="ic far fa-clock text-primary"></i>Mon to
                                     Fri :
                                     9:00am to 6:00pm</div><a class="footer-contacts__phone" href="tel:2584037961">(258)
@@ -531,4 +531,5 @@
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
     @livewireScripts
 </body>
+
 </html>

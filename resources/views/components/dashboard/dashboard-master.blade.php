@@ -8,8 +8,8 @@
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="description" />
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-
+    <link rel="shortcut icon" href="{{ asset('logo/icon-dark.png') }}">
+    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}"> --}}
     <!-- jquery.vectormap css -->
     <link href="{{asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css')}}" rel="stylesheet"
         type="text/css" />
@@ -95,7 +95,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <!-- item-->
-                                    <a class="dropdown-item" href="#"><i
+                                    <a class="dropdown-item" href="/profile/{{ Auth::user()->id }}"><i
                                             class="bx bx-user font-size-16 align-middle me-1"></i>
                                         Profile</a>
                                     {{-- <a class="dropdown-item" href="#"><i
@@ -170,7 +170,7 @@
                         <div class="mt-3">
 
                             <a href="#" class="text-body fw-medium font-size-16">{{ Auth::user()->name }}</a>
-                            <p class="text-muted mt-1 mb-0 font-size-13"></p>
+                            <p class="text-muted mt-1 mb-0 font-size-13">{{ Auth::user()->role->role}}</p>
 
                         </div>
                     </div>
@@ -218,11 +218,54 @@
                                     <span>Setup</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    {{-- <li><a href="/category">Category</a></li> --}}
+                                    <li><a href="/category">Category</a></li>
                                     <li><a href="/location">Pickup Location</a></li>
                                     <li><a href="/brand">Car Brand</a></li>
-                                    <li><a href="/priceSetup">Price Setup</a></li>
+                                    <li><a href="/priceSetup">Hire Price Setup</a></li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/pending" class="waves-effect">
+                                    <i class="mdi mdi-car-info"></i>
+                                    <span>Pending Booking Orders</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/ongoing" class="waves-effect">
+                                    <i class="mdi mdi-car-multiple"></i>
+                                    <span>Booking Ongoing Trips</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/completed" class="waves-effect">
+                                    <i class="mdi mdi-car-3-plus"></i>
+                                    <span>Completed Booking Trips</span>
+                                </a>
+                            </li>
+                            @elseif(Auth::user()->role_id == 2)
+                            <li>
+                                <a href="/myVehicles" class="waves-effect">
+                                    <i class="mdi mdi-car"></i>
+                                    <span>My Vehicles</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/pending" class="waves-effect">
+                                    <i class="mdi mdi-car-info"></i>
+                                    <span>Pending Booking Orders</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/ongoing" class="waves-effect">
+                                    <i class="mdi mdi-car-multiple"></i>
+                                    <span>Booking Ongoing Trips</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bookingOrder/completed" class="waves-effect">
+                                    <i class="mdi mdi-car-3-plus"></i>
+                                    <span>Completed Booking Trips</span>
+                                </a>
                             </li>
                             @endif
 
@@ -275,11 +318,11 @@
                             <div class="col-sm-6">
                                 <script>
                                     document.write(new Date().getFullYear())
-                                </script> © Qovex.
+                                </script> © D'PRESIDENTIAL LUXXETOUR.
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">
-                                    Design & Develop by Themesbrand
+                                    Design & Oliver's Concept
                                 </div>
                             </div>
                         </div>
@@ -331,6 +374,7 @@
     });
     
 </script>
+@livewire('paypal-payment')
 @livewireScripts
 </body>
 
