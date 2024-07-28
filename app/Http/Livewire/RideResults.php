@@ -26,7 +26,7 @@ class RideResults extends Component
         // Call to Google Distance Matrix API to get the distance
         // Note: Replace 'YOUR_GOOGLE_API_KEY' with your actual API key.
         try{
-        $apiKey = 'AIzaSyASWbUjWvphkvfHPiMLjtPWv9yzYZAHyMc';
+        $apiKey = env('GOOGLE_API_KEY');
         $response = Http::get("https://maps.googleapis.com/maps/api/distancematrix/json", [
             'origins' => $this->location,
             'destinations' => $this->destination,

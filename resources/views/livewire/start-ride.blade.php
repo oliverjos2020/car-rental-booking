@@ -34,59 +34,43 @@
 </div>
 
 <script>
-    let map;
-    let marker;
-    let circle;
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
+    function initMap(lat, lng) {
+        const mapOptions = {
             zoom: 15,
-            center: { lat: 0, lng: 0 },
+            center: { lat: lat, lng: lng },
+        };
+
+        const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        new google.maps.Marker({
+            position: { lat: lat, lng: lng },
+            map: map,
         });
 
-        // Try to get current location
-        getLocation();
-    }
+        const circle = new google.maps.Circle({
+            map: map,
+            radius: 500, // 500 meters radius
+            center: { lat: lat, lng: lng },
+            fillColor: '#70c2ff',
+            fillOpacity: 0.35,
+            strokeColor: '#70c2ff',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+        });
 
-    function initMapWithLocation(lat, lng) {
-        map.setCenter({ lat: lat, lng: lng });
-
-        if (marker) {
-            marker.setPosition({ lat: lat, lng: lng });
-        } else {
-            marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map,
-                icon: {
-                    url: 'https://img.icons8.com/color/48/000000/car.png',
-                    scaledSize: new google.maps.Size(48, 48),
-                },
-            });
-        }
-
-        if (circle) {
-            circle.setCenter({ lat: lat, lng: lng });
-        } else {
-            circle = new google.maps.Circle({
-                map: map,
-                radius: 100, // Radius in meters
-                fillColor: '#3b5de7',
-                fillOpacity: 0.35,
-                strokeColor: '#3b5de7',
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                center: { lat: lat, lng: lng },
-            });
-        }
+        google.maps.event.addListener(map, 'zoom_changed', function () {
+            const zoom = map.getZoom();
+            circle.setRadius(500 * Math.pow(2, 15 - zoom));
+        });
     }
 
     function getLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(
-                showPosition,
-                showError,
-                { enableHighAccuracy: true }
-            );
+            navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
         } else {
             alert("Geolocation is not supported by this browser.");
         }
@@ -96,17 +80,17 @@
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
-        // Update hidden input fields with new location
         document.getElementById('latitude').value = lat;
         document.getElementById('longitude').value = lng;
 
-        // Initialize or update the map with the obtained location
-        initMapWithLocation(lat, lng);
+        console.log('Latitude:', lat, 'Longitude:', lng);
+
+        initMap(lat, lng);
     }
 
     function showError(error) {
         document.getElementById('location-error').style.display = 'block';
-        switch(error.code) {
+        switch (error.code) {
             case error.PERMISSION_DENIED:
                 alert("User denied the request for Geolocation.");
                 break;
@@ -125,8 +109,9 @@
     function showInstructions() {
         document.getElementById('location-instructions').style.display = 'block';
     }
-</script>
 
+    window.addEventListener('load', getLocation);
+</script>
 {{-- <script>
 let map, infoWindow;
 
