@@ -19,8 +19,7 @@ class MyBookingOrders extends Component
     public function render()
     {
         $id = Auth()->user()->id;
-        $myOrders = BookingOrder::where('user_id', $id)->latest()->paginate($this->limit);
+        $myOrders = BookingOrder::where('user_id', $id)->where('payment_status', 1)->latest()->paginate($this->limit);
         return view('livewire.home.my-booking-orders', ['myOrders' => $myOrders])->layout('components.home.home-master-3');
-        // return view('livewire.my-booking-orders');
     }
 }

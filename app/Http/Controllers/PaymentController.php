@@ -3,79 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\PayPalService;
-use PayPal\Api\Payer;
-use PayPal\Api\Amount;
-use PayPal\Api\Transaction;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Payment;
-use PayPal\Api\PaymentExecution;
+use Srmklive\Paypal\Services\Paypal as PayPalClient;
+use App\Models\BookingOrder;
 
 class PaymentController extends Controller
 {
-    protected $paypalService;
-
-    public function __construct(PayPalService $paypalService)
+    public function processPaypal(Request $request)
     {
-        $this->paypalService = $paypalService;
-    }
+        // $provider = new PayPalClient;
+        $provider = \PayPal::setProvider();
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
 
-    public function createPayment()
-    {
-        $payer = new Payer();
-        $payer->setPaymentMethod('paypal');
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('processSuccess'),
+                "cancel_url" => route('processCancel'),
+            ],
+            "purchase_units" => [
+                0 => [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => "100.00",
+                    ],
+                ],
+            ],
+        ]);
 
-        $amount = new Amount();
-        $amount->setTotal('10.00');
-        $amount->setCurrency('USD');
+        if (isset($response['id']) && $response['id'] != null) {
 
-        $transaction = new Transaction();
-        $transaction->setAmount($amount);
-        $transaction->setDescription('Payment description');
-
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(route('status'))
-            ->setCancelUrl(route('status'));
-
-        $payment = new Payment();
-        $payment->setIntent('sale')
-            ->setPayer($payer)
-            ->setTransactions([$transaction])
-            ->setRedirectUrls($redirectUrls);
-
-        try {
-            $payment->create($this->paypalService->getApiContext());
-            return redirect($payment->getApprovalLink());
-        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-            echo $ex->getCode();
-            echo $ex->getData();
-            die($ex);
-        }
-    }
-
-    public function getPaymentStatus(Request $request)
-    {
-        if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-            return redirect('/')->with('error', 'Payment failed');
-        }
-
-        $paymentId = $request->input('paymentId');
-        $payment = Payment::get($paymentId, $this->paypalService->getApiContext());
-
-        $execution = new PaymentExecution();
-        $execution->setPayerId($request->input('PayerID'));
-
-        try {
-            $result = $payment->execute($execution, $this->paypalService->getApiContext());
-            if ($result->getState() == 'approved') {
-                return redirect('/')->with('success', 'Payment success');
+            // redirect to approve href
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return redirect()->away($links['href']);
+                }
             }
-        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-            echo $ex->getCode();
-            echo $ex->getData();
-            die($ex);
+
+            return redirect()
+                ->route('checkout')
+                ->with('error', 'Something went wrong.');
+
+        } else {
+            return redirect()
+                ->route('checkout')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
         }
 
-        return redirect('/')->with('error', 'Payment failed');
     }
+
+    public function processSuccess(Request $request)
+    {
+        // $provider = new PayPalClient;
+        $provider = \PayPal::setProvider();
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+        $response = $provider->capturePaymentOrder($request['token']);
+
+        if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+            BookingOrder::where('user_id', Auth()->User()->id)->update([
+                
+                'payment_status' => 1,
+                'status' => 1,
+    
+            ]);
+            return redirect()
+                ->route('checkout')
+                ->with('success', 'Transaction complete.');
+        } else {
+            return redirect()
+                ->route('checkout')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
+        }
+    }
+
+    public function processCancel(Request $request)
+    {
+        return redirect()
+            ->route('checkout')
+            ->with('error', 'You have canceled the transaction.');
+    }
+
 }

@@ -27,24 +27,7 @@ class Review extends Component
     public $existingInsurance;
     public $existingdriversLicense;
     public $step = 1;
-    public $amount = 200;
-
-    protected $listeners = ['onApprove'];
-
-    public function createOrder(PayPalService $paypal)
-    {
-        try {
-            // Validate the amount
-            if (!is_numeric($this->amount) || $this->amount <= 0) {
-                throw new Exception('Invalid amount');
-            }
-
-            $payment = $paypal->createOrder($this->amount);
-            return response()->json(['id' => $payment->getId()]);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
+   
 
     public function onApprove($details)
     {
@@ -140,12 +123,16 @@ class Review extends Component
             'dropoffTime' => $this->dropoffTime,
             'duration' => $this->days,
             'amount' => $amount,
-            'payment_status' => 1,
-            'status' => 1,
+            'payment_status' => 0,
+            'status' => 0,
 
         ]);
         if ($booking):
-            $this->step++;
+            $this->dispatchBrowserEvent('notify', [
+                'type' => 'success',
+                'message' => 'Vehicle Added Successfully',
+            ]);
+            return redirect()->route('checkout', ['reviewId' => $this->reviewId]);
         endif;
         // } catch (Exception $e) {
         //     $this->dispatchBrowserEvent('notify', [
@@ -176,21 +163,15 @@ class Review extends Component
         // $this->validate($rules);
     }
     
-    public function getClientToken(PayPalService $paypal)
-{
-    try {
-        $clientToken = $paypal->generateClientToken();
-        return response()->json(['client_token' => $clientToken]);
-    } catch (Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-}
+ 
 
     public function render()
     {
         // dd($this->pickupDate);
+        $user = Auth()->user()->id;
         $vehicle = Vehicle::where('id', $this->reviewId)->first();
-        return view('livewire.home.review', ['vehicle' => $vehicle, 'days' => $this->days])->layout('components.home.home-master-3');
+        $order = BookingOrder::where('user_id', $user)->where('payment_status', 0)->get();
+        return view('livewire.home.review', ['vehicle' => $vehicle, 'days' => $this->days, 'orders' => $order])->layout('components.home.home-master-3');
 
     }
 }

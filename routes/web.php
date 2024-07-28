@@ -19,6 +19,11 @@ use App\Http\Livewire\MyVehicles;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\MyBookingOrders;
 use App\Http\Livewire\PayPalPayment;
+use App\Http\Livewire\Checkout;
+use App\Http\Livewire\RideBooking;
+use App\Http\Livewire\RideResults;
+use App\Http\Livewire\StartRide;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,23 +36,25 @@ use App\Http\Livewire\PayPalPayment;
 |
 */
 
+Route::get('/processPaypal', [PaymentController::class, 'processPaypal'])->name('processPaypal');
+Route::get('/processSuccess', [PaymentController::class, 'processSuccess'])->name('processSuccess');
+Route::get('/processCancel', [PaymentController::class, 'processCancel'])->name('processCancel');
+
+
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 Route::get('/', Index::class)->name('index');
 Route::get('/listing', Listing::class)->name('listing');
 Route::get('/review/{reviewId}', Review::class)->name('review');
-Route::get('/mybooking-orders', MyBookingOrders::class)->name('MyBookingOrders');
-Route::get('/payment', PaypalPayment::class)->name('paypalPayment');
-Route::post('/create-order', [Review::class, 'createOrder'])->name('createOrder');
-Route::post('/on-approve', [Review::class, 'onApprove'])->name('onApprove');
-Route::get('/paypal/success', [Review::class, 'onApprove'])->name('paypal.success');
-Route::get('/paypal/cancel', function () {
-    return 'Payment cancelled';
-})->name('paypal.cancel');
-Route::get('/paypal/client-token', [Review::class, 'getClientToken'])->name('paypal.clientToken');
+
+Route::get('/ridebooking', RideBooking::class)->name('ridebooking');
+Route::get('/ride-results', RideResults::class)->name('ride.results');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/mybooking-orders', MyBookingOrders::class)->name('MyBookingOrders');
+    Route::get('/checkout', Checkout::class)->name('checkout');
     Route::get('/dashboard2', Dashboard::class)->name('dashboard2');
     Route::get('/role', RoleManagement::class)->name('role');
     Route::get('/category', CategoryManagement::class)->name('category');
@@ -57,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/myVehicles', MyVehicles::class)->name('myVehicles');
     Route::get('/registration/{vehID}/{type}', RegistrationType::class)->name('regType');
     Route::get('/bookingOrder/{status}', BookingOrderManagement::class)->name('bookingOrder');
+    Route::get('/start-ride', StartRide::class)->name('startRide');
     Route::middleware('can:admin-only')->group(function () {
         Route::get('/users', UserManagement::class)->name('userSetup');
         Route::get('/vendorManagement/{type}', VendorManagement::class)->name('vendorSetup');

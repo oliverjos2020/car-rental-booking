@@ -18,6 +18,7 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color2.css')}}" rel="alternate stylesheet" title="color2">
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
+    <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
     {{--
     <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
     {{-- @livewireStyles --}}
@@ -529,6 +530,17 @@
     <!-- Slider number-->
     <script src="{{asset('assets-ii/plugins/noUiSlider/wNumb.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{asset('js/toastr.min.js')}}"></script>
+    
+
+    <script>
+     document.addEventListener('livewire:load', function () {
+         window.addEventListener('notify', event => {
+             toastr[event.detail.type](event.detail.message);
+         });
+     });
+     
+ </script>
     @livewireScripts
 </body>
 

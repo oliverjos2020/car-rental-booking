@@ -18,6 +18,7 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color2.css')}}" rel="alternate stylesheet" title="color2">
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
+    <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
     @livewireStyles
     <style>
         .home-input {
@@ -379,7 +380,7 @@
     <script src="{{asset('assets-ii/plugins/headers/header.js')}}"></script>
     <!-- Mail scripts-->
     <script src="{{asset('assets-ii/plugins/jqBootstrapValidation.js')}}"></script>
-    <script src="{{asset('assets-ii/plugins/contact_me.js')}}"></script>
+    {{-- <script src="{{asset('assets-ii/plugins/contact_me.js')}}"></script> --}}
     <!-- Filter and sorting images-->
     <script src="{{asset('assets-ii/plugins/isotope/isotope.pkgd.min.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/isotope/imagesLoaded.js')}}"></script>
@@ -406,6 +407,17 @@
     <!-- Slider number-->
     <script src="{{asset('assets-ii/plugins/noUiSlider/wNumb.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{asset('js/toastr.min.js')}}"></script>
+    
+
+    <script>
+     document.addEventListener('livewire:load', function () {
+         window.addEventListener('notify', event => {
+             toastr[event.detail.type](event.detail.message);
+         });
+     });
+     
+ </script>
     @livewireScripts
 </body>
 

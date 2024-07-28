@@ -1,4 +1,4 @@
-<div>
+{{-- <div>
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -31,7 +31,7 @@
 
                 var amount = $('#amount').val();
                 $.ajax({
-                    url: "{{ route('createOrder') }}",
+                    // url: "{{ route('createOrder') }}",
                     method: "POST",
                     data: { amount: amount },
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
@@ -93,4 +93,4 @@
             });
         });
     </script>
-</div>
+</div> --}}

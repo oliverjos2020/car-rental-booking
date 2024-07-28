@@ -16,6 +16,11 @@
         </div>
         <!-- end page title -->
         @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+        {{-- @forelse(Auth::user()->vehicle as $vehicle)
+            @if($vehicle->category->category == 'Booking')
+
+            @endif
+        @endforelse --}}
                 <div class="row h-25">
                     <div class="col-md-4">
                         <div class="card bg-light">
@@ -91,7 +96,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-8">
                                         <p class="mb-2">Pending Booking Orders</p>
-                                        <h4 class="mb-0" id="totalCollection">{{$pendingRequest->count()}}</h4>
+                                        <h4 class="mb-0" id="totalCollection">{{$orders->count()}}</h4>
                                     </div>
                                     <div class="col-4">
                                         <div class="text-end">
@@ -181,12 +186,12 @@
                     
                 </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Notifications</h4>
+                            <h4 class="card-title mb-4">Vehicle Status</h4>
                             <div class="table-responsive">
-                                <table class="table table-nowrap table-centered mb-0">
+                                <table class="table table-nowrap table-centered mb-0 table-striped table-bordered">
                                     <tbody>
                                         {{-- @if(Auth::user()->vehicle->status == 1) --}}
                                         @forelse(Auth::user()->vehicle as $vehicle)
@@ -252,6 +257,12 @@
                                                     <!-- /.modal-dialog -->
                                                 </div>
                                             </td>
+                                            @elseif($vehicle->status == 2)
+                                                @if($vehicle->category->category == 'Booking')
+                                                <td class="text-center">
+                                                    <a href="/start-ride" class="btn btn-primary btn-sm">Start Ride</a>
+                                                </td>
+                                                @endif
                                             @endif
                                         </tr>
                                         @empty
@@ -264,7 +275,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card">
                         
                         <div class="card-body">
