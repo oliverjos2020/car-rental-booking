@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Dashboard | D’PRESIDENTIAL LUXXETOUR</title>
+    <title>Home | D’PRESIDENTIAL LUXXETOUR</title>
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="description">
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="keywords">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +54,7 @@
                     <div class="predefined_styles">
                         <div class="skin-theme-switcher">
                             <h4>Color</h4><a class="styleswitch" href="javascript:void(0);" data-switchcolor="color1"
-                                style="background-color:#e3740e;"></a><a class="styleswitch" href="javascript:void(0);"
+                                style="background-color:#016f92;"></a><a class="styleswitch" href="javascript:void(0);"
                                 data-switchcolor="color2" style="background-color:#9e8a2b;"></a><a class="styleswitch"
                                 href="javascript:void(0);" data-switchcolor="color3"
                                 style="background-color:#28af0f;"></a>
@@ -91,7 +91,7 @@
         <!-- MOBILE MENU-->
         <!-- ==========================-->
         <div data-off-canvas="mobile-slidebar left overlay">
-            <a class="navbar-brand scroll" href="home.html"><img class="scroll-logo"
+            <a class="navbar-brand scroll" href="/"><img class="scroll-logo"
                     src="{{asset('logo/d-logo-light.png')}}" height="40" alt="logo" /></a>
 
             <ul class="navbar-nav">
@@ -102,7 +102,11 @@
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="/listing">Car Rentals</a>
-
+                </li>
+                
+                @if(!Auth::check())
+                <li class="nav-item ">
+                    <a class="nav-link" href="/dashboard2">Partner</a>
                 </li>
                 <li class="nav-item "><a class="nav-link" href="/register">Register</a>
 
@@ -110,7 +114,25 @@
                 <li class="nav-item "><a class="nav-link" href="/login">Login</a>
 
                 </li>
+                @else
+                @if(Auth()->user()->role_id == 3)
+                <li class="nav-item ">
+                    <a class="nav-link" href="/dashboard2">Partner</a>
+                </li>
+                @else
+                <li class="nav-item ">
+                    <a class="nav-link" href="/dashboard2">Dashboard</a>
+                </li>
+                @endif
+                <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
+                @endif
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                @if(Auth::check())
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button style="padding-right: 20px; color: #333 !important; margin-top: 10px;" type="submit" class="btn btn-light btn-sm nav-link">Logout</button>
+                    </form>
+                @endif
             </ul>
         </div>
 
@@ -118,18 +140,23 @@
         <header class="header header_main-pg">
             
             <div class="header-main">
-                <div class="container">
+                <div class="container" style="margin-top:25px;">
                     <div class="row align-items-center justify-content-between">
-                        <div class="col-auto"><a class="navbar-brand navbar-brand_light scroll" href="/"><img
-                                    class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
-                                    alt="logo" /></a><a class="navbar-brand navbar-brand_dark scroll" href="/"><img
-                                    class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
-                                    alt="logo" /></a></div>
+                        <div class="col-auto">
+                            <a class="navbar-brand navbar-brand_light scroll" href="/">
+                                <img class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
+                                    alt="logo" />
+                                </a>
+                                <a class="navbar-brand navbar-brand_dark scroll" href="/">
+                                    <img class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
+                                    alt="logo" />
+                                </a>
+                            </div>
                         <div class="col-auto">
                             <div class="header-contacts d-none d-md-block d-lg-none d-xl-block"><i
                                     class="ic text-primary fas fa-phone"></i><span class="header-contacts__inner"><span
                                         class="header-contacts__info">Call us for help</span><a
-                                        class="header-contacts__number" href="%2b2584037961.html">(258) 403
+                                        class="header-contacts__number" href="#">(258) 403
                                         7961</a></span></div>
                             <!-- Mobile Trigger Start-->
                             <button class="menu-mobile-button js-toggle-mobile-slidebar toggle-menu-button d-lg-none"><i
@@ -150,12 +177,24 @@
                                     </li>
                                     @if(!Auth::check())
                                         <li class="nav-item ">
+                                            <a class="nav-link" href="/dashboard2">Partner</a>
+                                        </li>
+                                        <li class="nav-item ">
                                             <a class="nav-link" href="/register">Register</a>
                                         </li>
                                         <li class="nav-item ">
                                             <a class="nav-link" href="/login">Login</a>
                                         </li>
                                     @else
+                                        @if(Auth()->user()->role_id == 3)
+                                        <li class="nav-item ">
+                                            <a class="nav-link" href="/dashboard2">Partner</a>
+                                        </li>
+                                        @else
+                                        <li class="nav-item ">
+                                            <a class="nav-link" href="/dashboard2">Dashboard</a>
+                                        </li>
+                                        @endif
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">Contact</a>
                                         </li>
@@ -168,7 +207,7 @@
                                         
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-light btn-sm">Logout</button>
+                                            <a href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" style="color:#fffafa" class="btn btn-light btn-sm">LOGOUT</a>
                                         </form>
                                     @endif
                                     
@@ -263,7 +302,7 @@
                 </div>
             </div>
         </section>
-        <section class="section-area">
+        {{-- <section class="section-area">
             <div class="container">
                 <div class="text-center">
                     <div class="ui-subtitle">choose your dream cars</div>
@@ -379,7 +418,7 @@
 
             </div>
 
-        </section>
+        </section> --}}
         <footer class="footer">
             <div class="container">
                 <div class="row">

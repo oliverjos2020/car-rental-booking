@@ -24,6 +24,7 @@ use App\Http\Livewire\RideBooking;
 use App\Http\Livewire\RideResults;
 use App\Http\Livewire\StartRide;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\DriverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::get('/review/{reviewId}', Review::class)->name('review');
 
 Route::get('/ridebooking', RideBooking::class)->name('ridebooking');
 Route::get('/ride-results', RideResults::class)->name('ride.results');
+Route::post('/update-driver-location', [DriverController::class, 'updateLocation'])->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/mybooking-orders', MyBookingOrders::class)->name('MyBookingOrders');

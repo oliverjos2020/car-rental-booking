@@ -3,7 +3,7 @@
 /*//////////////////////////////////////////////////////////////////////////////////////////*/
 
 a:hover {
-    color: #4e7397;
+    color: #016f92;
     text-decoration: underline;
 }
 
@@ -27,7 +27,7 @@ a,
 .nav-link:hover,
 .b-goods-f__links-item:hover,
 .list-mark-2 li:before,
-.bbp-forum-title , html .b-post-full .entry-tag:hover  {color: #4e7397;}
+.bbp-forum-title , html .b-post-full .entry-tag:hover  {color: #016f92;}
 
 
 .bg-primary,
@@ -56,22 +56,22 @@ a,
 .b-goods-other__link:hover,
 .b-steps__btn:after , .btn-secondary:hover , b-filter-goods__btn btn , html .page-link:hover , html .page-item.active .page-link:hover ,
 .btn-gray:hover,
-html .btns-switch__item:hover{background-color: #4e7397;}
+html .btns-switch__item:hover{background-color: #016f92;}
 
 
 .btn-primary,
 .slick-dots li.slick-active button,
 .slick-dots li:hover button,
 .btn-default:hover,
-.b-post-full .entry-tag:hover {border-color: #4e7397;}
+.b-post-full .entry-tag:hover {border-color: #016f92;}
 
 .nav-link.active:after,
-#page-preloader .spinner:before {border-top-color: #4e7397;}
+#page-preloader .spinner:before {border-top-color: #016f92;}
 
- /* {border-right-color: #4e7397;} */
+ /* {border-right-color: #016f92;} */
 
 .widget-title:after,
-.nav-link.active:after {border-left-color: #4e7397;}
+.nav-link.active:after {border-left-color: #016f92;}
 
 .table_primary > thead > tr > th,
 .collapse.in,
@@ -80,5 +80,5 @@ html .btns-switch__item:hover{background-color: #4e7397;}
 .nav-link:focus,
 .nav-link:hover,
 .b-isotope-filter > li.current a,
-.b-isotope-filter > li:hover a {border-bottom-color: #4e7397;}
+.b-isotope-filter > li:hover a {border-bottom-color: #016f92;}
 

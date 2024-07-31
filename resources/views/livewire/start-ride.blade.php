@@ -68,8 +68,8 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError, {
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+                // timeout: 10000,
+                // maximumAge: 0
             });
         } else {
             alert("Geolocation is not supported by this browser.");
@@ -86,6 +86,7 @@
         console.log('Latitude:', lat, 'Longitude:', lng);
 
         initMap(lat, lng);
+        updateDriverLocation(lat, lng);
     }
 
     function showError(error) {
@@ -110,60 +111,29 @@
         document.getElementById('location-instructions').style.display = 'block';
     }
 
+    function updateDriverLocation(latitude, longitude) {
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/update-driver-location', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                latitude: latitude,
+                longitude: longitude
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
     window.addEventListener('load', getLocation);
 </script>
-{{-- <script>
-let map, infoWindow;
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 6,
-  });
-  infoWindow = new google.maps.InfoWindow();
-
-  const locationButton = document.createElement("button");
-
-  locationButton.textContent = "Pan to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-  locationButton.addEventListener("click", () => {
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
-          map.setCenter(pos);
-        },
-        () => {
-          handleLocationError(true, infoWindow, map.getCenter());
-        },
-      );
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
-    }
-  });
-}
-
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
-      ? "Error: The Geolocation service failed."
-      : "Error: Your browser doesn't support geolocation.",
-  );
-  infoWindow.open(map);
-}
-
-window.initMap = initMap;
-</script> --}}
 
 </div>

@@ -26,6 +26,8 @@ class AddExtraFieldsToUsersTable extends Migration
             $table->string('passport')->nullable();
             $table->string('driverLicense')->nullable();
             $table->string('insurance')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
         });
 
         $this->insertDefaultData();

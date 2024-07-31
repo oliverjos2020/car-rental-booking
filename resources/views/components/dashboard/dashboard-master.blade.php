@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="description" />
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="author" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('logo/icon-dark.png') }}">
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}"> --}}
@@ -58,7 +60,7 @@
                                 <button type="button" class="btn header-item noti-icon waves-effect"
                                     id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <i class="mdi mdi-magnify"></i>
+                                    {{-- <i class="mdi mdi-magnify"></i> --}}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-search-dropdown">
@@ -120,36 +122,37 @@
 
                         </div>
                         <div>
+                            <button type="button"
+                                class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect"
+                                id="vertical-menu-btn">
+                                <i class="fa fa-fw fa-bars"></i>
+                            </button>
                             <!-- LOGO -->
                             <div class="navbar-brand-box">
                                 <a href="/" class="logo logo-dark">
                                     <span class="logo-sm">
                                         
-                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="50">
+                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="35">
                                     </span>
                                     <span class="logo-lg">
                                         
-                                        <img src="{{asset('logo/d-logo-dark.png')}}" alt="" height="50">
+                                        <img src="{{asset('logo/d-logo-dark.png')}}" alt="" height="35">
                                     </span>
                                 </a>
 
                                 <a href="/" class="logo logo-light">
                                     <span class="logo-sm">
                                         
-                                        <img src="{{asset('logo/d-logo-dark.png')}}" alt="" height="50">
+                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="35">
                                     </span>
                                     <span class="logo-lg">
                                         
-                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="50">
+                                        <img src="{{asset('logo/d-logo-light.png')}}" alt="" height="35">
                                     </span>
                                 </a>
                             </div>
 
-                            <button type="button"
-                                class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect"
-                                id="vertical-menu-btn">
-                                <i class="fa fa-fw fa-bars"></i>
-                            </button>
+                            
 
                           
                             </form>
@@ -172,7 +175,7 @@
                         <div class="mt-3">
 
                             <a href="#" class="text-body fw-medium font-size-16">{{ Auth::user()->name }}</a>
-                            <p class="text-muted mt-1 mb-0 font-size-13">{{ Auth::user()->role->role}}</p>
+                            <p class="text-muted mt-1 mb-0 font-size-13">Role:{{ Auth::user()->role->role}}</p>
 
                         </div>
                     </div>
@@ -184,11 +187,16 @@
                             <li class="menu-title">Menu</li>
 
                             <li>
+                                <a href="/" class="waves-effect">
+                                    <i class="mdi mdi-home-lightbulb"></i>
+                                    <span>Homepage</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="/dashboard2" class="waves-effect">
                                     <i class="mdi mdi-airplay"></i>
                                     <span>Dashboard</span>
                                 </a>
-                                
                             </li>
                             @if(Auth::user()->role_id == 1)
                             

@@ -3628,7 +3628,7 @@ body.my-account #bbpress-forums {
   font-size: 22px;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 15.4px;
+  letter-spacing-x: 15.4px;
   padding-top: 260px;
   margin-bottom: 10px;
 }

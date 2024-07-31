@@ -291,6 +291,7 @@ html [data-off-canvas*=open] {
     float: none !important;
     width: 100%;
     margin: 0;
+    margin-top:10px;
     text-align: left;
     position: relative;
 }
@@ -422,7 +423,7 @@ html [data-off-canvas*=open] {
 
 @media (max-width:767px) {
   .menu-mobile-button {
-    top: -20px;
+    top: -28px;
   }
   .header .navbar {
     min-height: 87px;

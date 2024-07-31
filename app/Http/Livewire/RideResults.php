@@ -13,47 +13,96 @@ class RideResults extends Component
     public $destination;
     public $distance;
     public $distanceText;
+    public $latitude;
+    public $longitude;
+    public $nearestDrivers = [];
 
     public function mount()
     {
         $this->location = request('location');
         $this->destination = request('destination');
         $this->calculateDistance();
+        $this->findDrivers();
     }
 
     private function calculateDistance()
     {
-        // Call to Google Distance Matrix API to get the distance
-        // Note: Replace 'YOUR_GOOGLE_API_KEY' with your actual API key.
-        try{
+        try {
+            $userCoordinates = $this->getCoordinates($this->location);
+            $destinationCoordinates = $this->getCoordinates($this->destination);
+
+            if (!$userCoordinates || !$destinationCoordinates) {
+                Session::flash('error', 'Unable to get coordinates for the given addresses.');
+                return;
+            }
+
+            $this->latitude = $userCoordinates['lat'];
+            $this->longitude = $userCoordinates['lng'];
+
+            $apiKey = env('GOOGLE_API_KEY');
+            $response = Http::get("https://maps.googleapis.com/maps/api/distancematrix/json", [
+                'origins' => "{$this->latitude},{$this->longitude}",
+                'destinations' => "{$destinationCoordinates['lat']},{$destinationCoordinates['lng']}",
+                'key' => $apiKey,
+            ]);
+
+            // $distanceText = $response->json()['rows'][0]['elements'][0]['distance']['text'];
+            // $this->distanceText = $distanceText;
+            // $this->distance = $this->extractNumericDistance($distanceText);
+
+            $elements = $response->json()['rows'][0]['elements'][0];
+            $this->distanceText = $elements['distance']['text'];
+            $this->durationText = $elements['duration']['text']; // Estimated time
+            $this->distance = $this->extractNumericDistance($this->distanceText);
+        } catch (Exception $e) {
+            Session::flash('error', 'Could not resolve host issues with maps.googleapis.com. kindly check your internet');
+        }
+    }
+
+    private function findDrivers()
+    {
+        if ($this->latitude && $this->longitude) {
+            $this->nearestDrivers = $this->findNearestDrivers($this->latitude, $this->longitude);
+        }
+    }
+
+    private function getCoordinates($address)
+    {
         $apiKey = env('GOOGLE_API_KEY');
-        $response = Http::get("https://maps.googleapis.com/maps/api/distancematrix/json", [
-            'origins' => $this->location,
-            'destinations' => $this->destination,
+        $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
+            'address' => $address,
             'key' => $apiKey,
         ]);
 
-        $distanceText = $response->json()['rows'][0]['elements'][0]['distance']['text'];
-        $this->distanceText = $distanceText;
-        $this->distance = $this->extractNumericDistance($distanceText);
-    } catch (Exception $e) {
-        
-        // Session::flash('error', $e->getMessage());
-        $response= "";
-        Session::flash('error', 'Could not resolve host issues with maps.googleapis.com. kindly check your internet');
-        // return $response = [];
-        
-    }
+        if ($response->successful()) {
+            $location = $response->json()['results'][0]['geometry']['location'];
+            return [
+                'lat' => $location['lat'],
+                'lng' => $location['lng'],
+            ];
+        }
+
+        return null;
     }
 
     private function extractNumericDistance($distanceText)
     {
-        // Extract the numeric part of the distance
         if (preg_match('/[\d.]+/', $distanceText, $matches)) {
             return (float) $matches[0];
         }
 
-        return 0; // Default to 0 if no valid distance found
+        return 0;
+    }
+
+    private function findNearestDrivers($latitude, $longitude, $radius = 50)
+    {
+        $drivers = \DB::table('users')
+            ->selectRaw("id, name, latitude, longitude, (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance", [$latitude, $longitude, $latitude])
+            ->having('distance', '<', $radius)
+            ->orderBy('distance')
+            ->get();
+
+        return $drivers;
     }
 
     public function render()
@@ -66,6 +115,8 @@ class RideResults extends Component
             'destination' => $this->destination,
             'distance' => $this->distance,
             'charge' => $charge,
+            'nearestDrivers' => $this->nearestDrivers,
+            'durationText' => $this->durationText, 
         ])->layout('layouts.guest');
     }
 }

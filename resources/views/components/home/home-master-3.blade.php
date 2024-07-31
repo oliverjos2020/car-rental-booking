@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Dashboard | D’PRESIDENTIAL LUXXETOUR</title>
+    <title>Home | D’PRESIDENTIAL LUXXETOUR</title>
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="description">
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="keywords">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,37 +114,46 @@
             <a class="navbar-brand scroll" href="/"><img class="scroll-logo" src="{{asset('logo/d-logo-light.png')}}"
                     height="40" alt="logo" /></a>
 
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item ">
-                    <a class="nav-link" href="#">About</a>
-                    
-                </li>
-                <li class="nav-item ">
-
-                    <a class="nav-link" href="/listing">Car Rentals</a>
-                    
-                </li>
-                <li class="nav-item "><a class="nav-link" href="/register">Register</a>
-                  
-                </li>
-                
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    <li class="nav-item">
-                        @if(Auth::check())
-                        <li class="nav-item">
-                            <a class="nav-link" href="/mybooking-orders">My Trips</a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="#">About</a>
+        
                         </li>
-                        @csrf
-                        <button type="submit" class="btn btn-light btn-sm">Logout</button>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/listing">Car Rentals</a>
+                        </li>
+                        
+                        @if(!Auth::check())
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/dashboard2">Partner</a>
+                        </li>
+                        <li class="nav-item "><a class="nav-link" href="/register">Register</a>
+        
+                        </li>
+                        <li class="nav-item "><a class="nav-link" href="/login">Login</a>
+        
+                        </li>
                         @else
-                        <a class="nav-link" href="/login">Login</a>
+                        @if(Auth()->user()->role_id == 3)
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/dashboard2">Partner</a>
+                        </li>
+                        @else
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/dashboard2">Dashboard</a>
+                        </li>
                         @endif
-                    </li>
-                </form>
-            </ul>
+                        <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
+                        @endif
+                        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                        @if(Auth::check())
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button style="padding-right: 20px; color: #333 !important; margin-top: 10px;" type="submit" class="btn btn-light btn-sm nav-link">Logout</button>
+                            </form>
+                        @endif
+                    </ul>
         </div>
         <header class="header">
             <div class="top-bar">
@@ -224,12 +233,19 @@
                                     </li>
                                     
                                     @if(!Auth::check())
-                                    {{-- <li class="nav-item ">
-                                        <a class="nav-link" href="/login">Login</a>
-                                    </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/register">Register</a>
-                                    </li> --}}
+                                        <a class="nav-link" href="/dashboard2">Partner</a>
+                                    </li>
+                                    @else
+                                    @if(Auth()->user()->role_id == 3)
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/dashboard2">Partner</a>
+                                    </li>
+                                    @else
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/dashboard2">Dashboard</a>
+                                    </li>
+                                    @endif
                                     @endif
                                     <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                                 </ul>
