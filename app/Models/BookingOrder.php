@@ -19,7 +19,8 @@ class BookingOrder extends Model
         'duration',
         'amount',
         'payment_status',
-        'status'
+        'status',
+        'entertainmentMenu'
     ];
 
     public function user(){

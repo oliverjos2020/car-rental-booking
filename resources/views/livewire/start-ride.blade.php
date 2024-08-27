@@ -1,11 +1,13 @@
 <div>
+    
     <div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
-            <h4 class="page-title mb-0 font-size-18">Driver Location</h4>
+            <h4 class="page-title mb-0 font-size-18">Driver Location <button type="button" class="btn btn-light btn-sm" onclick="getLocation()">Update Location</button></h4>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
+        <div id="driversList" style="margin-top:100px"></div>
         <div id="location-error" style="color: red; display: none;">
             Location is required to use this service. Please allow location access.
             <br>
@@ -23,16 +25,16 @@
 
         <form id="location-form" method="POST" action="">
             @csrf
-            <input type="text" name="latitude" id="latitude" wire:model="latitude">
-            <input type="text" name="longitude" id="longitude" wire:model="longitude">
-            <button type="button" onclick="getLocation()">Update Location</button>
+            <input type="hidden" name="latitude" id="latitude" wire:model="latitude">
+            <input type="hidden" name="longitude" id="longitude" wire:model="longitude">
+            
         </form>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div id="map" style="height: 100vh; width: 100%;"></div>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function initMap(lat, lng) {
         const mapOptions = {
@@ -122,18 +124,57 @@
             },
             body: JSON.stringify({
                 latitude: latitude,
-                longitude: longitude
+                longitude: longitude,
+                vehID: {{$vehId}}
             })
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            // alert(data.message);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     }
+
+    function myOrders()
+    {
+        $.ajax({
+                url: '/myOrders', // Adjust this URL to your backend endpoint
+                method: 'GET',
+                success: function(response) {
+                    $('#driversList').empty(); // Clear existing content
+
+                response.forEach(order => {
+                    $('#driversList').append(
+                        `<div class="container p-1 mt-2" style="border: 2px solid #ccc; max-width: 450px; border-radius: 10px;">
+                            <div class="row flex-nowrap">
+                                <div class="col-3 d-flex align-items-center">
+                                    <i class="fa fa-user" style="font-size:35px; padding: 15px;"></i>
+                                </div>
+                                <div class="col-6 d-flex flex-column justify-content-center">
+                                    <h6 class="m-0 text-truncate">${order.name}</h6>
+                                    <span>Amount: $${order.amount}</span>
+                                </div>
+                                <div class="col-3 get-items-centered">
+                                    <a style="border-radius:5px; cursor:pointer; width:max-content; background: mediumseagreen; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Accept</a>
+                                </div>
+                            </div>
+                        </div>`
+                    );
+                });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching ride:', error);
+                }
+            });
+    }
+    
     window.addEventListener('load', getLocation);
+    myOrders();
+    setTimeout(() => {
+        myOrders();
+    }, 10000); // Adjust interval as needed
 </script>
 
 </div>

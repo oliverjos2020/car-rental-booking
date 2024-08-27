@@ -38,9 +38,7 @@ class Checkout extends Component
     {
         
         $user = Auth()->user()->id;
-        $totalAmount = BookingOrder::where('user_id', $user)
-    ->where('payment_status', 0)
-    ->sum('amount');
+        $totalAmount = BookingOrder::where('user_id', $user)->where('payment_status', 0)->sum('amount');
         $order = BookingOrder::where('user_id', $user)->where('payment_status', 0)->get();
         return view('livewire.home.checkout', ['orders' => $order, 'totalAmount' => $totalAmount])->layout('components.home.home-master-3');
 

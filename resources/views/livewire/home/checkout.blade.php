@@ -63,24 +63,54 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><strong>Pickup date {{$order->pickupDate}}
+                                        <td colspan="2"><strong>Pickup {{$order->pickupDate}}
                                                 {{$order->pickupTime}}</strong></td>
-                                        <td colspan="2"><strong>Dropoff date {{$order->dropoffDate}}
+                                        <td colspan="2"><strong>Dropoff {{$order->dropoffDate}}
                                                 {{$order->dropoffTime}}</strong></td>
                                         <td><strong>Location: {{$order->vehicle->location}}</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><strong>Category: {{$order->vehicle->priceSetup->item}}
-                                            </strong></td>
-                                        <td colspan="2"><strong>Days of hire: {{ $order->duration }} </strong></td>
-                                        <td><strong>Total Amount: ${{ number_format($order->amount, 2, ',', '.')}}
-                                            </strong></td>
+                                        <td colspan="2">Category: {{$order->vehicle->priceSetup->item}} ({{$order->vehicle->priceSetup->amount}})</td>
+                                        @if($order->vehicle->category_id == 3)
+                                            <td colspan="3">Hours of hire: {{ $order->duration }} x {{$order->vehicle->priceSetup->amount}}</td>
+                                        @elseif($order->vehicle->category_id == 2)
+                                            <td colspan="3">Days of hire: {{ $order->duration }} x {{$order->vehicle->priceSetup->amount}} </td>
+                                        @endif
+                                        
+                                        
                                     </tr>
+                                    @if($order->vehicle->category_id == 3)
+                                        @php
+                                            $menus = json_decode($order->entertainmentMenu, true)
+                                        @endphp
+                                        @forelse($menus as $menu)
+                                            <tr>
+                                                <td colspan="2">
+                                                    @php
+                                                    $item = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('item')->first();
+                                                    @endphp
+                                                    {{ $item }}
+                                                </td>
+                                                <td colspan="3">
+                                                    @php
+                                                    $amount = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('amount')->first();
+                                                    @endphp
+                                                    {{ $amount }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                        @endforelse
+                                    @endif
                                     <tr>
                                         <td>
                                             <button type="submit" style="background:red; color:white;"
                                                 class="btn btn-danger btn-sm"
                                                 wire:click="deleteOrder({{ $order->id }})">Delete</button>
+                                        </td>
+                                        <td colspan="4">
+                                            <strong>
+                                                Total Amount: ${{ number_format($order->amount, 2, ',', '.')}}
+                                            </strong>
                                         </td>
                                     </tr>
                                     </tfoot>

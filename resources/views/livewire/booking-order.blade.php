@@ -83,7 +83,7 @@
                                 <td>{{ $order->pickupTime }}</td>
                                 <td>{{ $order->dropoffDate }}</td>
                                 <td>{{ $order->dropoffTime }}</td>
-                                <td>{{ $order->duration }} Day(s)</td>
+                                <td>{{$order->vehicle->category_id == 3 ? $order->duration .'hour(s)' :  $order->duration .'day(s)'}}</td>
                                 <td>{{ $order->amount }}</td>
                                 <td><span class="badge bg-{{$order->payment_status == 1 ? 'success' : 'danger'}}">{{$order->payment_status == 1 ? 'Paid' : 'Pending'}}</span></td>
                                 <td>{{ $order->created_at }}</td>

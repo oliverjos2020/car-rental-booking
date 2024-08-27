@@ -79,7 +79,7 @@
                                         <td>{{ $order->pickupTime }}</td>
                                         <td>{{ $order->dropoffDate }}</td>
                                         <td>{{ $order->dropoffTime }}</td>
-                                        <td>{{ $order->duration }} Day(s)</td>
+                                        <td>{{$order->vehicle->category_id == 3 ? $order->duration .'hour(s)' :  $order->duration .'day(s)'}}</td>
                                         <td>{{ $order->amount }}</td>
                                         <td><span
                                                 class="badge bg-{{$order->payment_status == 1 ? 'success' : 'danger'}}">{{$order->payment_status
@@ -100,14 +100,14 @@
                                             @endif
                                         </td>
                                         {{-- @endif --}}
-                                        @if($order->status == 2)
+                                        {{-- @if($order->status == 2)
                                         <td>
 
                                             <a class="btn btn-danger btn-sm"
                                                 wire:click="end({{$order->id}}, {{$order->vehicle_id}})"><i
                                                     class="fa fa-check"></i> End Trip</a>
                                         </td>
-                                        @endif
+                                        @endif --}}
                                     </tr>
 
                                     @empty

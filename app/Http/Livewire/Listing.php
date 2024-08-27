@@ -65,9 +65,9 @@ class Listing extends Component
                 });
             })
         ->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', 2)->where('on_trip', 0);
-        if (!empty($this->hire)) {
-            $vehicles->where('category_id', $this->hire);
-        }
+        // if (!empty($this->hire)) {
+            $vehicles->where('category_id', 2);
+        // }
         $vehicles = $vehicles->latest()->paginate($this->limit);
         $brands = CarBrand::all();
         $categories = PriceSetup::all();

@@ -260,7 +260,7 @@
                                             @elseif($vehicle->status == 2)
                                                 @if($vehicle->category->category == 'Booking')
                                                 <td class="text-center">
-                                                    <a href="/start-ride" class="btn btn-primary btn-sm">Start Ride</a>
+                                                    <a href="/start-ride/{{ $vehicle->id}}" class="btn btn-primary btn-sm">Start Ride</a>
                                                 </td>
                                                 @endif
                                             @endif

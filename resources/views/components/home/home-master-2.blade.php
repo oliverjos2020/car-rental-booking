@@ -19,9 +19,9 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
     <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
-    {{--
-    <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
-    {{-- @livewireStyles --}}
+    
+    {{-- <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
+    @livewireStyles
     <style>
         .home-input {
             width: 100%;
@@ -33,11 +33,80 @@
         .text-light {
             color: #fff;
         }
-        .nav-link{
-            color:#fff !important;
+
+        .nav-link {
+            color: #fff !important;
+        }
+        .input-group-text-left{
+            border-top-left-radius: 0px!important;
+            border-bottom-left-radius:0px !important;
+            /* border-bottom-right-radius:0px !important; */
+        }
+        .input-group-text-right{
+            border-top-right-radius: 0px!important;
+            border-bottom-right-radius:0px !important;
+            /* border-bottom-left-radius:0px !important; */
+        }
+        .my-form-control{
+            height:48px !important;
+        }
+        .my-show-location{
+            background:white;
+            padding:15px;
+            /* border-top-right-radius: 5px!important;
+            border-top-left-radius: 5px!important; */
+            border-radius:5px !important;
+            width: 450px;
+            cursor: pointer;
+        }
+        .my-show-location li{
+            list-style: none !important;
+        }
+        .service-card{
+            padding: 20px;
+            background: rgb(245, 245, 245);
+            border-radius: 15px;
+            margin-top:15px;
+            
+        }
+        .service-card a{
+            background: #333;
+            padding: 8px 20px;
+            color: #fff !important;
+            border-radius: 30px;
+            margin-top: 10px !important;
+        }
+        .service-card div{
+            font-size:12px !important;
+            margin-bottom:10px;
+        }
+        .get-items-centered {
+            display: flex !important;
+            align-items: center;
+        }
+
+        /* Override flex display for small screens */
+        @media (max-width: 991.98px) {
+            .d-none {
+                display: none !important;
+            }
+        }
+        .my-btn-dark{
+            background: #333;
+            padding: 8px 20px;
+            color: #fff !important;
+            border-radius: 30px;
+            margin-top: 10px !important;
+        }
+        .my-btn-light{
+            background: #fff;
+            padding: 8px 20px;
+            color: #333f !important;
+            border-radius: 30px;
+            margin-top: 10px !important;
         }
     </style>
-<link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('logo/icon-dark.png') }}">
 </head>
 
 <body class="page">
@@ -91,8 +160,8 @@
         <!-- MOBILE MENU-->
         <!-- ==========================-->
         <div data-off-canvas="mobile-slidebar left overlay">
-            <a class="navbar-brand scroll" href="/"><img class="scroll-logo"
-                    src="{{asset('logo/d-logo-light.png')}}" height="40" alt="logo" /></a>
+            <a class="navbar-brand scroll" href="/"><img class="scroll-logo" src="{{asset('logo/d-logo-light.png')}}"
+                    height="40" alt="logo" /></a>
 
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
@@ -103,13 +172,16 @@
                 <li class="nav-item ">
                     <a class="nav-link" href="/listing">Car Rentals</a>
                 </li>
-                
+                <li class="nav-item ">
+                    <a class="nav-link" href="/entertainment-listing">Entertainment Listing</a>
+                </li>
+
                 @if(!Auth::check())
                 <li class="nav-item ">
                     <a class="nav-link" href="/dashboard2">Partner</a>
                 </li>
-                <li class="nav-item "><a class="nav-link" href="/register">Register</a>
-
+                <li class="nav-item ">
+                    <a class="nav-link" href="/register">Register</a>
                 </li>
                 <li class="nav-item "><a class="nav-link" href="/login">Login</a>
 
@@ -125,20 +197,21 @@
                 </li>
                 @endif
                 <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
-                @endif
+                    @endif
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                 @if(Auth::check())
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button style="padding-right: 20px; color: #333 !important; margin-top: 10px;" type="submit" class="btn btn-light btn-sm nav-link">Logout</button>
-                    </form>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button style="padding-right: 20px; color: #333 !important; margin-top: 10px;" type="submit"
+                        class="btn btn-light btn-sm nav-link">Logout</button>
+                </form>
                 @endif
             </ul>
         </div>
 
-        
+
         <header class="header header_main-pg">
-            
+
             <div class="header-main">
                 <div class="container" style="margin-top:25px;">
                     <div class="row align-items-center justify-content-between">
@@ -146,18 +219,22 @@
                             <a class="navbar-brand navbar-brand_light scroll" href="/">
                                 <img class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
                                     alt="logo" />
-                                </a>
-                                <a class="navbar-brand navbar-brand_dark scroll" href="/">
-                                    <img class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
+                            </a>
+                            <a class="navbar-brand navbar-brand_dark scroll" href="/">
+                                <img class="normal-logo" src="{{asset('logo/d-logo-light.png')}}" height="40"
                                     alt="logo" />
-                                </a>
-                            </div>
+                            </a>
+                        </div>
                         <div class="col-auto">
-                            <div class="header-contacts d-none d-md-block d-lg-none d-xl-block"><i
-                                    class="ic text-primary fas fa-phone"></i><span class="header-contacts__inner"><span
-                                        class="header-contacts__info">Call us for help</span><a
-                                        class="header-contacts__number" href="#">(258) 403
-                                        7961</a></span></div>
+                            {{-- <div class="header-contacts d-none d-md-block d-lg-none d-xl-block">
+                                <i class="ic text-primary fas fa-phone"></i>
+                                <span class="header-contacts__inner">
+                                    <span class="header-contacts__info">Call us for help</span>
+                                        <a class="header-contacts__number" href="#">
+                                            (258) 403 7961
+                                        </a>
+                                    </span>
+                                </div> --}}
                             <!-- Mobile Trigger Start-->
                             <button class="menu-mobile-button js-toggle-mobile-slidebar toggle-menu-button d-lg-none"><i
                                     class="toggle-menu-button-icon"><span></span><span></span><span></span><span></span><span></span><span></span></i></button>
@@ -173,44 +250,48 @@
                                     </li>
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/listing">Car Rentals</a>
-
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/entertainment-listing">Entertainment</a>
                                     </li>
                                     @if(!Auth::check())
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="/dashboard2">Partner</a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="/register">Register</a>
-                                        </li>
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="/login">Login</a>
-                                        </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/dashboard2">Partner</a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/register">Register</a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/login">Login</a>
+                                    </li>
                                     @else
-                                        @if(Auth()->user()->role_id == 3)
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="/dashboard2">Partner</a>
-                                        </li>
-                                        @else
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="/dashboard2">Dashboard</a>
-                                        </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Contact</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="/mybooking-orders">My Trips</a>
-                                        </li>
+                                    @if(Auth()->user()->role_id == 3)
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/dashboard2">Partner</a>
+                                    </li>
+                                    @else
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/dashboard2">Dashboard</a>
+                                    </li>
                                     @endif
-                                    
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Contact</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/mybooking-orders">My Trips</a>
+                                    </li>
+                                    @endif
+
                                     @if(Auth::check())
-                                        
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <a href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" style="color:#fffafa" class="btn btn-light btn-sm">LOGOUT</a>
-                                        </form>
+
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <a href="route('logout')"
+                                            onclick="event.preventDefault(); this.closest('form').submit();"
+                                            style="color:#fffafa" class="btn btn-light btn-sm">LOGOUT</a>
+                                    </form>
                                     @endif
-                                    
+
 
                                 </ul>
                             </nav>
@@ -219,46 +300,9 @@
                 </div>
             </div>
         </header>
-       
-        <div class="main-slider slider-pro" id="main-slider" data-slider-width="100%" data-slider-height="900px"
-            data-slider-arrows="true" data-slider-buttons="false">
-            <div class="sp-slides">
-                <!-- Slide 1-->
-                <div class="main-slider__slide sp-slide"><img class="sp-image"
-                        src="{{asset('assets-ii/media/content/b-main-slider/bg-1.jpg')}}" alt="slider" />
-                    <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400">
-                        <div class="main-slider__slogan">Book or Hire a Vehicle</div>
-                        <div class="main-slider__title">find your car</div>
-                    </div>
-                    <div class="sp-layer" data-width="100%" data-show-transition="down" data-hide-transition="top"
-                        data-show-duration="1500" data-show-delay="800" data-hide-delay="400"><img
-                            class="main-slider__figure-1 img-fluid"
-                            src="{{asset('assets-ii/media/content/b-main-slider/fig-1.png')}}" alt="foto" /></div>
-                    <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a
-                            class="main-slider__link" href="/listing">explore inventory</a></div>
-                </div>
-            </div>
-            <div class="sp-slides">
-                <!-- Slide 1-->
-                <div class="main-slider__slide sp-slide"><img class="sp-image"
-                        src="{{asset('assets-ii/media/content/b-main-slider/bg-1.jpg')}}" alt="slider" />
-                    <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400">
-                        <div class="main-slider__slogan">Book or Hire a Vehicle</div>
-                        <div class="main-slider__title">find your car</div>
-                    </div>
-                    <div class="sp-layer" data-width="100%" data-show-transition="down" data-hide-transition="top"
-                        data-show-duration="1500" data-show-delay="800" data-hide-delay="400"><img
-                            class="main-slider__figure-1 img-fluid"
-                            src="{{asset('assets-ii/media/content/b-main-slider/fig-1.png')}}" alt="foto" /></div>
-                    <div class="sp-layer" data-width="100%" data-show-transition="left" data-hide-transition="left"
-                        data-show-duration="800" data-show-delay="400" data-hide-delay="400"><a
-                            class="main-slider__link" href="/listing">explore inventory</a></div>
-                </div>
-            </div>
-        </div>
+        
+        
+
         {{ $slot }}
         <section class="section-default">
             <div class="container">
@@ -422,7 +466,7 @@
         <footer class="footer">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4 col-sm-5">
+                    <div class="col-lg-5">
                         <div class="footer-section footer-section_info">
                             <div class="footer__title"><img src="{{asset('logo/d-logo-light.png')}}" height="40"></div>
                             {{-- <div class="footer__slogan">autos dealers</div> --}}
@@ -436,56 +480,51 @@
                                 <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
                                         href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a>
                                 </div>
-                                <div class="footer-contacts__item"><i class="ic far fa-clock text-primary"></i>Mon to
-                                    Fri :
-                                    9:00am to 6:00pm</div><a class="footer-contacts__phone" href="tel:2584037961">(258)
-                                    403
-                                    7961</a>
+                                {{-- <div class="footer-contacts__item">
+                                    <i class="ic far fa-clock text-primary"></i>
+                                    Mon to Fri :
+                                    9:00am to 6:00pm
+                                </div> --}}
+
+                                <a class="footer-contacts__phone" href="tel:2584037961">
+                                    (258) 403 7961
+                                </a>
+                                <div class="text-left">
+                                    <ul class="footer-soc list-unstyled" style="margin-top:14px !important">
+                                        <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                target="_blank"><i class="ic fab fa-twitter"></i></a></li>
+                                        <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                target="_blank"><i class="ic fab fa-facebook"></i></a></li>
+                                        <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                target="_blank"><i class="ic fab fa-linkedin"></i></a></li>
+
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-7 col-sm-3">
+                    <div class="col-lg-3">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <section class="footer-section footer-section_link">
-                                    <h3 class="footer-section__title">About Isnaider</h3><i
-                                        class="ui-decor bg-primary"></i>
+                                    <h3 class="footer-section__title">Links</h3><i class="ui-decor bg-primary"></i>
                                     <ul class="footer-list list-unstyled">
                                         <li><a href="#">Home</a></li>
-                                        <li><a href="#">Services</a></li>
                                         <li><a href="#">About us</a></li>
-                                        <li><a href="#">Inventory</a></li>
-                                        <li><a href="#">Parts Shop</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                        <li><a href="#">Sitemap</a></li>
-                                    </ul>
+                                        <li><a href="#">Car Rentals</a></li>
+                                        <li><a href="#">Contact Us</a></li>
                                 </section>
                             </div>
-                            <div class="col-md-6">
-                                <section class="footer-section footer-section_link">
-                                    <h3 class="footer-section__title">Customer Links</h3><i
-                                        class="ui-decor bg-primary"></i>
-                                    <ul class="footer-list list-unstyled">
-                                        <li><a href="#">Latest Cars</a></li>
-                                        <li><a href="#">Featured Cars</a></li>
-                                        <li><a href="#">Sell Your Car</a></li>
-                                        <li><a href="#">Buy a Car</a></li>
-                                        <li><a href="#">Reviews</a></li>
-                                        <li><a href="#">Latest News</a></li>
-                                        <li><a href="#">Car Inspection</a></li>
-                                    </ul>
-                                </section>
-                            </div>
+
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <section class="footer-section footer-section_subscribe">
-                            <h3 class="footer-section__title">Subscribe Newsletter</h3><i
+                            <h3 class="footer-section__title">Feel Free to reach us</h3><i
                                 class="ui-decor bg-primary"></i>
                             <form class="footer-form">
-                                <div class="footer-form__info">Get our weekly nwsletter for latest car news exclusive
-                                    offers and
-                                    deals and more.</div>
+                                <div class="footer-form__info">Drop us an email and we will reach you within 24 hours
+                                </div>
                                 <div class="form-group">
                                     <input class="footer-form__input form-control" type="email"
                                         placeholder="your email">
@@ -495,22 +534,7 @@
                         </section>
                     </div>
                 </div>
-                <div class="text-center">
-                    <ul class="footer-soc list-unstyled">
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-twitter"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-facebook"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-linkedin"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-google-plus-g"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-pinterest"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fas fa-play"></i></a></li>
-                    </ul>
-                </div>
+
                 <div class="footer-copyright">
                     Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
                     <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
@@ -570,16 +594,16 @@
     <script src="{{asset('assets-ii/plugins/noUiSlider/wNumb.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>
-    
+
 
     <script>
-     document.addEventListener('livewire:load', function () {
+        document.addEventListener('livewire:load', function () {
          window.addEventListener('notify', event => {
              toastr[event.detail.type](event.detail.message);
          });
      });
      
- </script>
+    </script>
     @livewireScripts
 </body>
 

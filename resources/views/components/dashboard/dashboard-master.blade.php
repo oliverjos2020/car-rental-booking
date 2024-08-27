@@ -38,6 +38,10 @@
     .bg-not-active{
         background:#c3cef8 !important;
     }
+    .get-items-centered {
+        display: flex !important;
+        align-items: center;
+    }
 </style>
 </head>
 
@@ -232,6 +236,7 @@
                                     <li><a href="/location">Pickup Location</a></li>
                                     <li><a href="/brand">Car Brand</a></li>
                                     <li><a href="/priceSetup">Hire Price Setup</a></li>
+                                    <li><a href="/entertainment-menu">Entertainment Menu</a></li>
                                 </ul>
                             </li>
                             <li>

@@ -17,14 +17,15 @@ class CreateBookingOrdersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete();
-            $table->date('pickupDate');
+            $table->date('pickupDate')->nullable();
             $table->string('pickupTime');
-            $table->date('dropoffDate');
+            $table->date('dropoffDate')->nullable();
             $table->string('dropoffTime');
             $table->integer('duration');
             $table->decimal('amount');
             $table->char('payment_status', 1)->default('0');
             $table->char('status', 1)->default('0');
+            $table->string('entertainmentMenu')->nullable();
             $table->timestamps();
         });
     }

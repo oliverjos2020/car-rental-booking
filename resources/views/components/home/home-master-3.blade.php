@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Home | D’PRESIDENTIAL LUXXETOUR</title>
+    <title>D’PRESIDENTIAL LUXXETOUR</title>
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="description">
     <meta content="D’PRESIDENTIAL LUXXETOUR" name="keywords">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,6 +123,9 @@
                         <li class="nav-item ">
                             <a class="nav-link" href="/listing">Car Rentals</a>
                         </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/entertainment-listing">Entertainment</a>
+                        </li>
                         
                         @if(!Auth::check())
                         <li class="nav-item ">
@@ -231,6 +234,9 @@
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/listing">Car Rentals</a>
                                     </li>
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/entertainment-listing">Entertainment</a>
+                                    </li>
                                     
                                     @if(!Auth::check())
                                     <li class="nav-item ">
@@ -268,7 +274,8 @@
                         {{-- <div class="col-md-auto"><a class="b-title-page__btn bg-primary" href="#">Smarter Way to
                                 Buy or
                                 Sell
-                                Cars</a></div> --}}
+                                Cars</a>
+                            </div> --}}
                     </div>
                 </div>
             </div>
@@ -278,98 +285,84 @@
         <div class="xyz">
                 {{ $slot }}
             </div>
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 col-sm-5">
-                        <div class="footer-section footer-section_info">
-                            <div class="footer__title"><img src="{{asset('logo/d-logo-light.png')}}" height="40"></div>
-                            {{-- <div class="footer__slogan">autos dealers</div> --}}
-                            <div class="footer-info">Eipisicing elit sed do eiusmod tempor laboe dolore magna aliqa Ut
-                                enim ad
-                                minim veniam quis nostrud exercitation ullam.</div>
-                            <div class="footer-contacts">
-                                <div class="footer-contacts__item"><i class="ic fas fa-map-marker-alt text-primary"></i>Fairview
-                                    Ave, El Monte, CA 91732</div>
-                                <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
-                                        href="mailto:support@domain.com">support@domain.com</a></div>
-                                <div class="footer-contacts__item"><i class="ic far fa-clock text-primary"></i>Mon to
-                                    Fri :
-                                    9:00am to 6:00pm</div><a class="footer-contacts__phone" href="tel:2584037961">(258)
-                                    403
-                                    7961</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-7 col-sm-3">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <section class="footer-section footer-section_link">
-                                    <h3 class="footer-section__title">About Isnaider</h3><i class="ui-decor bg-primary"></i>
-                                    <ul class="footer-list list-unstyled">
-                                        <li><a href="#">Home</a></li>
-                                        <li><a href="#">Services</a></li>
-                                        <li><a href="#">About us</a></li>
-                                        <li><a href="#">Inventory</a></li>
-                                        <li><a href="#">Parts Shop</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                        <li><a href="#">Sitemap</a></li>
-                                    </ul>
-                                </section>
-                            </div>
-                            <div class="col-md-6">
-                                <section class="footer-section footer-section_link">
-                                    <h3 class="footer-section__title">Customer Links</h3><i class="ui-decor bg-primary"></i>
-                                    <ul class="footer-list list-unstyled">
-                                        <li><a href="#">Latest Cars</a></li>
-                                        <li><a href="#">Featured Cars</a></li>
-                                        <li><a href="#">Sell Your Car</a></li>
-                                        <li><a href="#">Buy a Car</a></li>
-                                        <li><a href="#">Reviews</a></li>
-                                        <li><a href="#">Latest News</a></li>
-                                        <li><a href="#">Car Inspection</a></li>
-                                    </ul>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <section class="footer-section footer-section_subscribe">
-                            <h3 class="footer-section__title">Subscribe Newsletter</h3><i class="ui-decor bg-primary"></i>
-                            <form class="footer-form">
-                                <div class="footer-form__info">Get our weekly nwsletter for latest car news exclusive
-                                    offers and
-                                    deals and more.</div>
-                                <div class="form-group">
-                                    <input class="footer-form__input form-control" type="email" placeholder="your email">
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="footer-section footer-section_info">
+                                <div class="footer__title"><img src="{{asset('logo/d-logo-light.png')}}" height="40"></div>
+                                {{-- <div class="footer__slogan">autos dealers</div> --}}
+                                <div class="footer-info">Eipisicing elit sed do eiusmod tempor laboe dolore magna aliqa Ut
+                                    enim ad
+                                    minim veniam quis nostrud exercitation ullam.</div>
+                                <div class="footer-contacts">
+                                    <div class="footer-contacts__item"><i
+                                            class="ic fas fa-map-marker-alt text-primary"></i>Fairview
+                                        Ave, El Monte, CA 91732</div>
+                                    <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
+                                            href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a>
+                                    </div>
+                                    {{-- <div class="footer-contacts__item">
+                                        <i class="ic far fa-clock text-primary"></i>
+                                        Mon to Fri :
+                                        9:00am to 6:00pm
+                                    </div> --}}
+                                    
+                                    <a class="footer-contacts__phone" href="tel:2584037961">
+                                        (258) 403 7961
+                                    </a>
+                                    <div class="text-left">
+                                        <ul class="footer-soc list-unstyled" style="margin-top:14px !important">
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
+                                                        class="ic fab fa-twitter"></i></a></li>
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
+                                                        class="ic fab fa-facebook"></i></a></li>
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
+                                                        class="ic fab fa-linkedin"></i></a></li>
+                                           
+                                        </ul>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-primary">Subscribe</button>
-                            </form>
-                        </section>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <section class="footer-section footer-section_link">
+                                        <h3 class="footer-section__title">Links</h3><i
+                                            class="ui-decor bg-primary"></i>
+                                        <ul class="footer-list list-unstyled">
+                                            <li><a href="#">Home</a></li>
+                                            <li><a href="#">About us</a></li>
+                                            <li><a href="#">Car Rentals</a></li>
+                                            <li><a href="#">Contact Us</a></li>
+                                    </section>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <section class="footer-section footer-section_subscribe">
+                                <h3 class="footer-section__title">Feel Free to reach us</h3><i
+                                    class="ui-decor bg-primary"></i>
+                                <form class="footer-form">
+                                    <div class="footer-form__info">Drop us an email and we will reach you within 24 hours</div>
+                                    <div class="form-group">
+                                        <input class="footer-form__input form-control" type="email"
+                                            placeholder="your email">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary">Subscribe</button>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-copyright">
+                        Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
+                        <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
                     </div>
                 </div>
-                <div class="text-center">
-                    <ul class="footer-soc list-unstyled">
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-twitter"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-facebook"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-linkedin"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-google-plus-g"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fab fa-pinterest"></i></a></li>
-                        <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                    class="ic fas fa-play"></i></a></li>
-                    </ul>
-                </div>
-                <div class="footer-copyright">
-                    Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
-                    <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
-                </div>
-            </div>
-        </footer>
+            </footer>
         <!-- .footer-->
     </div>
     <!-- end layout-theme-->

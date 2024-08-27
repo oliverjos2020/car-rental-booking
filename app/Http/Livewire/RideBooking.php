@@ -35,7 +35,7 @@ class RideBooking extends Component
         ]);
 
         return $response->json()['predictions'] ?? [];
-    } catch (Exception $e) {
+     } catch (Exception $e) {
         
         // Session::flash('error', $e->getMessage());
         $response= "";
@@ -47,7 +47,7 @@ class RideBooking extends Component
     public function selectSuggestion($field, $suggestion)
     {
         $this->$field = $suggestion;
-        if ($field === 'location') {
+        if ($field === 'location') { 
             $this->suggestionsLocation = [];
         } elseif ($field === 'destination') {
             $this->suggestionsDestination = [];

@@ -4,7 +4,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/"><i class="ic text-primary fas fa-home"></i> Review</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Review</li>
+                <li class="breadcrumb-item active" aria-current="page">Review </li>
             </ol>
         </nav>
     </div>
@@ -58,6 +58,7 @@
                             </div>
 
                             <div class="b-goods-f-checks d-none d-sm-block">
+                                @if($vehicle->category_id == 2)
                                 <div class="b-goods-f-checks__section">
                                     <div class="b-goods-f-checks__title text-primary">Vehicle Category</div>
                                     <div class="row no-gutters justify-content-between">
@@ -92,12 +93,153 @@
                                     </div>
 
                                 </div>
-
+                                @elseif($vehicle->category_id == 3)
+                                    <div class="b-goods-f-checks__section">
+                                        <div class="b-goods-f-checks__title text-primary">Vehicle Category</div>
+                                        <div class="row no-gutters justify-content-between">
+                                            <div class="col-sm-auto">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-inputx" checked="checked" id="customCheck1"
+                                                        type="checkbox" />
+                                                        
+                                                    <label class="custom-control-labelx"
+                                                        for="customCheck1">{{$vehicle->priceSetup->item}} / hour</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-auto b-goods-f-checks__price">${{
+                                                number_format($vehicle->priceSetup->amount, 2, ',', '.') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="b-goods-f-checks__section">
+                                        <div class="b-goods-f-checks__title text-primary">Hours of hire</div>
+                                        <div class="row no-gutters justify-content-between">
+                                            <div class="col-sm-auto">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-inputx" checked="checked" id="customCheck1"
+                                                        type="radio" checked />
+                                                        
+                                                    <label class="custom-control-labelx" for="customCheck2">
+                                                        <div wire:listen="daysCalculated">
+                                                            <p id="days">{{ $hours }} hour(s)</p>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-auto b-goods-f-checks__price">${{ number_format($hours *
+                                                $vehicle->priceSetup->amount, 2, ',', '.')}} </div>
+                                        </div>
+    
+                                    </div>
+                                @endif
                             </div>
                             
                         </div>
                         <div class="col-lg-4">
-                            
+                            @if($vehicle->category_id == 3)
+                            <aside class="l-sidebar mt-4 mt-lg-0">
+                                <div class="widget section-sidebar bg-gray">
+                                    <h3
+                                        class="widget-title bg-dark row justify-content-between align-items-center no-gutters">
+                                        <i class="ic flaticon-car-2 bg-primary col-auto"></i><span
+                                            class="widget-title__inner col">Your Reservation</span>
+                                    </h3>
+                                    <div class="widget-content">
+                                        <div class="widget-card">
+                                            @if(auth()->check())
+                                                <div class="widget-card-descr">
+                                                    <div class="widget-card-descr__item">
+                                                        <div class="widget-card-descr__title">Vehicle Pickup & Dropoff</div>
+                                                        <div class="widget-card-descr__info">
+                                                            {{$vehicle->location}} / {{$vehicle->location}}</div>
+                                                    </div> 
+                                                    <div class="widget-card-number no-gutter widget-card-descr__item">
+                                                        <div class="b-filter__row">
+                                                            <label for="pickupTime">Pick-up Time</label>
+                                                            <input type="time" wire:model="pickupTime" 
+                                                                placeholder="Pick-up Time" class="review-input">
+                                                                @error('pickupTime')
+                                                                    <span style="color:red" class="text-danger"> {{ $message }} </span>
+                                                                @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="widget-card-number no-gutter widget-card-descr__item">
+                                                        <div class="b-filter__row">
+                                                            <label for="dropOffTime">Drop-off Time</label>
+                                                            <input type="time" pattern="hh:mm a" wire:model="dropoffTime"
+                                                                placeholder="Drop-off Time" wire:change="calculateTime" class="review-input">
+                                                                @error('dropoffTime')
+                                                                    <span style="color:red" class="text-danger"> {{ $message }} </span>
+                                                                @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="widget-card-number no-gutter widget-card-descr__item">
+                                                        @forelse($menus as $menu)
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input wire:model="selectedMenus" class="custom-control-inputx" 
+                                                                {{ $menu->required == 1 ? 'checked disabled' : '' }} 
+                                                                value="{{ $menu->id }}" 
+                                                                type="checkbox" 
+                                                            />
+                                                            <label class="custom-control-labelx" for="customCheck1">
+                                                                {{ $menu->item }} ({{ $menu->amount }})
+                                                            </label>
+                                                        </div>
+                                                        @empty
+
+                                                        @endforelse
+                                                    </div>
+                                                    <div class="widget-card-number no-gutter widget-card-descr__item">
+                                                        <div class="b-filter__row">
+                                                            <label for="dropOffTime">Drivers License</label>
+                                                            <input type="file" wire:model="driversLicense"
+                                                            accept="image/jpg, image/jpeg, image/png" class="review-input">
+                                                            <br>
+                                                            {{-- @if ($driversLicense)
+                                                                <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            @endif --}}
+                                                            @if ($driversLicense instanceof \Livewire\TemporaryUploadedFile)
+                                                            <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            @elseif ($existingdriversLicense)
+                                                            <img src="{{ $existingdriversLicense }}" class="image mt-3" style="max-width: 300px">
+                                                            @endif
+                                                            <br>
+                                                            @error('driversLicense')
+                                                                    <span style="color:red" class="text-danger"> {{ $message }} </span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="widget-card-number no-gutter widget-card-descr__item">
+                                                        <div class="b-filter__row">
+                                                            <label for="dropOffTime">Insurance</label>
+                                                            <input type="file" wire:model="insurance"
+                                                            accept="image/jpg, image/jpeg, image/png" class="review-inputx">
+                                                            <br>
+                                                            {{-- @if ($insurance)
+                                                                <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            @endif --}}
+                                                            @if ($insurance instanceof \Livewire\TemporaryUploadedFile)
+                                                            <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            @elseif ($existingInsurance)
+                                                            <img src="{{ $existingInsurance }}" class="image mt-3" style="max-width: 300px">
+                                                            @endif
+                                                            <br>
+                                                            @error('insurance')
+                                                                    <span style="color:red" class="text-danger"> {{ $message }} </span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <a style="color:#fff" class="btn btn-primary text-light btn-lg d-none d-sm-block" wire:click="proceed"> Proceed</a>
+                                                @else
+                                                <a style="color:#fff" class="btn btn-primary text-light btn-lg d-none d-sm-block" href="/login"> Login to continue</a>
+                                                @endif
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </aside>
+                            @else
                                 <aside class="l-sidebar mt-4 mt-lg-0">
                                     <div class="widget section-sidebar bg-gray">
                                         <h3
@@ -252,6 +394,7 @@
                                         @endif
                                     </div>
                                 </aside>
+                            @endif
                             
                         </div>
                     </div>

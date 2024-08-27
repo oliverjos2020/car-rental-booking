@@ -76,7 +76,7 @@
                                                 @endforelse
                                             </select>
                                         </div>
-                                        <div class="b-filter__row">
+                                        {{-- <div class="b-filter__row">
                                             <select wire:model="hire" class="home-input" data-width="100%">
                                                 <option value="">Select Hire Type</option>
                                                 @forelse($hireTypes as $hire)
@@ -85,11 +85,10 @@
 
                                                 @endforelse
                                             </select>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
-                                    <button wire:click.prevent="resetButton"
-                                        class="b-filter__reset btn btn-default btn-lg w-100">Reset Filters</button>
+                                    <button wire:click.prevent="resetButton" class="b-filter__reset btn btn-default btn-lg w-100">Reset Filters</button>
                                 </form>
                             </div>
                         </div>
@@ -241,17 +240,6 @@
                             {{ $vehicles->links()}}
                         </div>
                     </div>
-                    {{-- <nav class="mt-3" aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                            </li>
-                        </ul>
-                    </nav> --}}
                 </div>
             </div>
         </div>
