@@ -33,6 +33,8 @@ class CreateVehiclesTable extends Migration
             $table->char('status', 1)->default('0')->nullable();
             $table->dateTime('dateApproved')->nullable();
             $table->char('on_trip', 1)->default('0')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->timestamps();
         });
     }

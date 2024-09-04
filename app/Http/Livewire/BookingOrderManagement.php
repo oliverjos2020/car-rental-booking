@@ -78,7 +78,7 @@ class BookingOrderManagement extends Component
             return;
         }
     }
-    
+
     public function render()
     {
         if ($this->status == 'pending'):
@@ -87,14 +87,15 @@ class BookingOrderManagement extends Component
             $status = 2;
         elseif ($this->status == 'completed'):
             $status = 3;
-        endif; 
+        endif;
         // dd($status);
         if(Auth()->user()->role_id == 1):
-            $orders = BookingOrder::where('user_id', 'like', '%' . $this->search . '%')->where('status', $status)->latest()->paginate($this->limit);
+            $orders = BookingOrder::where('user_id', 'like', '%' . $this->search . '%')->where('status', $status)->where('entertainment', 0)->latest()->paginate($this->limit);
         elseif (Auth()->user()->role_id == 2):
             $partnerVehiclesArray = Vehicle::where('user_id', Auth()->user()->id)->where('status', 2)->pluck('id')->toArray();
-            $orders = BookingOrder::whereIn('vehicle_id', $partnerVehiclesArray)->where('status', $status)->latest()->paginate($this->limit);
+            $orders = BookingOrder::whereIn('vehicle_id', $partnerVehiclesArray)->where('status', $status)->where('entertainment', 0)->latest()->paginate($this->limit);
         endif;
+        // dd($orders);
 
         return view('livewire.booking-order', [
             'orders' => $orders,

@@ -1,5 +1,5 @@
 <div>
-    
+
     <div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -27,7 +27,7 @@
             @csrf
             <input type="hidden" name="latitude" id="latitude" wire:model="latitude">
             <input type="hidden" name="longitude" id="longitude" wire:model="longitude">
-            
+
         </form>
     </div>
     <div class="col-md-7">
@@ -36,34 +36,54 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function initMap(lat, lng) {
+    function initMap(data) {
+
+        console.log(data);
         const mapOptions = {
-            zoom: 15,
-            center: { lat: lat, lng: lng },
+            zoom: 13,
+            center: { lat: data[0].lat, lng: data[0].lng },
         };
 
         const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        const icon = [
+            {
+                icon: '{{asset("img/car-icon.png")}}'
+            },
+            {
+                icon: '{{asset("img/Map-Marker.png")}}'
+            }
+        ];
+        // data.forEach(locate => {
 
-        new google.maps.Marker({
-            position: { lat: lat, lng: lng },
-            map: map,
-        });
+        for (let i = 0; i < data.length; i++) {
+            new google.maps.Marker({
+                position: { lat: data[i].lat, lng: data[i].lng },
+                map: map,
+                icon: {
+                          url: icon[i].icon,
+                          scaledSize: new google.maps.Size(40, 40),
+                          origin: new google.maps.Point(0, 0),
+                          anchor: new google.maps.Point(20, 20)
+                      }
+            });
 
-        const circle = new google.maps.Circle({
-            map: map,
-            radius: 500, // 500 meters radius
-            center: { lat: lat, lng: lng },
-            fillColor: '#70c2ff',
-            fillOpacity: 0.35,
-            strokeColor: '#70c2ff',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-        });
+            const circle = new google.maps.Circle({
+                map: map,
+                radius: 450, // 500 meters radius
+                center: { lat: data[i].lat, lng: data[i].lng },
+                fillColor: '#70c2ff',
+                fillOpacity: 0.35,
+                strokeColor: '#70c2ff',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+            });
 
-        google.maps.event.addListener(map, 'zoom_changed', function () {
-            const zoom = map.getZoom();
-            circle.setRadius(500 * Math.pow(2, 15 - zoom));
-        });
+            google.maps.event.addListener(map, 'zoom_changed', function () {
+                const zoom = map.getZoom();
+                circle.setRadius(350 * Math.pow(2, 15 - zoom));
+            });
+        }
+        // });
     }
 
     function getLocation() {
@@ -87,7 +107,9 @@
 
         console.log('Latitude:', lat, 'Longitude:', lng);
 
-        initMap(lat, lng);
+        const locationData = [{lat:parseFloat(lat), lng:parseFloat(lng)}];
+
+        initMap(locationData);
         updateDriverLocation(lat, lng);
     }
 
@@ -144,37 +166,149 @@
                 method: 'GET',
                 success: function(response) {
                     $('#driversList').empty(); // Clear existing content
-
-                response.forEach(order => {
-                    $('#driversList').append(
-                        `<div class="container p-1 mt-2" style="border: 2px solid #ccc; max-width: 450px; border-radius: 10px;">
-                            <div class="row flex-nowrap">
-                                <div class="col-3 d-flex align-items-center">
-                                    <i class="fa fa-user" style="font-size:35px; padding: 15px;"></i>
-                                </div>
-                                <div class="col-6 d-flex flex-column justify-content-center">
-                                    <h6 class="m-0 text-truncate">${order.name}</h6>
-                                    <span>Amount: $${order.amount}</span>
-                                </div>
-                                <div class="col-3 get-items-centered">
-                                    <a style="border-radius:5px; cursor:pointer; width:max-content; background: mediumseagreen; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Accept</a>
-                                </div>
-                            </div>
-                        </div>`
-                    );
-                });
+                    if(response.length !== 0){
+                        response.forEach(order => {
+                            const originCoords = JSON.parse(order.originCoords);
+                            const destinationCoords = JSON.parse(order.destinationCoords);
+                            let btn1;
+                            let btn2;
+                            if(order.status == 0){
+                                btn1 = `<a onclick="acceptRequest(${order.id}, ${order.vehicle_id}, ${originCoords.lat}, ${originCoords.lng})" style="border-radius:5px; cursor:pointer; width:max-content; background: mediumseagreen; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Accept</a>`;
+                                btn2 = `<a onclick="rejectRequest(${order.id})" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Reject</a>`;
+                            }else if(order.status == 1){
+                                btn1 = `<a onclick="acceptRequest(${order.id}, ${order.vehicle_id}, ${originCoords.lat}, ${originCoords.lng})" style="border-radius:5px; cursor:pointer; width:max-content; background: dodgerblue; padding: 3px 3px;color: #fff !important; margin-top: 10px !important;">On Trip</a>`;
+                                btn2 = `<a onclick="rejectRequest(${order.id})" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Cancel</a>`;
+                            }
+                            $('#driversList').append(
+                                `<div class="container p-1 mt-2" style="border: 2px solid #ccc; max-width: 450px; border-radius: 10px;">
+                                    <div class="row flex-nowrap">
+                                        <div class="col-3 d-flex align-items-center">
+                                            <i class="fa fa-user" style="font-size:35px; padding: 15px;"></i>
+                                        </div>
+                                        <div class="col-4 d-flex flex-column justify-content-center">
+                                            <h6 class="m-0 text-truncate">${order.name}</h6>
+                                            <span>Amount: $${order.amount}</span>
+                                        </div>
+                                        <div class="col-2 get-items-centered">
+                                            ${btn1}
+                                        </div>
+                                        <div class="col-2 get-items-centered">
+                                            ${btn2}
+                                        </div>
+                                    </div>
+                                </div>`
+                            );
+                        });
+                    }else{
+                        $('#driversList').append(`<div class="alert alert-info text-center">No ride request at the moment</div>`);
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching ride:', error);
                 }
             });
     }
-    
-    window.addEventListener('load', getLocation);
     myOrders();
-    setTimeout(() => {
+    let ordersInterval = setInterval(() => {
         myOrders();
-    }, 10000); // Adjust interval as needed
+    }, 5000);
+
+
+    function acceptRequest(id, vehicleId, lat, lng)
+    {
+        var lat1 = document.getElementById('latitude').value
+        var lng1 = document.getElementById('longitude').value;
+        $('#cancelRide').text('Accepting');
+            var token = $("input[name=_token]").val();
+            $.ajax({
+                url: '/accept-ride', // Adjust this URL to your backend endpoint
+                method: 'POST',
+                data: {
+                    id: id,
+                    vehicleId:vehicleId,
+                    _token: token
+                },
+                success: function(response) {
+                    if(response.responseCode == 200) {
+                        const Data = [
+                        {
+                            lat: parseFloat(lat1),
+                            lng: parseFloat(lng1)
+                        },{
+
+                             lat: parseFloat(lat),
+                             lng: parseFloat(lng)
+                        }
+                    ];
+                    initMap(Data);
+                    myOrders();
+                    clearInterval(ordersInterval);
+                    const Data2 = { lat: lat, lng: lng}
+                    setInterval(() => {
+                        getLocation2(Data2);
+                    }, 5000);
+                    // alert('You have accepted this ride');
+                    }else{
+                        alert('An error occurred accepting ride');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error accepting ride:', error);
+                }
+            });
+    }
+    function rejectRequest(id)
+    {
+        var token = $("input[name=_token]").val();
+        $.ajax({
+            url: '/reject-ride', // Adjust this URL to your backend endpoint
+            method: 'POST',
+            data: {
+                id: id,
+                _token: token
+            },
+            success: function(response) {
+                if(response.responseCode == 200) {
+                    myOrders();
+                    alert('You have rejected this ride');
+                }else{
+                    alert('An error occurred rejecting ride');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error rejecting ride:', error);
+            }
+        });
+    }
+    function getLocation2(extraParam) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    showPosition2(position, extraParam);
+                },
+                showError,
+                {
+                    enableHighAccuracy: true,
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition2(position, extraParam) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        console.log('Latitude:', lat, 'Longitude:', lng, 'Extra Param:', extraParam);
+        const locationData = [{lat:parseFloat(lat), lng:parseFloat(lng)}, extraParam];
+
+        initMap(locationData);
+        updateDriverLocation(lat, lng);
+    }
+
+    window.addEventListener('load', getLocation);
+   // Adjust interval as needed
 </script>
 
 </div>

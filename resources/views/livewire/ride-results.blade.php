@@ -8,17 +8,17 @@
         let OCoords;
         let DCoords;
         let charge;
-    
+
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 10,
                 center: { lat: 0, lng: 0 },
             });
-    
+
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
             directionsRenderer.setMap(map);
-    
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -27,7 +27,7 @@
                             lng: position.coords.longitude,
                         };
                         map.setCenter(pos);
-    
+
                         new google.maps.Marker({
                             position: pos,
                             map: map,
@@ -42,7 +42,7 @@
                 handleLocationError(false, map.getCenter());
             }
         }
-    
+
         function handleLocationError(browserHasGeolocation, pos) {
             const infoWindow = new google.maps.InfoWindow({
                 position: pos,
@@ -52,17 +52,17 @@
             });
             infoWindow.open(map);
         }
-    
+
         function calculateRoute() {
             const origin = document.getElementById("location").value;
             const destination = document.getElementById("destination").value;
-    
+
             if (!origin || !destination) {
                 alert("Please enter both location and destination.");
                 return;
             }
             $('#driversList').empty();
-    
+
             // Use Geocoding API to get coordinates for origin and destination
             fetchCoordinates(origin, (originCoords) => {
                 fetchCoordinates(destination, (destinationCoords) => {
@@ -75,7 +75,7 @@
                         (response, status) => {
                             if (status === "OK") {
                                 directionsRenderer.setDirections(response);
-    
+
                                 // Fit map to bounds
                                 const bounds = new google.maps.LatLngBounds();
                                 const route = response.routes[0];
@@ -84,7 +84,7 @@
                                     bounds.extend(leg.end_location);
                                 });
                                 map.fitBounds(bounds);
-    
+
                                 // Calculate the total distance
                                 const totalDistance = route.legs.reduce((sum, leg) => sum + leg.distance.value, 0) / 1000; // in km
                                 const price = totalDistance * 1; // $1 per km
@@ -101,14 +101,14 @@
                                             <div class="col-6 d-flex flex-column justify-content-center">
                                                 <h6 class="m-0 text-truncate">Price: $${price.toFixed(2)}</h6>
                                             </div>
-                                            
+
                                         </div>
                                     </div>`
                                 );
                                  OCoords = originCoords;
                                  DCoords = destinationCoords;
-    
-    
+
+
                                 // Fetch nearby drivers
                                 fetchDrivers(originCoords, destinationCoords, (drivers) => {
                                     calculateDriverTimes(originCoords, drivers, (driversWithTime) => {
@@ -123,7 +123,7 @@
                 });
             });
         }
-    
+
         function fetchCoordinates(address, callback) {
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ address: address }, (results, status) => {
@@ -139,7 +139,7 @@
                 }
             });
         }
-    
+
         function fetchDrivers(originCoords, destinationCoords, callback) {
             $.ajax({
                 url: '/get-nearby-drivers', // Adjust this URL to your backend endpoint
@@ -152,18 +152,23 @@
                 },
                 success: function(response) {
                     const drivers = response.drivers;
-                    callback(drivers);
+                    if (drivers.length === 0) {
+                        alert("No driver available for your location");
+                        callback(null); // or you can pass a specific value or message to the callback
+                    } else {
+                        callback(drivers);
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching drivers:', error);
                 }
             });
         }
-    
+
         function calculateDriverTimes(originCoords, drivers, callback) {
             const service = new google.maps.DistanceMatrixService();
             const destinations = drivers.map(driver => ({ lat: parseFloat(driver.latitude), lng: parseFloat(driver.longitude) }));
-    
+
             service.getDistanceMatrix({
                 origins: [originCoords],
                 destinations: destinations,
@@ -179,7 +184,7 @@
                 }
             });
         }
-    
+
         function displayDrivers(drivers) {
             // Clear previous markers
             driverMarkers.forEach(marker => marker.setMap(null));
@@ -235,10 +240,10 @@
                             // Check if the driver's ID is in the orders array
                             let btn;
                             if (ordersNumbers.includes(driver.id)) {
-                                btn = `<a onclick="cancelRide(${driver.id})" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Cancel</a>`;
+                                btn = `<a onclick="cancelRide(${driver.id})" id="cancelRide" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Cancel</a>`;
                                 console.log(`Driver ID ${driver.id} is present in the orders.`);
                             } else {
-                                btn = `<a onclick="orderRide(${driver.id})" style="border-radius:5px; cursor:pointer; width:max-content; background: #333; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Order Ride</a>`;
+                                btn = `<a onclick="orderRide(${driver.id})" id="orderRide" style="border-radius:5px; cursor:pointer; width:max-content; background: #333; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Order</a>`;
                                 console.log(`Driver ID ${driver.id} is not present in the orders.`);
                             }
 
@@ -271,16 +276,14 @@
             // }, 10000); // Adjust interval as needed
         }
 
-
-    
         function fetchDriversAgain() {
             const origin = document.getElementById("location").value;
             const destination = document.getElementById("destination").value;
-    
+
             if (!origin || !destination) {
                 return;
             }
-    
+
             fetchCoordinates(origin, (originCoords) => {
                 fetchCoordinates(destination, (destinationCoords) => {
                     fetchDrivers(originCoords, destinationCoords, (drivers) => {
@@ -291,7 +294,7 @@
                 });
             });
         }
-    
+
         function loadGoogleMaps() {
             const script = document.createElement("script");
             script.src = `https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&callback=initMap&libraries=places`;
@@ -299,18 +302,28 @@
             script.async = true;
             document.head.appendChild(script);
         }
-    
+
         window.onload = loadGoogleMaps;
-    
+
         $(document).ready(function() {
             $("#bookRide").click(function() {
                 calculateRoute();
             });
         });
+        let ordersInterval = setInterval(() => {
+            acceptRequest();
+        }, 5000);
+        clearInterval(ordersInterval);
+
+        function stopMyFunction() {
+            clearInterval(ordersInterval);
+            console.log("Interval cleared!");
+        }
 
         function orderRide(id){
+            $('#orderRide').text('Ordering');
             var _token = $("input[name=_token]").val();
-            $.ajax({
+            $.ajax({do
                 url: '/order-ride', // Adjust this URL to your backend endpoint
                 method: 'POST',
                 data: {
@@ -327,8 +340,12 @@
                     // callback(drivers);
                     if(response.responseCode == 200){
                         fetchDriversAgain();
+                        setInterval(() => {
+                            acceptRequest(response.data.id);
+                        }, 5000);
+
                     }
-                    
+                    // $('#orderRide').text('loading');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching drivers:', error);
@@ -337,6 +354,8 @@
         }
 
         function cancelRide(id){
+
+            $('#cancelRide').text('Cancelling');
             var token = $("input[name=_token]").val();
             $.ajax({
                 url: '/cancel-ride', // Adjust this URL to your backend endpoint
@@ -349,14 +368,104 @@
                 success: function(response) {
                     alert(response.message);
                     fetchDriversAgain();
-                    // const drivers = response.drivers;
-                    // callback(drivers);
+                    clearInterval(ordersInterval);
+                    clearInterval();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error canceling ride:', error);
                 }
             });
         }
+        function acceptRequest(id)
+        {
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+                    url: '/acceptRequest', // Adjust this URL to your backend endpoint
+                    method: 'POST',
+                    data:{
+                        id,
+                        _token
+                    },
+                    success: function(response) {
+                        if(response.data.is_request_accepted == 1){
+                            alert('Driver has accepted your request');
+                            updateMap(response.data);
+                            stopMyFunction();
+                        }else if(response.data.is_request_accepted == 2){
+                            alert('Driver has rejected your request');
+                            stopMyFunction();
+                        }
+                    }
+            });
+        }
+        function updateMap(data)
+        {
+            // Initialize DirectionsService and DirectionsRenderer
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            // directionsRenderer.setMap(map);
+
+            // Set the destination coordinates
+            // destination = { lat: 9.0742854, lng: 7.4949809 };
+            destination = JSON.parse(data.destinationCoords); // Replace with your destination
+
+            // Start watching the position
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(showPosition, showError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+        function showPosition(position) {
+            const origin = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            console.log('Current Position:', origin);
+
+            // Recalculate and display the route with updated origin
+            calculateAndDisplayRoute(directionsService, directionsRenderer, origin, destination);
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer, origin, destination) {
+            directionsService.route(
+                {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (response, status) => {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(response);
+                    } else {
+                        console.error('Directions request failed due to ' + status);
+                    }
+                }
+            );
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
     </script>
 
     <div class="grid grid-cols-2 p-2">
@@ -505,7 +614,7 @@
             fetchCoordinates(origin)
                 .then(originCoords => {
                     return fetchCoordinates(destination).then(destinationCoords => ({
-                        originCoords, 
+                        originCoords,
                         destinationCoords
                     }));
                 })
@@ -542,7 +651,7 @@
                 console.log(`Cache hit for address: ${address}`);
                 return Promise.resolve(geocodeCache[address]);
             }
-    
+
             const geocoder = new google.maps.Geocoder();
             return new Promise((resolve, reject) => {
                 geocoder.geocode({ address: address }, (results, status) => {
@@ -556,7 +665,7 @@
                 });
             });
         }
-        
+
 
         $("#bookRide").click(function() {
             calculateRoute();

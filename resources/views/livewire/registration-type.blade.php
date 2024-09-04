@@ -51,20 +51,20 @@
                         <input type="text" id="phone_no" class="form-control" wire:model="phone_no">
                         @error('phone_no') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
-    
+
                     <div class="form-group mt-2">
                         <label for="field2">Address</label>
                         <input type="text" id="address" class="form-control form-control-md" wire:model="address">
                         @error('address') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                
+
                 @elseif ($step == 2)
                 <div>
                     <h4><strong>Vehicle Information</strong></h4>
-                    
+
                         @if(!$addtionalMake)
-                            
+
                             <div class="form-group">
                                 <label for="vehicleMake">Vehicle Make</label>
                                 <select wire:model="vehicleMake" class="form-control">
@@ -99,13 +99,13 @@
                             </select>
                             @error('vehicleYear') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
-                    
+
                     {{-- <div class="form-group mt-2">
                         <label for="vehicleMake">Vehicle Make</label>
                         <input type="text" id="vehicleMake" class="form-control" wire:model="vehicleMake" placeholder="e.g Toyota">
                         @error('vehicleMake') <span class="text-danger">{{ $message }}</span> @enderror
                     </div> --}}
-    
+
                     <div class="form-group mt-2">
                         <label for="vehicleModel">Vehicle Model</label>
                         <input type="text" id="vehicleModel" class="form-control" wire:model="vehicleModel" placeholder="e.g Corolla">
@@ -171,7 +171,7 @@
                         </select>
                         @error('airCondition') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
-                    
+
                     {{-- @if($type == 'booking') --}}
                     <div class="form-group mt-2">
                         <label for="driver_license">Drivers License</label>
@@ -194,7 +194,7 @@
                         <span class="text-warning">Select Pickup station when your vehicle is picked to be hired</span>
                         @error('location') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
-                    
+
                 </div>
                 @elseif ($step == 3)
                 <div>
@@ -203,7 +203,7 @@
                         <label>Passport Photograph <span class="text-danger">*</span></label>
                         <div class="col-xxl-9">
                             <input type="file" class="form-control {{$errors->has('passport') ? 'is-invalid' : ''}}" wire:model="passport" accept="image/jpg, image/jpeg, image/png">
-                            
+
                             @error('passport')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -256,8 +256,8 @@
                             </div>
                         </div>
                     </div>
-    
-                    
+
+
                 </div>
                 @elseif ($step == 4)
                 <h4><strong>Setup your Account for payment</strong></h4>
@@ -305,11 +305,11 @@
                             <label>Images of vehicle <span class="text-danger">*</span></label>
                             <div class="col-xxl-12">
                                 <input type="file" class="form-control {{$errors->has('vehImage') ? 'is-invalid' : ''}}" wire:model="vehImage" accept="image/jpg, image/jpeg, image/png" multiple>
-                                @if ($errors->has('vehImage.*'))
-                                @foreach ($errors->get('vehImage.*') as $error)
-                                <span class="text-danger">{{ $error[0] }}</span><br>
-                                @endforeach
-                                @endif
+                                    @if ($errors->has('vehImage.*'))
+                                        @foreach ($errors->get('vehImage.*') as $error)
+                                        <span class="text-danger">{{ $error[0] }}</span><br>
+                                        @endforeach
+                                    @endif
                                 <div class="row mt-3 mb-3">
                                 {{-- @if ($vehImage)
                                     @foreach ($vehImage as $image)
@@ -351,12 +351,12 @@
                         </div>
                     </div>
                 @endif
-    
+
                 <div class="mt-4">
                     @if ($step > 1)
                     <button type="button" class="btn btn-secondary" wire:click="previousStep" style="margin-right:15px;">Previous</button>
                     @endif
-    
+
                     @if ($step < 5) <button type="button" class="btn btn-primary btn-block" wire:click="nextStep">Next</button>
                         @else
                         <button type="button" class="btn btn-success" wire:click="submit">Submit</button>
@@ -365,7 +365,7 @@
                 </div>
                 <div class="row">
                     <div class="col-7">
-                
+
                     </div>
                     <div class="col-5">
                         <div class="mt-4">
@@ -374,7 +374,7 @@
                     </div>
                 </div>
             </div>
-    
+
             @if (session()->has('message'))
             <div class="card-footer">
                 <div class="alert alert-success">
@@ -384,4 +384,3 @@
             @endif
         </div>
     </div>
-    

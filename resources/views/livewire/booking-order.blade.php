@@ -71,14 +71,18 @@
                             <tr>
                                 <td>{{ ($orders->currentPage() - 1) * $orders->perPage() + $loop->iteration }}
                                 </td>
-                                <td> <a href="@if(Auth::user()->role_id == 1) '/vendorManagement/approved/?uid={{ $order->vehicle->user->id }}&vehID={{$order->vehicle_id}}' @else # @endif">{{ $order->vehicle->user->name }}</a> </td>
+                                <td>
+                                    <a href="@if(Auth::user()->role_id == 1) '/vendorManagement/approved/?uid={{ $order->vehicle->user->id }}&vehID={{$order->vehicle_id}}' @else # @endif">{{ $order->vehicle->user->name }}</a>
+                                </td>
                                 @if(Auth::user()->role_id == 1)
                                 <td>{{ $order->user->name }}</td>
                                 @endif
                                 @if(Auth::user()->role_id == 2)
                                 <td>{{$order->vehicle->user->phone_no }}</td>
                                 @endif
-                                <td><a href="/review/{{ $order->vehicle_id}}" target="_blank">{{ $order->vehicle->vehicleMake }} {{ $order->vehicle->vehicleModel }}</a></td>
+                                <td>
+                                    <a href="/review/{{ $order->vehicle_id}}" target="_blank">{{ $order->vehicle->vehicleMake }} {{ $order->vehicle->vehicleModel }}</a>
+                                </td>
                                 <td>{{ $order->pickupDate }}</td>
                                 <td>{{ $order->pickupTime }}</td>
                                 <td>{{ $order->dropoffDate }}</td>
@@ -101,15 +105,15 @@
                                 @endif
                                 @if($order->status == 2)
                                 <td>
-                                    
+
                                     <a class="btn btn-danger btn-sm" wire:click="end({{$order->id}}, {{$order->vehicle_id}})"><i class="fa fa-check"></i> End Trip</a>
                                 </td>
                                 @endif
                             </tr>
-                            
+
                             @empty
                             <tr>
-                                <td colspan="11" class="text-center text-danger"> No record available</td>
+                                <td colspan="12" class="text-center text-danger"> No record available</td>
                             </tr>
                             @endforelse
                         </tbody>

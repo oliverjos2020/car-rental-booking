@@ -59,7 +59,7 @@
             <div class="card-body">
 
                 <div class="row">
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <select name="limit" wire:model="limit" class="form-control form-control-sm mt-2">
                             <option value="10">10</option>
                             <option value="50">50</option>
@@ -67,7 +67,7 @@
                             <option value="500">500</option>
                         </select>
                     </div>
-                    <div class="col-md-7"></div>
+                    <div class="col-md-6"></div>
                     <div class="col-md-4">
                         <input type="search" wire:model.live.debounce.500ms="search" placeholder="Search by name..."
                             class="form-control form-control-sm mt-2">
@@ -107,7 +107,7 @@
                                         Delete</a></a></td>
                             </tr>
 
-                            @if($editingID === $user->id) 
+                            @if($editingID === $user->id)
                             <tr>
                                 <td colspan="2">
                                     <input type="text" wire:model="editingName" placeholder="Name"

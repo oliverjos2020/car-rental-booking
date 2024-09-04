@@ -2,14 +2,14 @@
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
             <h4 class="page-title mb-0 font-size-18">Vendor Data - {{$user->name}}</h4>
-    
+
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <!-- <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li> -->
                     <!-- <li class="breadcrumb-item active">Welcome to Tax Drive Dashboard</li> -->
                 </ol>
             </div>
-    
+
         </div>
     </div>
     <div class="col-md-3">
@@ -43,12 +43,12 @@
                 @if ($step == 1)
                 <div>
                     <div class="row mt-3">
-                       
+
                         <table class="table table-bordered table-striped">
                             <tr>
                                 <th>Mobile Number:</th>
                                 <td>{{$user->phone_no}}</td>
-                                
+
                             </tr>
                             <tr>
                                 <th>Address:</th>
@@ -89,7 +89,7 @@
                             <td>{{$vehicle->location}}</td>
                         </tr>
                         </table>
-                    
+
                     </div>
                 @elseif ($step == 3)
                 <div>
@@ -116,7 +116,7 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                 </div>
                 @elseif ($step == 4)
                     <div>
@@ -124,19 +124,19 @@
                             <tr>
                                 <th>Bank:</th>
                                 <td>{{$user->bank}}</td>
-                        
+
                             </tr>
                             <tr>
                                 <th>Account Number:</th>
                                 <td>{{$user->accountNumber}}</td>
                             </tr>
-                        
+
                         <tr>
                             <th>Account Type:</th>
                             <td>{{$user->accountType}}</td>
                         </tr>
                     </table>
-                    
+
                     </div>
                 @elseif($step == 5)
                     <div>
@@ -163,7 +163,7 @@
                         <div class="form-group">
                             <button class="btn btn-primary btn-sm mt-2" wire:click="submitDeny">submit</button>
                         </div>
-                        
+
                         @endif
                         @if($showApprove)
                         <div class="form-group">
@@ -173,10 +173,10 @@
                                     <option value="{{$category->id}}">{{$category->item}}</option>
                                 @endforeach
                             </select>
-                            
+
                             <button type="button" class="btn btn-success btn-sm mt-3" wire:click="approve">Approve</button>
                         </div>
-                        
+
                         @endif
                     </div>
                 @endif
@@ -184,8 +184,8 @@
                     @if ($step > 1)
                     <button type="button" style="margin-right:15px;" class="btn btn-secondary" wire:click="previousStep">Previous</button>&nbsp;&nbsp;&nbsp;&nbsp;
                     @endif
-                
-                    @if ($step < 5) 
+
+                    @if ($step < 5)
                     <button type="button" class="btn btn-primary btn-block px-3" wire:click="nextStep">Next</button>
                     @else
                         @if($vehicle->status == '2')
@@ -201,5 +201,5 @@
             </div>
         </div>
     </div>
-   
+
 </div>

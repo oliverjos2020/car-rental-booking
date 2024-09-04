@@ -10,6 +10,7 @@ class PaymentController extends Controller
 {
     public function processPaypal(Request $request)
     {
+        // dd($request->amount);
         // $provider = new PayPalClient;
         $provider = \PayPal::setProvider();
         $provider->setApiCredentials(config('paypal'));
@@ -25,7 +26,7 @@ class PaymentController extends Controller
                 0 => [
                     "amount" => [
                         "currency_code" => "USD",
-                        "value" => "100.00",
+                        "value" => $request->amount,
                     ],
                 ],
             ],
@@ -51,6 +52,50 @@ class PaymentController extends Controller
         }
 
     }
+    public function processPaypalEntertainment(Request $request)
+    {
+        // dd($request->amount);
+        // $provider = new PayPalClient;
+        $provider = \PayPal::setProvider();
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => route('processSuccessEntertainment'),
+                "cancel_url" => route('processCancelEntertainment'),
+            ],
+            "purchase_units" => [
+                0 => [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => $request->amount,
+                    ],
+                ],
+            ],
+        ]);
+
+        if (isset($response['id']) && $response['id'] != null) {
+
+            // redirect to approve href
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return redirect()->away($links['href']);
+                }
+            }
+
+            return redirect()
+                ->route('entertainmentCheckout')
+                ->with('error', 'Something went wrong.');
+
+        } else {
+            return redirect()
+                ->route('entertainmentCheckout')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
+        }
+
+    }
 
     public function processSuccess(Request $request)
     {
@@ -62,10 +107,10 @@ class PaymentController extends Controller
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             BookingOrder::where('user_id', Auth()->User()->id)->update([
-                
+
                 'payment_status' => 1,
                 'status' => 1,
-    
+
             ]);
             return redirect()
                 ->route('checkout')
@@ -76,11 +121,41 @@ class PaymentController extends Controller
                 ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
+    public function processSuccessEntertainment(Request $request)
+    {
+        // $provider = new PayPalClient;
+        $provider = \PayPal::setProvider();
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+        $response = $provider->capturePaymentOrder($request['token']);
+
+        if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+            BookingOrder::where('user_id', Auth()->User()->id)->update([
+
+                'payment_status' => 1,
+                'status' => 1,
+
+            ]);
+            return redirect()
+                ->route('entertainmentCheckout')
+                ->with('success', 'Transaction complete.');
+        } else {
+            return redirect()
+                ->route('entertainmentCheckout')
+                ->with('error', $response['message'] ?? 'Something went wrong.');
+        }
+    }
 
     public function processCancel(Request $request)
     {
         return redirect()
             ->route('checkout')
+            ->with('error', 'You have canceled the transaction.');
+    }
+    public function processCancelEntertainment(Request $request)
+    {
+        return redirect()
+            ->route('entertainmentCheckout')
             ->with('error', 'You have canceled the transaction.');
     }
 

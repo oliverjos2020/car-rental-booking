@@ -55,7 +55,7 @@ class DriverController extends Controller
     $drivers = \DB::table('vehicles')
     ->join('users', 'vehicles.user_id', '=', 'users.id')
     ->selectRaw("vehicles.id, users.name, vehicles.latitude, vehicles.longitude, (6371 * acos(cos(radians(?)) * cos(radians(vehicles.latitude)) * cos(radians(vehicles.longitude) - radians(?)) + sin(radians(?)) * sin(radians(vehicles.latitude)))) AS distance", [$originLat, $originLng, $originLat])
-    ->having('distance', '<', $radius)
+    ->having('distance', '<', $radius)->where('on_trip', 0)
     ->orderBy('distance')
     ->get();
 

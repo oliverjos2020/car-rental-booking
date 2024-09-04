@@ -19,6 +19,7 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
     <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/css/swiffy-slider.min.css" rel="stylesheet" crossorigin="anonymous">
     @livewireStyles
     <style>
         .home-input {
@@ -27,14 +28,22 @@
             border: none;
             border-radius: 2px;
             color:#888;
-        } 
+        }
         .review-input {
             width: 100%;
             padding: 10px;
             border: none;
             border-radius: 2px;
             color:#888;
-        } 
+        }
+        .review-input-ent {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 2px;
+            color:#888;
+            border:1px solid #ccc;
+        }
         .b-goods__img img{
             width: 100%;
             height: 200px;
@@ -53,6 +62,7 @@
         .pagination{
             margin-bottom:50px !important;
         }
+
     </style>
 
 
@@ -118,7 +128,7 @@
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#">About</a>
-        
+
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="/listing">Car Rentals</a>
@@ -126,16 +136,16 @@
                         <li class="nav-item ">
                             <a class="nav-link" href="/entertainment-listing">Entertainment</a>
                         </li>
-                        
+
                         @if(!Auth::check())
                         <li class="nav-item ">
                             <a class="nav-link" href="/dashboard2">Partner</a>
                         </li>
                         <li class="nav-item "><a class="nav-link" href="/register">Register</a>
-        
+
                         </li>
                         <li class="nav-item "><a class="nav-link" href="/login">Login</a>
-        
+
                         </li>
                         @else
                         @if(Auth()->user()->role_id == 3)
@@ -176,9 +186,9 @@
                         <div class="col-auto">
                             <div class="top-bar__item">
                                 @if(Auth::user())
-                                
+
                                     @csrf
-                                    
+
                                     <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
                                         <i class="ic fas fa-user text-primary"></i> {{ __('Log Out') }}
                                     </x-dropdown-link>
@@ -237,7 +247,7 @@
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/entertainment-listing">Entertainment</a>
                                     </li>
-                                    
+
                                     @if(!Auth::check())
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/dashboard2">Partner</a>
@@ -307,7 +317,7 @@
                                         Mon to Fri :
                                         9:00am to 6:00pm
                                     </div> --}}
-                                    
+
                                     <a class="footer-contacts__phone" href="tel:2584037961">
                                         (258) 403 7961
                                     </a>
@@ -319,7 +329,7 @@
                                                         class="ic fab fa-facebook"></i></a></li>
                                             <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
                                                         class="ic fab fa-linkedin"></i></a></li>
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
@@ -338,7 +348,7 @@
                                             <li><a href="#">Contact Us</a></li>
                                     </section>
                                 </div>
-                               
+
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -356,7 +366,7 @@
                             </section>
                         </div>
                     </div>
-                    
+
                     <div class="footer-copyright">
                         Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
                         <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
@@ -417,15 +427,14 @@
     <script src="{{asset('assets-ii/plugins/noUiSlider/wNumb.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>
-    
-
+    <script src="https://cdn.jsdelivr.net/npm/swiffy-slider@1.6.0/dist/js/swiffy-slider.min.js" crossorigin="anonymous" defer></script>
     <script>
      document.addEventListener('livewire:load', function () {
          window.addEventListener('notify', event => {
              toastr[event.detail.type](event.detail.message);
          });
      });
-     
+
  </script>
     @livewireScripts
 </body>

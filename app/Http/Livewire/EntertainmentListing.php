@@ -8,71 +8,93 @@ use App\Models\PriceSetup;
 use App\Models\Vehicle;
 use App\Models\Location;
 use App\Models\Category;
+use App\Models\EntertainmentMenu;
 use Livewire\WithPagination;
+use App\Models\BookingOrder;
+use Exception;
 
 class EntertainmentListing extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $search;
-    public $limit = '9';
     public $selected;
-    public $make;
-    public $transmission;
-    public $category;
-    public $location;
-    public $hire;
+    public $event;
+    public $address;
+    public $participants;
+    public $hours;
+    public $no_of_stops;
+    public $selectedMenus = [];
+    public $entertainment_date;
 
-    protected $queryString = ['limit', 'search', 'make', 'transmission', 'location', 'category', 'hire'];
-    public function updatingSearch()
+    public function mount()
     {
-        $this->resetPage();
+        $this->selectedMenus = EntertainmentMenu::where('required', 1)->pluck('id')->toArray();
+        // $this->selected = 1;
+        // $this->event = "";
+        // $this->address = "";
+        // $this->participants = "";
+        // $this->hours = "";
+        // $this->no_of_stops = "";
     }
 
-    public function updatingLimit()
-    {
-        $this->resetPage();
-    }
-    public function resetButton()
-    {
-        $this->make = null;
-        $this->transmission = null;
-        $this->category = null;
-        $this->location = null;
-        $this->hire = null;
-        $this->resetPage();
+    public function proceed(){
+        // dd($this->selectedMenus);
+        $amount = 0; // Initialize $ammount as an integer
 
-    }
+        foreach ($this->selectedMenus as $id) {
+            // Retrieve the amount for the given ID and add it to the total
+            $menuAmount = EntertainmentMenu::where('id', $id)->value('amount');
+            $amount += $menuAmount;
+        }
+        // dd($amount);
+        // try{
+            $this->validate([
+                'event' => ['required'],
+                'address' => ['required'],
+                'participants' => ['required'],
+                'hours' => ['required'],
+                'no_of_stops' => ['required'],
+                'selectedMenus' => ['array','required'],
+                'entertainment_date' => ['required']
+            ]);
 
-    public function submit(){
-
+            $data = [
+                'event' => $this->event,
+                'address' => $this->address,
+                'participants' => $this->participants,
+                'hours' => $this->hours,
+                'no_of_stops' => $this->no_of_stops,
+                'selectedMenus' => json_encode($this->selectedMenus),
+                'entertainment_date' => $this->entertainment_date,
+                'user_id' => auth()->user()->id,
+                'payment_status' => 0,
+                'status' => 0,
+                'amount' => $amount * $this->hours,
+                'entertainment' => 1
+            ];
+            // dd($data);
+            BookingOrder::create($data);
+            return redirect()->route('entertainmentCheckout');
+        // }catch(Exception $e){
+        //     $this->dispatchBrowserEvent('notify', [
+        //                 'type' => 'error',
+        //                 'message' => $e->getMessage(),
+        //             ]);
+        //             return;
+        // }
     }
 
     public function render()
-    { 
+    {
 
-    $vehicles = Vehicle::with(['photos', 'priceSetup'])
-        ->when($this->make, function ($query) {
-            return $query->where('vehicleMake', $this->make);
-        })->when($this->transmission, function ($query) {
-                return $query->where('transmission', $this->transmission);
-        })->when($this->location, function ($query) {
-                return $query->where('location', $this->location);
-        })->when($this->category, function ($query) {
-                return $query->whereHas('priceSetup', function ($query) {
-                    $query->where('id', $this->category);
-                });
-            })
-        ->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', 2)->where('on_trip', 0);
-        // if (!empty($this->hire)) {
-            $vehicles->where('category_id', 3);
-        // }
-        $vehicles = $vehicles->latest()->paginate($this->limit);
+
         $brands = CarBrand::all();
         $categories = PriceSetup::all();
         $locations = Location::all();
         $hireTypes = Category::all();
-            return view('livewire.home.entertainment-listing', compact('brands', 'categories', 'vehicles', 'locations', 'hireTypes'))
+        $menus = EntertainmentMenu::all();
+            return view('livewire.home.entertainment-listing', compact('brands', 'categories', 'locations', 'hireTypes', 'menus'))
     ->layout('components.home.home-master-3');
     }
 }
+

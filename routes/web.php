@@ -25,6 +25,8 @@ use App\Http\Livewire\RideResults;
 use App\Http\Livewire\StartRide;
 use App\Http\Livewire\EntertainmentMenuManagement;
 use App\Http\Livewire\EntertainmentListing;
+use App\Http\Livewire\EntertainmentCheckout;
+use App\Http\Livewire\EntertainmentOrder;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\RideOrderController;
@@ -40,9 +42,12 @@ use App\Http\Controllers\RideOrderController;
 |
 */
 
-Route::get('/processPaypal', [PaymentController::class, 'processPaypal'])->name('processPaypal');
+Route::get('/processPaypal/{amount}', [PaymentController::class, 'processPaypal'])->name('processPaypal');
+Route::get('/processPaypalEntertainment/{amount}', [PaymentController::class, 'processPaypalEntertainment'])->name('processPaypalEntertainment');
 Route::get('/processSuccess', [PaymentController::class, 'processSuccess'])->name('processSuccess');
 Route::get('/processCancel', [PaymentController::class, 'processCancel'])->name('processCancel');
+Route::get('/processSuccessEntertainment', [PaymentController::class, 'processSuccessEntertainment'])->name('processSuccessEntertainment');
+Route::get('/processCancelEntertainment', [PaymentController::class, 'processCancelEntertainment'])->name('processCancelEntertainment');
 
 
 
@@ -64,6 +69,9 @@ Route::get('/fetch-ride', [RideOrderController::class, 'fetchRide']);
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');
+    Route::get('/entertainment-order', EntertainmentOrder::class)->name('entertainmentOrder');
+    Route::get('/entertainment-checkout', EntertainmentCheckout::class)->name('entertainmentCheckout');
     Route::get('/ridebooking', RideBooking::class)->name('ridebooking');
     Route::get('/ride-results', RideResults::class)->name('ride.results');
     Route::get('/mybooking-orders', MyBookingOrders::class)->name('MyBookingOrders');
@@ -79,13 +87,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bookingOrder/{status}', BookingOrderManagement::class)->name('bookingOrder');
     Route::get('/start-ride/{vehId}', StartRide::class)->name('startRide');
     Route::get('/myOrders', [RideOrderController::class, 'driverOrders'])->name('driverOrders');
+    Route::post('/acceptRequest', [RideOrderController::class, 'acceptRequest'])->name('acceptRequest');
+    Route::post('/accept-ride', [RideOrderController::class, 'acceptRide'])->name('acceptRide');
+    Route::post('/reject-ride', [RideOrderController::class, 'rejectRide'])->name('rejectRide');
     Route::middleware('can:admin-only')->group(function () {
         Route::get('/users', UserManagement::class)->name('userSetup');
         Route::get('/entertainment-menu', EntertainmentMenuManagement::class)->name('entertainmentMenu');
         Route::get('/vendorManagement/{type}', VendorManagement::class)->name('vendorSetup');
         Route::get('/vendor/{vehID}', VendorViewDetails::class)->name('viewVendor');
         Route::get('/profile/{userID}', Profile::class)->name('profile');
-        
+
     });
 });
 

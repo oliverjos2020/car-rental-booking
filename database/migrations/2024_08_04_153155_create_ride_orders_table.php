@@ -22,6 +22,7 @@ class CreateRideOrdersTable extends Migration
             $table->string('destinationCoords');
             $table->decimal('amount');
             $table->char('status', 1)->default('0');
+            $table->char('is_request_accepted', 1)->default('0');
             $table->timestamps();
         });
     }
