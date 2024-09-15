@@ -12,7 +12,10 @@
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 10,
-                center: { lat: 0, lng: 0 },
+                center: {
+                    lat: 0,
+                    lng: 0
+                },
             });
 
             directionsService = new google.maps.DirectionsService();
@@ -46,9 +49,9 @@
         function handleLocationError(browserHasGeolocation, pos) {
             const infoWindow = new google.maps.InfoWindow({
                 position: pos,
-                content: browserHasGeolocation
-                    ? "Error: The Geolocation service failed."
-                    : "Error: Your browser doesn't support geolocation.",
+                content: browserHasGeolocation ?
+                    "Error: The Geolocation service failed." :
+                    "Error: Your browser doesn't support geolocation.",
             });
             infoWindow.open(map);
         }
@@ -66,8 +69,7 @@
             // Use Geocoding API to get coordinates for origin and destination
             fetchCoordinates(origin, (originCoords) => {
                 fetchCoordinates(destination, (destinationCoords) => {
-                    directionsService.route(
-                        {
+                    directionsService.route({
                             origin: originCoords,
                             destination: destinationCoords,
                             travelMode: google.maps.TravelMode.DRIVING,
@@ -86,7 +88,8 @@
                                 map.fitBounds(bounds);
 
                                 // Calculate the total distance
-                                const totalDistance = route.legs.reduce((sum, leg) => sum + leg.distance.value, 0) / 1000; // in km
+                                const totalDistance = route.legs.reduce((sum, leg) => sum + leg.distance
+                                    .value, 0) / 1000; // in km
                                 const price = totalDistance * 1; // $1 per km
                                 charge = price;
                                 // Display price
@@ -105,13 +108,14 @@
                                         </div>
                                     </div>`
                                 );
-                                 OCoords = originCoords;
-                                 DCoords = destinationCoords;
+                                OCoords = originCoords;
+                                DCoords = destinationCoords;
 
 
                                 // Fetch nearby drivers
                                 fetchDrivers(originCoords, destinationCoords, (drivers) => {
-                                    calculateDriverTimes(originCoords, drivers, (driversWithTime) => {
+                                    calculateDriverTimes(originCoords, drivers, (
+                                        driversWithTime) => {
                                         displayDrivers(driversWithTime);
                                     });
                                 });
@@ -126,7 +130,9 @@
 
         function fetchCoordinates(address, callback) {
             const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address: address }, (results, status) => {
+            geocoder.geocode({
+                address: address
+            }, (results, status) => {
                 if (status === 'OK') {
                     const location = results[0].geometry.location;
                     // console.log('lat:'+ location.lat(), 'lng:'+ location.lng());
@@ -167,7 +173,10 @@
 
         function calculateDriverTimes(originCoords, drivers, callback) {
             const service = new google.maps.DistanceMatrixService();
-            const destinations = drivers.map(driver => ({ lat: parseFloat(driver.latitude), lng: parseFloat(driver.longitude) }));
+            const destinations = drivers.map(driver => ({
+                lat: parseFloat(driver.latitude),
+                lng: parseFloat(driver.longitude)
+            }));
 
             service.getDistanceMatrix({
                 origins: [originCoords],
@@ -194,65 +203,70 @@
 
             // Fetch orders once and then process drivers
             $.ajax({
-            url: '/fetch-ride', // Adjust this URL to your backend endpoint
-            method: 'GET',
-            success: function(response) {
-                console.log('Raw response from server:', response);
+                url: '/fetch-ride', // Adjust this URL to your backend endpoint
+                method: 'GET',
+                success: function(response) {
+                    console.log('Raw response from server:', response);
 
-                        // Ensure the response is parsed correctly
-                        let orders = Array.isArray(response) ? response : JSON.parse(response);
-                        const ordersNumbers = orders.map(id => Number(id));
+                    // Ensure the response is parsed correctly
+                    let orders = Array.isArray(response) ? response : JSON.parse(response);
+                    const ordersNumbers = orders.map(id => Number(id));
 
-                        drivers.forEach(driver => {
-                            const position = { lat: parseFloat(driver.latitude), lng: parseFloat(driver.longitude) };
-                            const carIconUrl = '{{asset("img/car-icon.png")}}';
-                            const marker = new google.maps.Marker({
-                                position: position,
-                                map: map,
-                                title: `${driver.name} - ${driver.distance ? driver.distance.toFixed(2) : 'N/A'} km, ${driver.duration ? driver.duration : 'N/A'} away`,
-                                icon: {
-                                    url: carIconUrl,
-                                    scaledSize: new google.maps.Size(40, 40),
-                                    origin: new google.maps.Point(0, 0),
-                                    anchor: new google.maps.Point(20, 20)
-                                }
-                            });
-
-                            driverMarkers.push(marker);
-                            const circle = new google.maps.Circle({
-                                map: map,
-                                radius: 500,
-                                center: position,
-                                fillColor: '#70c2ff',
-                                fillOpacity: 0.2,
-                                strokeColor: '#70c2ff',
-                                strokeOpacity: 0.8,
-                                strokeWeight: 2,
-                            });
-                            google.maps.event.addListener(map, 'zoom_changed', function () {
-                                const zoom = map.getZoom();
-                                circle.setRadius(500 * Math.pow(2, 15 - zoom));
-                            });
-
-                            const distance = parseFloat(driver.distance);
-                            const charge = distance * 1;
-
-                            // Check if the driver's ID is in the orders array
-                            let btn;
-                            if (ordersNumbers.includes(driver.id)) {
-                                btn = `<a onclick="cancelRide(${driver.id})" id="cancelRide" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Cancel</a>`;
-                                console.log(`Driver ID ${driver.id} is present in the orders.`);
-                            } else {
-                                btn = `<a onclick="orderRide(${driver.id})" id="orderRide" style="border-radius:5px; cursor:pointer; width:max-content; background: #333; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Order</a>`;
-                                console.log(`Driver ID ${driver.id} is not present in the orders.`);
+                    drivers.forEach(driver => {
+                        const position = {
+                            lat: parseFloat(driver.latitude),
+                            lng: parseFloat(driver.longitude)
+                        };
+                        const carIconUrl = '{{ asset('img/car-icon.png') }}';
+                        const marker = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: `${driver.name} - ${driver.distance ? driver.distance.toFixed(2) : 'N/A'} km, ${driver.duration ? driver.duration : 'N/A'} away`,
+                            icon: {
+                                url: carIconUrl,
+                                scaledSize: new google.maps.Size(40, 40),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(20, 20)
                             }
+                        });
 
-                            // Display driver info on the page
-                            $('#driversList').append(
-                                `<div class="container p-1 mt-2" style="border: 2px solid #ccc; max-width: 450px; border-radius: 10px;">
+                        driverMarkers.push(marker);
+                        const circle = new google.maps.Circle({
+                            map: map,
+                            radius: 500,
+                            center: position,
+                            fillColor: '#70c2ff',
+                            fillOpacity: 0.2,
+                            strokeColor: '#70c2ff',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                        });
+                        google.maps.event.addListener(map, 'zoom_changed', function() {
+                            const zoom = map.getZoom();
+                            circle.setRadius(500 * Math.pow(2, 15 - zoom));
+                        });
+
+                        const distance = parseFloat(driver.distance);
+                        const charge = distance * 1;
+
+                        // Check if the driver's ID is in the orders array
+                        let btn;
+                        if (ordersNumbers.includes(driver.id)) {
+                            btn =
+                                `<a onclick="cancelRide(${driver.id})" id="cancelRide" style="border-radius:5px; cursor:pointer; width:max-content; background: tomato; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Cancel</a>`;
+                            console.log(`Driver ID ${driver.id} is present in the orders.`);
+                        } else {
+                            btn =
+                                `<a onclick="orderRide(${driver.id})" id="orderRide" style="border-radius:5px; cursor:pointer; width:max-content; background: #333; padding: 5px 5px;color: #fff !important; margin-top: 10px !important;">Order</a>`;
+                            console.log(`Driver ID ${driver.id} is not present in the orders.`);
+                        }
+
+                        // Display driver info on the page
+                        $('#driversList').append(
+                            `<div class="container p-1 mt-2" style="border: 2px solid #ccc; max-width: 450px; border-radius: 10px;">
                                     <div class="row flex-nowrap">
                                         <div class="col-4 d-flex align-items-center">
-                                            <img src="{{asset('img/service1.png')}}" alt="home-image" class="img-fluid" style="max-height:100px;">
+                                            <img src="{{ asset('img/service1.png') }}" alt="home-image" class="img-fluid" style="max-height:100px;">
                                         </div>
                                         <div class="col-4 d-flex flex-column justify-content-center">
                                             <h6 class="m-0 text-truncate">${driver.name}</h6>
@@ -263,13 +277,13 @@
                                         </div>
                                     </div>
                                 </div>`
-                            );
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching orders:', error);
-                    }
-                });
+                        );
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching orders:', error);
+                }
+            });
             // Update driver locations periodically
             // setTimeout(() => {
             //     fetchDriversAgain();
@@ -297,7 +311,8 @@
 
         function loadGoogleMaps() {
             const script = document.createElement("script");
-            script.src = `https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&callback=initMap&libraries=places`;
+            script.src =
+                `https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&callback=initMap&libraries=places`;
             script.defer = true;
             script.async = true;
             document.head.appendChild(script);
@@ -310,21 +325,20 @@
                 calculateRoute();
             });
         });
-        let ordersInterval = setInterval(() => {
-            acceptRequest();
-        }, 5000);
-        clearInterval(ordersInterval);
+        let ordersInterval;
 
         function stopMyFunction() {
-            clearInterval(ordersInterval);
-            console.log("Interval cleared!");
+            if (ordersInterval) {
+                clearInterval(ordersInterval);
+                console.log("Interval cleared!");
+            }
         }
 
-        function orderRide(id){
+        function orderRide(id) {
             $('#orderRide').text('Ordering');
             var _token = $("input[name=_token]").val();
-            $.ajax({do
-                url: '/order-ride', // Adjust this URL to your backend endpoint
+            $.ajax({
+                url: '/order-ride',
                 method: 'POST',
                 data: {
                     vehicle_id: id,
@@ -336,16 +350,14 @@
                 },
                 success: function(response) {
                     alert(response.message);
-                    // const drivers = response.drivers;
-                    // callback(drivers);
-                    if(response.responseCode == 200){
+                    if (response.responseCode == 200) {
                         fetchDriversAgain();
-                        setInterval(() => {
+                        // Clear any previous interval before setting a new one
+                        stopMyFunction();
+                        ordersInterval = setInterval(() => {
                             acceptRequest(response.data.id);
                         }, 5000);
-
                     }
-                    // $('#orderRide').text('loading');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching drivers:', error);
@@ -353,12 +365,11 @@
             });
         }
 
-        function cancelRide(id){
-
+        function cancelRide(id) {
             $('#cancelRide').text('Cancelling');
             var token = $("input[name=_token]").val();
             $.ajax({
-                url: '/cancel-ride', // Adjust this URL to your backend endpoint
+                url: '/cancel-ride',
                 method: 'POST',
                 data: {
                     vehicle_id: id,
@@ -368,38 +379,38 @@
                 success: function(response) {
                     alert(response.message);
                     fetchDriversAgain();
-                    clearInterval(ordersInterval);
-                    clearInterval();
+                    // Clear the interval when the ride is canceled
+                    stopMyFunction();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error canceling ride:', error);
                 }
             });
         }
-        function acceptRequest(id)
-        {
+
+        function acceptRequest(id) {
             var _token = $("input[name=_token]").val();
             $.ajax({
-                    url: '/acceptRequest', // Adjust this URL to your backend endpoint
-                    method: 'POST',
-                    data:{
-                        id,
-                        _token
-                    },
-                    success: function(response) {
-                        if(response.data.is_request_accepted == 1){
-                            alert('Driver has accepted your request');
-                            updateMap(response.data);
-                            stopMyFunction();
-                        }else if(response.data.is_request_accepted == 2){
-                            alert('Driver has rejected your request');
-                            stopMyFunction();
-                        }
+                url: '/acceptRequest',
+                method: 'POST',
+                data: {
+                    id,
+                    _token
+                },
+                success: function(response) {
+                    if (response.data.is_request_accepted == 1) {
+                        alert('Driver has accepted your request');
+                        updateMap(response.data);
+                        stopMyFunction(); // Stop the interval after acceptance
+                    } else if (response.data.is_request_accepted == 2) {
+                        alert('Driver has rejected your request');
+                        stopMyFunction(); // Stop the interval after rejection
                     }
+                }
             });
         }
-        function updateMap(data)
-        {
+
+        function updateMap(data) {
             // Initialize DirectionsService and DirectionsRenderer
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
@@ -420,6 +431,7 @@
                 alert("Geolocation is not supported by this browser.");
             }
         }
+
         function showPosition(position) {
             const origin = {
                 lat: position.coords.latitude,
@@ -433,8 +445,7 @@
         }
 
         function calculateAndDisplayRoute(directionsService, directionsRenderer, origin, destination) {
-            directionsService.route(
-                {
+            directionsService.route({
                     origin: origin,
                     destination: destination,
                     travelMode: google.maps.TravelMode.DRIVING,
@@ -465,12 +476,11 @@
                     break;
             }
         }
-
     </script>
 
     <div class="grid grid-cols-2 p-2">
         <div class="row" style="margin-top:140px">
-            <div class="col-md-4 p-3">
+            <div class="col-md-5 p-3">
                 <div class="container p-4"
                     style="max-width:450px; margin:0 auto; margin-top:0px; border: 1px solid #ccc; border-radius: 5px;">
                     <h5 class="text-light">Order a ride</h5>
@@ -483,15 +493,15 @@
                             <br>
                             <input type="text" id="location" wire:model.debounce.500ms="location"
                                 class="form-control my-form-control" placeholder="Enter Location">
-                            @if(count($suggestionsLocation) > 0)
-                            <ul class="list-group position-absolute w-100" style="z-index: 1000; margin-top:45px;">
-                                @foreach($suggestionsLocation as $suggestion)
-                                <li class="list-group-item list-group-item-action"
-                                    wire:click="selectSuggestion('location', '{{ $suggestion['place_id'] }}', '{{ $suggestion['description'] }}')">
-                                    {{ $suggestion['description'] }}
-                                </li>
-                                @endforeach
-                            </ul>
+                            @if (count($suggestionsLocation) > 0)
+                                <ul class="list-group position-absolute w-100" style="z-index: 1000; margin-top:45px;">
+                                    @foreach ($suggestionsLocation as $suggestion)
+                                        <li class="list-group-item list-group-item-action"
+                                            wire:click="selectSuggestion('location', '{{ $suggestion['place_id'] }}', '{{ $suggestion['description'] }}')">
+                                            {{ $suggestion['description'] }}
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @endif
                         </div>
                         <div class="input-group mb-3">
@@ -501,32 +511,28 @@
                             <br>
                             <input type="text" id="destination" wire:model.debounce.500ms="destination"
                                 class="form-control my-form-control" placeholder="Enter Destination">
-                            @if(count($suggestionsDestination) > 0)
-                            <ul class="list-group position-absolute w-100" style="z-index: 1000; margin-top:45px;">
-                                @foreach($suggestionsDestination as $suggestion)
-                                <li class="list-group-item list-group-item-action"
-                                    wire:click="selectSuggestion('destination', '{{ $suggestion['place_id'] }}', '{{ $suggestion['description'] }}')">
-                                    {{ $suggestion['description'] }}
-                                </li>
-                                @endforeach
-                            </ul>
+                            @if (count($suggestionsDestination) > 0)
+                                <ul class="list-group position-absolute w-100" style="z-index: 1000; margin-top:45px;">
+                                    @foreach ($suggestionsDestination as $suggestion)
+                                        <li class="list-group-item list-group-item-action"
+                                            wire:click="selectSuggestion('destination', '{{ $suggestion['place_id'] }}', '{{ $suggestion['description'] }}')">
+                                            {{ $suggestion['description'] }}
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @endif
                         </div>
                     </div>
-                    @if(Auth::check())
-
-                    <a id="bookRide" class="my-btn-dark" style="border-radius:5px; cursor:pointer;">Book Ride</a>
+                    @if (Auth::check())
+                        <a id="bookRide" class="my-btn-dark" style="border-radius:5px; cursor:pointer;">Book Ride</a>
                     @else
-                    <a href="/login" class="my-btn-dark" style="border-radius:5px; cursor:pointer;">Book Ride</a>
+                        <a href="/login" class="my-btn-dark" style="border-radius:5px; cursor:pointer;">Book Ride</a>
                     @endif
                 </div>
                 <div id="distance"></div>
                 <div id="driversList"></div>
-
-
-
             </div>
-            <div class="col-md-8 p-3" id="map" style="height: 100vh;" wire:ignore></div>
+            <div class="col-md-7 p-3" id="map" style="height: 100vh;" wire:ignore></div>
         </div>
     </div>
 

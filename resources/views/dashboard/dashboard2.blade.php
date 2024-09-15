@@ -4,13 +4,13 @@
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
                     <h4 class="page-title mb-0 font-size-18">Dashboard</h4>
-        
+
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item active">Welcome to D’PRESIDENTIAL LUXXETOUR Dashboard</li>
                         </ol>
                     </div>
-        
+
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="col-md-3">
                         <div class="card">
                             <div class="card-body">
@@ -183,7 +183,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             <div class="row">
                 <div class="col-md-8">
@@ -205,11 +205,11 @@
                                                 <h5 class="text-truncate font-size-14 m-0"><span class="text-truncate">Your {{$vehicle->vehicleMake}} | {{$vehicle->vehicleModel}} is under review</span></h5>
                                             </td>
                                             <td>
-                                               
+
                                                             <span class="text-truncate">
                                                               {{$vehicle->category->category}}
                                                             </span>
-                                                
+
                                             </td>
                                             <td>
                                                 <div class="text-center">
@@ -228,7 +228,7 @@
                                             </td>
                                             @if($vehicle->status == 3)
                                             <td>
-                                            
+
                                                 <div class="text-center">
                                                     <a data-bs-toggle="modal" data-bs-target="#myModal" href="javascript:void()">
                                                         <span class="badge rounded-pill bg-danger-subtle text-danger  font-size-11">View Reason</span></a>
@@ -243,7 +243,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <h5 class="font-size-16">{{$vehicle->reason}}</h5>
-                                            
+
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
@@ -268,7 +268,7 @@
                                         @empty
                                         <div class="alert alert-info">No Notifications available at the moment</div>
                                         @endforelse
-                                       
+
                                     </tbody>
                                 </table>
                             </div>
@@ -277,7 +277,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        
+
                         <div class="card-body">
                             <h4 class="card-title mb-4">Active Orders</h4>
                             <div class="tab-content p-3 text-muted">
@@ -306,11 +306,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                           
+
                                         @empty
                                             <div class="alert alert-danger">No active booking orders yet</div>
                                         @endforelse
-                                        
+
 
                                     </div>
                                 </div>
@@ -365,7 +365,7 @@
                     </div>
                 </div>
             </div>
-            
+
         @elseif(Auth::user()->role_id == 1)
             <div class="row">
                 <div class="col-md-4">
@@ -391,13 +391,13 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <p class="mb-2">Transaction Vehicle Approved</p>
+                                    <p class="mb-2">Total Vehicle Approved</p>
                                     <h4 class="mb-0" id="totalCount">{{$approved->count()}}</h4>
                                 </div>
                                 <div class="col-4">

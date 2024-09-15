@@ -27,14 +27,14 @@
             border: none;
             border-radius: 2px;
             color:#888;
-        } 
+        }
         .review-input {
             width: 100%;
             padding: 10px;
             border: none;
             border-radius: 2px;
             color:#888;
-        } 
+        }
         .b-goods__img img{
             width: 100%;
             height: 200px;
@@ -149,21 +149,21 @@
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#">About</a>
-        
+
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="/listing">Car Rentals</a>
                         </li>
-                        
+
                         @if(!Auth::check())
                         <li class="nav-item ">
                             <a class="nav-link" href="/dashboard2">Partner</a>
                         </li>
                         <li class="nav-item "><a class="nav-link" href="/register">Register</a>
-        
+
                         </li>
                         <li class="nav-item "><a class="nav-link" href="/login">Login</a>
-        
+
                         </li>
                         @else
                         @if(Auth()->user()->role_id == 3)
@@ -175,7 +175,7 @@
                             <a class="nav-link" href="/dashboard2">Dashboard</a>
                         </li>
                         @endif
-                        <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
+                        <li class="nav-item "><a class="nav-link" href="/trip-decide">My Trips</a>
                         @endif
                         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                         @if(Auth::check())
@@ -204,14 +204,14 @@
                         <div class="col-auto">
                             <div class="top-bar__item">
                                 @if(Auth::user())
-                                
+
                                     @csrf
-                                    
+
                                     <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
                                         <i class="ic fas fa-user text-primary"></i> {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 {{-- </form> --}}
-                                <a href="/mybooking-orders" class="top-bar__btn" style="color:#fff; background:transparent;">
+                                <a href="/trip-decide" class="top-bar__btn" style="color:#fff; background:transparent;">
                                     <i class="ic icon-list"></i> My Trips
                                 </a>
                                 @else
@@ -262,7 +262,7 @@
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/listing">Car Rentals</a>
                                     </li>
-                                    
+
                                     @if(!Auth::check())
                                     <li class="nav-item ">
                                         <a class="nav-link" href="/dashboard2">Partner</a>
@@ -296,7 +296,7 @@
                             <h1 class="b-title-page">Vehicle Listing</h1>
                             <div class="ui-decor bg-primary"></div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div> --}}
@@ -328,7 +328,7 @@
                                         Mon to Fri :
                                         9:00am to 6:00pm
                                     </div> --}}
-                                    
+
                                     <a class="footer-contacts__phone" href="tel:2584037961">
                                         (258) 403 7961
                                     </a>
@@ -340,7 +340,7 @@
                                                         class="ic fab fa-facebook"></i></a></li>
                                             <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
                                                         class="ic fab fa-linkedin"></i></a></li>
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
@@ -359,7 +359,7 @@
                                             <li><a href="#">Contact Us</a></li>
                                     </section>
                                 </div>
-                               
+
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -377,7 +377,7 @@
                             </section>
                         </div>
                     </div>
-                    
+
                     <div class="footer-copyright">
                         Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
                         <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
@@ -438,7 +438,7 @@
     <script src="{{asset('assets-ii/plugins/noUiSlider/wNumb.js')}}"></script>
     <script src="{{asset('assets-ii/plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>
-    
+
 
     <script>
      document.addEventListener('livewire:load', function () {
@@ -446,7 +446,7 @@
              toastr[event.detail.type](event.detail.message);
          });
      });
-     
+
  </script>
     @livewireScripts
 </body>

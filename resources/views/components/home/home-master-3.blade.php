@@ -157,7 +157,7 @@
                             <a class="nav-link" href="/dashboard2">Dashboard</a>
                         </li>
                         @endif
-                        <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
+                        <li class="nav-item "><a class="nav-link" href="/trip-decide">My Trips</a>
                         @endif
                         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                         @if(Auth::check())
@@ -193,7 +193,7 @@
                                         <i class="ic fas fa-user text-primary"></i> {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 {{-- </form> --}}
-                                <a href="/mybooking-orders" class="top-bar__btn" style="color:#fff; background:transparent;">
+                                <a href="/trip-decide" class="top-bar__btn" style="color:#fff; background:transparent;">
                                     <i class="ic icon-list"></i> My Trips
                                 </a>
                                 @else
@@ -278,7 +278,7 @@
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-md">
-                            <h1 class="b-title-page">Vehicle Listing</h1>
+                            {{-- <h1 class="b-title-page">Vehicle Listing</h1> --}}
                             <div class="ui-decor bg-primary"></div>
                         </div>
                         {{-- <div class="col-md-auto"><a class="b-title-page__btn bg-primary" href="#">Smarter Way to

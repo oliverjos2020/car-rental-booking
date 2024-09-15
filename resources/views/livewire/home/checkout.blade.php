@@ -63,9 +63,9 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><strong>Pickup {{$order->pickupDate}}
+                                        <td colspan="2"><strong>Pickup :{{$order->pickupDate}}
                                                 {{$order->pickupTime}}</strong></td>
-                                        <td colspan="2"><strong>Dropoff {{$order->dropoffDate}}
+                                        <td colspan="2"><strong>Dropoff :{{$order->dropoffDate}}
                                                 {{$order->dropoffTime}}</strong></td>
                                         <td><strong>Location: {{$order->vehicle->location}}</strong></td>
                                     </tr>
@@ -76,31 +76,10 @@
                                         @elseif($order->vehicle->category_id == 2)
                                             <td colspan="3">Days of hire: {{ $order->duration }} x {{$order->vehicle->priceSetup->amount}} </td>
                                         @endif
-                                        
-                                        
+
+
                                     </tr>
-                                    @if($order->vehicle->category_id == 3)
-                                        @php
-                                            $menus = json_decode($order->entertainmentMenu, true)
-                                        @endphp
-                                        @forelse($menus as $menu)
-                                            <tr>
-                                                <td colspan="2">
-                                                    @php
-                                                    $item = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('item')->first();
-                                                    @endphp
-                                                    {{ $item }}
-                                                </td>
-                                                <td colspan="3">
-                                                    @php
-                                                    $amount = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('amount')->first();
-                                                    @endphp
-                                                    {{ $amount }}
-                                                </td>
-                                            </tr>
-                                        @empty
-                                        @endforelse
-                                    @endif
+
                                     <tr>
                                         <td>
                                             <button type="submit" style="background:red; color:white;"
@@ -109,7 +88,7 @@
                                         </td>
                                         <td colspan="4">
                                             <strong>
-                                                Total Amount: ${{ number_format($order->amount, 2, ',', '.')}}
+                                                {{$order->vehicle->priceSetup->item}} ({{$order->vehicle->priceSetup->amount}}) * {{$order->duration}} days =  Total Amount: ${{ number_format($order->amount, 2, ',', '.')}}
                                             </strong>
                                         </td>
                                     </tr>
@@ -121,7 +100,7 @@
                         </div>
                     </section>
                     @if(count($orders) > 0)
-                    <form method="GET" action="{{ route('processPaypal') }}">
+                    <form method="GET" action="/processPaypal/{{$totalAmount}}">
                         @csrf
                         <input type="hidden" name="amount" value="{{$totalAmount}}">
                         <div class="text-right">
@@ -132,7 +111,7 @@
                     </form>
                     @endif
                 </div>
-                
+
 
                 <div id="paypal-button-container"></div>
 

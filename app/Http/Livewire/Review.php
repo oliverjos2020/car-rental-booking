@@ -29,7 +29,7 @@ class Review extends Component
     public $step = 1;
     public $catId;
     public $selectedMenus = [];
-   
+
 
     public function onApprove($details)
     {
@@ -78,34 +78,34 @@ class Review extends Component
 
     public function proceed()
     {
-     
+
         $vehicle = Vehicle::where('id', $this->reviewId)->first();
         // dd($this->selectedMenus);
 
-        if ($vehicle->category_id == 3):
-        $rules = [
-            'pickupTime' => 'required',
-            'dropoffTime' => 'required'
-        ];
-        $amount = $vehicle->priceSetup->amount * $this->hours;
-        $ammount = 0; // Initialize $ammount as an integer
+        // if ($vehicle->category_id == 3):
+        //     $rules = [
+        //         'pickupTime' => 'required',
+        //         'dropoffTime' => 'required'
+        //     ];
+        //     $amount = $vehicle->priceSetup->amount * $this->hours;
+        //     $ammount = 0; // Initialize $ammount as an integer
 
-        foreach ($this->selectedMenus as $id) {
-            // Retrieve the amount for the given ID and add it to the total
-            $menuAmount = EntertainmentMenu::where('id', $id)->value('amount');
-            $ammount += $menuAmount;
-        }
+        //     foreach ($this->selectedMenus as $id) {
+        //         // Retrieve the amount for the given ID and add it to the total
+        //         $menuAmount = EntertainmentMenu::where('id', $id)->value('amount');
+        //         $ammount += $menuAmount;
+        //     }
             // dd($ammount);
-        elseif ($vehicle->category_id == 2):
-        $rules = [
-            'pickupDate' => 'required',
-            'pickupTime' => 'required',
-            'dropoffDate' => 'required',
-            'dropoffTime' => 'required'
-        ];
-        $amount = $vehicle->priceSetup->amount * $this->days;
-        endif;
-        $amount = $amount + $ammount;
+        // elseif ($vehicle->category_id == 2):
+            $rules = [
+                'pickupDate' => 'required',
+                'pickupTime' => 'required',
+                'dropoffDate' => 'required',
+                'dropoffTime' => 'required'
+            ];
+            $amount = $vehicle->priceSetup->amount * $this->days;
+        // endif;
+        // $amount = $amount + $ammount;
 
         // $driverLicense = Auth()->User()->driversLicense;
         // $insurance = Auth()->User()->insurance;
@@ -146,21 +146,21 @@ class Review extends Component
                 'insurance' => $insurancePath,
             ]);
         endif;
-        if ($vehicle->category_id == 3):
-            $booking = BookingOrder::create([
-                'user_id' => Auth()->User()->id,
-                'vehicle_id' => $this->reviewId,
-                'pickupDate' => $this->pickupDate,
-                'pickupTime' => $this->pickupTime,
-                'dropoffDate' => $this->dropoffDate,
-                'dropoffTime' => $this->dropoffTime,
-                'duration' => $this->hours,
-                'amount' => $amount,
-                'payment_status' => 0,
-                'status' => 0,
-                'entertainmentMenu' => json_encode($this->selectedMenus)
-            ]);
-        elseif ($vehicle->category_id == 2):
+        // if ($vehicle->category_id == 3):
+        //     $booking = BookingOrder::create([
+        //         'user_id' => Auth()->User()->id,
+        //         'vehicle_id' => $this->reviewId,
+        //         'pickupDate' => $this->pickupDate,
+        //         'pickupTime' => $this->pickupTime,
+        //         'dropoffDate' => $this->dropoffDate,
+        //         'dropoffTime' => $this->dropoffTime,
+        //         'duration' => $this->hours,
+        //         'amount' => $amount,
+        //         'payment_status' => 0,
+        //         'status' => 0,
+        //         'entertainmentMenu' => json_encode($this->selectedMenus)
+        //     ]);
+        // elseif ($vehicle->category_id == 2):
             $booking = BookingOrder::create([
                 'user_id' => Auth()->User()->id,
                 'vehicle_id' => $this->reviewId,
@@ -173,7 +173,7 @@ class Review extends Component
                 'payment_status' => 0,
                 'status' => 0
             ]);
-        endif;
+        // endif;
         if ($booking):
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'success',
@@ -216,7 +216,7 @@ class Review extends Component
         if (Auth()->user()):
             $user = Auth()->user()->id;
             $order = BookingOrder::where('user_id', $user)->where('payment_status', 0)->get();
-            
+
         else:
             $order = [];
         endif;

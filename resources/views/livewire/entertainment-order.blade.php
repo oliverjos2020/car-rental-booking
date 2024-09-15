@@ -41,8 +41,7 @@
                         </div>
                     </div>
                     <div class="table-responsive mt-3">
-                        <table class="table table-striped table-bordered"
-                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
                                     <th>#ID</th>
@@ -57,37 +56,50 @@
                                     <th>Amount</th>
                                     <th>Payment Status</th>
                                     <th>Created</th>
-                                    <th colspan="2">Action</th>
-
+                                    <th colspan="2">Requested Items</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($orders as $order)
-                                <tr>
-                                    <td>{{ ($orders->currentPage() - 1) * $orders->perPage() + $loop->iteration }}
-                                    </td>
-                                    <td>{{ $order->user->name}}</td>
-                                    <td>{{ $order->event}}</td>
-                                    <td>{{ $order->address}}</td>
-                                    <td>{{ $order->amount }}</td>
-                                    <td>{{ $order->participants }}</td>
-                                    <td>{{ $order->no_of_stops }}</td>
-                                    <td>{{ $order->hours}}</td>
-                                    <td>{{ $order->entertainment_date }}</td>
-                                    <td>{{ $order->amount }}</td>
-                                    <td><span class="badge bg-{{$order->payment_status == 1 ? 'success' : 'danger'}}">{{$order->payment_status == 1 ? 'Paid' : 'Pending'}}</span></td>
-                                    <td>{{ $order->created_at }}</td>
+                                    @php
+                                        // Fetch all menu items and amounts for the order in one go
+                                        $menus = collect(json_decode($order->selectedMenus, true));
+                                        $menuItems = \App\Models\EntertainmentMenu::whereIn('id', $menus)->get(['item', 'amount']);
+                                    @endphp
+                                    <tr>
+                                        <td>{{ ($orders->currentPage() - 1) * $orders->perPage() + $loop->iteration }}</td>
+                                        <td>{{ $order->user->name }}</td>
+                                        <td>{{ $order->event }}</td>
+                                        <td>{{ $order->address }}</td>
+                                        <td>{{ $order->amount }}</td>
+                                        <td>{{ $order->participants }}</td>
+                                        <td>{{ $order->no_of_stops }}</td>
+                                        <td>{{ $order->hours }}</td>
+                                        <td>{{ $order->entertainment_date }}</td>
+                                        <td>{{ $order->amount }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $order->payment_status == 1 ? 'success' : 'danger' }}">
+                                                {{ $order->payment_status == 1 ? 'Paid' : 'Pending' }}
+                                            </span>
+                                        </td>
 
-
-                                </tr>
-
+                                        <td>{{ $order->created_at }}</td>
+                                        <td colspan="2">
+                                            @forelse($menuItems as $menuItem)
+                                                {{ $menuItem->item }} ({{ $menuItem->amount }}),<br>
+                                            @empty
+                                                No requested items
+                                            @endforelse
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="12" class="text-center text-danger"> No record available</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="13" class="text-center text-danger">No record available</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
+
                         <div class="loader text-center">
                             <div class="my-2">
                                 {{ $orders->links()}}

@@ -30,7 +30,6 @@ class EntertainmentCheckout extends Component
     }
     public function render()
     {
-
         $user = Auth()->user()->id;
         $totalAmount = BookingOrder::where('user_id', $user)->where('payment_status', 0)->where('entertainment', 1)  // Ensure 'selectedMenus' is not null
         ->where('selectedMenus', '!=', '') ->sum('amount');

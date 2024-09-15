@@ -27,6 +27,7 @@ use App\Http\Livewire\EntertainmentMenuManagement;
 use App\Http\Livewire\EntertainmentListing;
 use App\Http\Livewire\EntertainmentCheckout;
 use App\Http\Livewire\EntertainmentOrder;
+use App\Http\Livewire\DecideTrip;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\RideOrderController;
@@ -51,9 +52,10 @@ Route::get('/processCancelEntertainment', [PaymentController::class, 'processCan
 
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/trip-decideh', function () {
+    // return view('welcome');
+
+});
 Route::get('/', Index::class)->name('index');
 Route::get('/listing', Listing::class)->name('listing');
 Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');
@@ -66,15 +68,15 @@ Route::get('/get-nearby-drivers', [DriverController::class, 'getNearbyDrivers'])
 Route::post('/order-ride', [RideOrderController::class, 'orderRide']);
 Route::post('/cancel-ride', [RideOrderController::class, 'cancelRide']);
 Route::get('/fetch-ride', [RideOrderController::class, 'fetchRide']);
-
+Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');
+    Route::get('/trip-decide', DecideTrip::class)->name('entertainmentOrder');
     Route::get('/entertainment-order', EntertainmentOrder::class)->name('entertainmentOrder');
     Route::get('/entertainment-checkout', EntertainmentCheckout::class)->name('entertainmentCheckout');
     Route::get('/ridebooking', RideBooking::class)->name('ridebooking');
     Route::get('/ride-results', RideResults::class)->name('ride.results');
-    Route::get('/mybooking-orders', MyBookingOrders::class)->name('MyBookingOrders');
+    Route::get('/mybooking-orders/{type}', MyBookingOrders::class)->name('MyBookingOrders');
     Route::get('/checkout', Checkout::class)->name('checkout');
     Route::get('/dashboard2', Dashboard::class)->name('dashboard2');
     Route::get('/role', RoleManagement::class)->name('role');

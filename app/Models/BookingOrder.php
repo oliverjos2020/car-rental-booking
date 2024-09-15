@@ -27,7 +27,8 @@ class BookingOrder extends Model
         'hours',
         'no_of_stops',
         'selectedMenus',
-        'entertainment_date'
+        'entertainment_date',
+        'entertainment'
     ];
 
     public function user(){

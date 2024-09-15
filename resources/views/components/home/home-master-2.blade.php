@@ -19,7 +19,7 @@
     <link href="{{asset('assets-ii/plugins/switcher/css/color3.css')}}" rel="alternate stylesheet" title="color3">
     <script src="{{asset('assets-ii/plugins/switcher/js/dmss.js')}}"></script>
     <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
-    
+
     {{-- <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" /> --}}
     @livewireStyles
     <style>
@@ -67,7 +67,7 @@
             background: rgb(245, 245, 245);
             border-radius: 15px;
             margin-top:15px;
-            
+
         }
         .service-card a{
             background: #333;
@@ -196,7 +196,7 @@
                     <a class="nav-link" href="/dashboard2">Dashboard</a>
                 </li>
                 @endif
-                <li class="nav-item "><a class="nav-link" href="/mybooking-orders">My Trips</a>
+                <li class="nav-item "><a class="nav-link" href="/trip-decide">My Trips</a>
                     @endif
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                 @if(Auth::check())
@@ -278,7 +278,7 @@
                                         <a class="nav-link" href="#">Contact</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/mybooking-orders">My Trips</a>
+                                        <a class="nav-link" href="/trip-decide">My Trips</a>
                                     </li>
                                     @endif
 
@@ -300,8 +300,8 @@
                 </div>
             </div>
         </header>
-        
-        
+
+
 
         {{ $slot }}
         <section class="section-default">
@@ -309,7 +309,7 @@
                 <div class="row">
                     <div class="col-md-10 offset-md-1 text-center">
                         <div class="ui-subtitle">welcome to D’PRESIDENTIAL LUXXETOUR</div>
-                        <h2 class="ui-title text-uppercase">premium car company</h2>
+                        <h2 class="ui-title text-uppercase">premium car hire company</h2>
                         <div class="ui-decor bg-primary"></div>
                         <p>Et dolore magna aliqua ut enim ad minim veniam, quis nostrud exercitation ull laboris aliquip
                             ex
@@ -325,21 +325,22 @@
                     <div class="col-lg-4">
                         <div class="b-advantages row no-gutters">
                             <div class="col-auto"><i class="ic flaticon-lock"></i></div>
-                            <div class="b-advantages__title col">We have the largest cars dealership</div>
+                            <div class="b-advantages__title col">We have the best car hire</div>
                         </div>
                         <!-- end .b-advantages-->
                     </div>
                     <div class="col-lg-4">
                         <div class="b-advantages row no-gutters active">
                             <div class="col-auto"><i class="ic flaticon-vehicle-3"></i></div>
-                            <div class="b-advantages__title col">We offers the best cars prices for all</div>
+                            <div class="b-advantages__title col">We offer the best prices</div>
                         </div>
                         <!-- end .b-advantages-->
                     </div>
                     <div class="col-lg-4">
                         <div class="b-advantages row no-gutters">
                             <div class="col-auto"><i class="ic flaticon-toolbox-1"></i></div>
-                            <div class="b-advantages__title col">We have modern workshop checkups</div>
+                            <div class="b-advantages__title col">
+                                All round rides to fit your movement</div>
                         </div>
                         <!-- end .b-advantages-->
                     </div>
@@ -602,7 +603,7 @@
              toastr[event.detail.type](event.detail.message);
          });
      });
-     
+
     </script>
     @livewireScripts
 </body>

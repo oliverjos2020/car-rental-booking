@@ -8,8 +8,8 @@
             </ol>
         </nav>
     </div>
-    
-    
+
+
     <div class="b-steps d-none d-sm-block">
         <div class="container">
             <div class="b-steps__item">
@@ -27,7 +27,7 @@
         </div>
     </div>
     {{-- <div class="l-main-content"> --}}
- 
+
         <div class="container">
             <main>
                 <section class="b-goods-f">
@@ -39,7 +39,7 @@
                         <div class="col-lg-8">
                             <div wire:ignore class="b-goods-f__slider">
                                 <div class="ui-slider-main js-slider-for" wire:ignore>
-                                    
+
                                     @foreach($vehicle->photos as $photo)
                                     {{-- <img class="img-scale" src="{{asset($photo->image_path)}}"
                                         alt="{{$photo->image_path}}" /> --}}
@@ -101,7 +101,7 @@
                                                 <div class="custom-control custom-checkbox">
                                                     <input class="custom-control-inputx" checked="checked" id="customCheck1"
                                                         type="checkbox" />
-                                                        
+
                                                     <label class="custom-control-labelx"
                                                         for="customCheck1">{{$vehicle->priceSetup->item}} / hour</label>
                                                 </div>
@@ -117,7 +117,7 @@
                                                 <div class="custom-control custom-checkbox">
                                                     <input class="custom-control-inputx" checked="checked" id="customCheck1"
                                                         type="radio" checked />
-                                                        
+
                                                     <label class="custom-control-labelx" for="customCheck2">
                                                         <div wire:listen="daysCalculated">
                                                             <p id="days">{{ $hours }} hour(s)</p>
@@ -128,11 +128,11 @@
                                             <div class="col-sm-auto b-goods-f-checks__price">${{ number_format($hours *
                                                 $vehicle->priceSetup->amount, 2, ',', '.')}} </div>
                                         </div>
-    
+
                                     </div>
                                 @endif
                             </div>
-                            
+
                         </div>
                         <div class="col-lg-4">
                             @if($vehicle->category_id == 3)
@@ -151,11 +151,11 @@
                                                         <div class="widget-card-descr__title">Vehicle Pickup & Dropoff</div>
                                                         <div class="widget-card-descr__info">
                                                             {{$vehicle->location}} / {{$vehicle->location}}</div>
-                                                    </div> 
+                                                    </div>
                                                     <div class="widget-card-number no-gutter widget-card-descr__item">
                                                         <div class="b-filter__row">
                                                             <label for="pickupTime">Pick-up Time</label>
-                                                            <input type="time" wire:model="pickupTime" 
+                                                            <input type="time" wire:model="pickupTime"
                                                                 placeholder="Pick-up Time" class="review-input">
                                                                 @error('pickupTime')
                                                                     <span style="color:red" class="text-danger"> {{ $message }} </span>
@@ -175,10 +175,10 @@
                                                     <div class="widget-card-number no-gutter widget-card-descr__item">
                                                         @forelse($menus as $menu)
                                                         <div class="custom-control custom-checkbox">
-                                                            <input wire:model="selectedMenus" class="custom-control-inputx" 
-                                                                {{ $menu->required == 1 ? 'checked disabled' : '' }} 
-                                                                value="{{ $menu->id }}" 
-                                                                type="checkbox" 
+                                                            <input wire:model="selectedMenus" class="custom-control-inputx"
+                                                                {{ $menu->required == 1 ? 'checked disabled' : '' }}
+                                                                value="{{ $menu->id }}"
+                                                                type="checkbox"
                                                             />
                                                             <label class="custom-control-labelx" for="customCheck1">
                                                                 {{ $menu->item }} ({{ $menu->amount }})
@@ -228,7 +228,7 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <a style="color:#fff" class="btn btn-primary text-light btn-lg d-none d-sm-block" wire:click="proceed"> Proceed</a>
                                                 @else
@@ -236,7 +236,7 @@
                                                 @endif
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </aside>
                             @else
@@ -255,7 +255,7 @@
                                                         <div class="widget-card-descr__title">Vehicle Pickup</div>
                                                         <div class="widget-card-descr__info">
                                                             {{$vehicle->location}} </div>
-                                                    </div> 
+                                                    </div>
                                                     <div class="widget-card-descr__item">
                                                         <div class="widget-card-descr__title">Vehicle Drop Off</div>
                                                         <div class="widget-card-descr__info">{{$vehicle->location}}</div>
@@ -273,7 +273,7 @@
                                                     <div class="widget-card-number no-gutter widget-card-descr__item">
                                                         <div class="b-filter__row">
                                                             <label for="pickupTime">Pick-up Time</label>
-                                                            <input type="time" pattern="hh:mm a" wire:model="pickupTime" 
+                                                            <input type="time" pattern="hh:mm a" wire:model="pickupTime"
                                                                 placeholder="Pick-up Time" class="review-input">
                                                                 @error('pickupTime')
                                                                     <span style="color:red" class="text-danger"> {{ $message }} </span>
@@ -351,7 +351,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="b-goods-f-checks d-md-none">
+                                    {{-- <div class="b-goods-f-checks d-md-none">
                                         <div class="b-goods-f-checks__section">
                                             <div class="b-goods-f-checks__title text-primary">Vehicle Category</div>
                                             <div class="row no-gutters justify-content-between">
@@ -384,23 +384,23 @@
                                                 <div class="col-sm-auto b-goods-f-checks__price">${{ number_format($days *
                                                     $vehicle->priceSetup->amount, 2, ',', '.')}} </div>
                                             </div>
-        
+
                                         </div>
-                                        
+
                                         @if(auth()->check())
                                         <a style="color:#fff" class="btn btn-primary btn-lg d-sm-none" wire:click="proceed"> Proceed</a>
                                         @else
                                         <a style="color:#fff" class="btn btn-primary btn-lg d-sm-none" href="/login">Login to proceed</a>
                                         @endif
-                                    </div>
+                                    </div> --}}
                                 </aside>
                             @endif
-                            
+
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-8">
-                            
+
                         </div>
 
                     </div>

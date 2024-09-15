@@ -50,7 +50,7 @@ class Listing extends Component
     }
 
     public function render()
-    { 
+    {
 
     $vehicles = Vehicle::with(['photos', 'priceSetup'])
         ->when($this->make, function ($query) {
@@ -66,7 +66,7 @@ class Listing extends Component
             })
         ->where('vehicleMake', 'like', '%' . $this->search . '%')->where('status', 2)->where('on_trip', 0);
         // if (!empty($this->hire)) {
-            $vehicles->where('category_id', 2);
+            $vehicles->where('category_id', 1);
         // }
         $vehicles = $vehicles->latest()->paginate($this->limit);
         $brands = CarBrand::all();

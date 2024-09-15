@@ -9,7 +9,7 @@ use App\Models\CarBrand;
 use App\Models\Location;
 use App\Models\Photo;
 use App\Models\Vehicle;
-use Exception; 
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -79,7 +79,7 @@ class RegistrationType extends Component
         $this->existingvehImage = Photo::where('vehicle_id', $this->vehID)->get();
 
     }
-    
+
     public function nextStep()
     {
         $this->validateCurrentStep();
@@ -122,7 +122,7 @@ class RegistrationType extends Component
                     'slug' => $slugBrand,
                 ]);
             endif;
-            
+
             if ($this->type == 'rental'):
             elseif ($this->type == 'booking'):
                 $rules['driverLicense'] = 'required';
@@ -174,6 +174,9 @@ class RegistrationType extends Component
                 endif;
             endif;
 
+
+            // dd($this->identificationDocument);
+
             unset($data['type']);
             unset($data['vehImage']);
             unset($data['vehicleMake']);
@@ -219,7 +222,7 @@ class RegistrationType extends Component
                     'category_id' => $this->category
                 ]);
             endif;
-            
+
             if(is_bool($vehicle)):
                 $vehicle = $this->vehID;
             else:
@@ -252,7 +255,7 @@ class RegistrationType extends Component
         //     ]);
         //     return;
         // }
-       
+
     }
 
     protected function validateCurrentStep()
