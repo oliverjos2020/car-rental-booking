@@ -19,7 +19,7 @@
     </div>
 </div>
 {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfBwLJ8_9K-iu7vf1jJ7B2vdr5cpA3qPw&libraries=places" async defer></script> --}}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfBwLJ8_9K-iu7vf1jJ7B2vdr5cpA3qPw"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_API_KEY')}}"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
     let isOnline = false; // Track the driver's online/offline status
@@ -135,7 +135,7 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = false;
 
-    var pusher = new Pusher('62fa54aa1df62c15f35a', {
+    var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
         cluster: 'eu'
     });
 

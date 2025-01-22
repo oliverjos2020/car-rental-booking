@@ -47,7 +47,7 @@
         </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfBwLJ8_9K-iu7vf1jJ7B2vdr5cpA3qPw&libraries=places" async
+<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_API_KEY')}}&libraries=places" async
     defer></script>
 
 {{-- <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.0/dist/echo.iife.js"></script> --}}
@@ -57,7 +57,7 @@
 
 <script>
     Pusher.logToConsole = false;
-    var pusher = new Pusher('62fa54aa1df62c15f35a', {
+    var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
         cluster: 'eu'
     });
 

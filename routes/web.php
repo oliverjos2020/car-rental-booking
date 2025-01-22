@@ -72,7 +72,6 @@ Route::get('/entertainment-listing', EntertainmentListing::class)->name('enterta
 Route::get('/review/{reviewId}', Review::class)->name('review');
 
 Route::get('/ridebooking', RideBooking::class)->name('ridebooking');
-Route::get('/booking', RideResults::class)->name('ride.results');
 Route::post('/update-driver-location', [DriverController::class, 'updateLocation'])->middleware('auth');
 Route::get('/get-nearby-drivers', [DriverController::class, 'getNearbyDrivers']);
 Route::post('/order-ride', [RideOrderController::class, 'orderRide']);
@@ -81,6 +80,8 @@ Route::get('/fetch-ride', [RideOrderController::class, 'fetchRide']);
 Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/booking', RideResults::class)->name('ride.results');
     Route::get('/test-direction', TestDirections::class)->name('testDirection');
     Route::get('/test-driver', TestDriver::class)->name('testDriver');
     Route::post('/driver/toggle-status', [DriverController::class, 'toggleStatus']);
