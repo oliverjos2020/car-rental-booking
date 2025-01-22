@@ -16,13 +16,8 @@
         </div>
         <!-- end page title -->
         @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
-        {{-- @forelse(Auth::user()->vehicle as $vehicle)
-            @if($vehicle->category->category == 'Booking')
-
-            @endif
-        @endforelse --}}
                 <div class="row h-25">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card bg-light">
                             <div class="card-body">
                                 <div class="row justify-content-end">
@@ -44,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card bg-primary">
                             <div class="card-body">
                                 <div class="row justify-content-end">
@@ -66,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <div class="card bg-light">
                             <div class="card-body">
                                 <div class="row justify-content-end">
@@ -87,7 +82,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="row">
                     <div class="col-md-3">
@@ -119,7 +114,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <div class="col-8">
-                                        <p class="mb-2">Approved Booking Orders</p>
+                                        <p class="mb-2">Ongoing Booking Orders</p>
                                         <h4 class="mb-0" id="totalCount">{{$approvedRequest->count()}}</h4>
                                     </div>
                                     <div class="col-4">
@@ -202,7 +197,7 @@
                                                 </div>
                                             </td>
                                             <td style="width:90px;">
-                                                <h5 class="text-truncate font-size-14 m-0"><span class="text-truncate">Your {{$vehicle->vehicleMake}} | {{$vehicle->vehicleModel}} is under review</span></h5>
+                                                <h5 class="text-truncate font-size-14 m-0"><span class="text-truncate">Your {{$vehicle->vehicleMake}} | {{$vehicle->vehicleModel}} is  @if($vehicle->status == 1) Under Review @elseif($vehicle->status == 2) Approved @elseif($vehicle->status == 3) Declined @endif</span></h5>
                                             </td>
                                             <td>
 
@@ -301,7 +296,7 @@
                                                             <p class="text-muted mt-1 mb-0">Pickup Date: {{ $order->pickupDate}}</p>
                                                             <p class="text-muted mt-1 mb-0">Pickup / Drop of Time: {{ $order->pickupTime}} / {{ $order->dropoffTime}}</p>
                                                             <p class="text-muted mt-1 mb-0">pick Up / Drop off Location: {{ $order->vehicle->location}}</p>
-                                                            <p class="text-muted mt-1 mb-0"><a class="btn btn-primary btn-sm">View</a></p>
+                                                            <p class="text-muted mt-1 mb-0"><a href="/bookingOrder/pendingA" class="btn btn-primary btn-sm">View</a></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -367,7 +362,13 @@
             </div>
 
         @elseif(Auth::user()->role_id == 1)
-            <div class="row">
+        <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+            <i class="mdi mdi-alert-circle-outline me-2"></i> You have <strong>{{$pending->count()}}</strong> pending request waiting to be accepted. <a href="/vendorManagement/pending">View</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+
+            </button>
+        </div>
+            <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
@@ -439,4 +440,39 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div id="container" style="width:100%; height:400px;"></div>
+            </div>
         @endif
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const chart = Highcharts.chart('container', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Graphical Representations'
+                    },
+                    xAxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+                            'Nov', 'Dec'
+                        ]
+                    },
+                    // yAxis: {
+                    //     title: {
+                    //         text: 'Fruit eaten'
+                    //     }
+                    // },
+                    series: [{
+                        name: 'Users',
+                        data: @json(array_values($usersChart))
+                    }, {
+                        name: 'Approved Vehicles ',
+                        data: @json(array_values($approvedVehicleChart))
+                    }, {
+                        name: 'Pending Vehicles ',
+                        data: @json(array_values($pendingVehicleChart))
+                    }]
+                });
+            });
+        </script>

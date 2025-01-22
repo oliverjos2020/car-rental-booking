@@ -34,7 +34,7 @@ class StartRide extends Component
 
     public function render()
     {
-        return view('livewire.start-ride', [
+        return view('livewire.test-driver', [
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
         ])->layout('components.dashboard.dashboard-master');

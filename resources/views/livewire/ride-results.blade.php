@@ -1,6 +1,7 @@
 <div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
         let map;
         let directionsService;
         let directionsRenderer;
@@ -11,7 +12,7 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 10,
+                zoom: 5,
                 center: {
                     lat: 0,
                     lng: 0
@@ -476,6 +477,8 @@
                     break;
             }
         }
+
+        // displayDrivers([]);
     </script>
 
     <div class="grid grid-cols-2 p-2">

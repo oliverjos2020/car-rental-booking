@@ -64,6 +64,13 @@
             @enderror
         </div>
         <div class="b-filter__row">
+            <label for="stop_location">Stop Location</label>
+            <input type="text" wire:model="stop_location" placeholder="Stop Location" class="review-input-ent">
+            @error('stop_location')
+                <span style="color:red" class="text-danger"> {{ $message }} </span>
+            @enderror
+        </div>
+        <div class="b-filter__row">
             <label for="no_of_stops">Date of Event</label>
             <input type="date" wire:model="entertainment_date" placeholder="Date of Event" class="review-input-ent">
             @error('entertainment_date')
@@ -77,7 +84,7 @@
                     type="checkbox" @if ($menu->required == 1) checked @endif
                     @if ($menu->required == 1) disabled @endif />
                 <label class="custom-control-labelx" for="customCheck1">
-                    {{ $menu->item }} ({{ $menu->amount }})
+                    {{ $menu->item }} [{{ $menu->amount }} {{ $menu->charge_per_hour == 1 ? 'charged per hour' : '' }}]
                 </label>
             </div>
         @empty

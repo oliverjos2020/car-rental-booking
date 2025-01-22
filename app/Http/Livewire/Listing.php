@@ -51,7 +51,6 @@ class Listing extends Component
 
     public function render()
     {
-
     $vehicles = Vehicle::with(['photos', 'priceSetup'])
         ->when($this->make, function ($query) {
             return $query->where('vehicleMake', $this->make);

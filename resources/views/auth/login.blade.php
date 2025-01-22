@@ -43,8 +43,8 @@
 
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="/register">
+                        {{ __('Dont have an account?  Create') }}
                     </a>
                 @endif
 
@@ -108,7 +108,7 @@
                             <div class="p-2">
                                 <!-- Session Status -->
                                 <x-auth-session-status class="mb-4" :status="session('status')" />
-                                
+
                                 <!-- Validation Errors -->
                                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <form class="form-horizontal" method="POST" action="{{ route('login') }}">
@@ -147,10 +147,10 @@
                     </div>
                     <div class="mt-5 text-center">
                         <p>Don't have an account ? <a href="pages-register.html" class="fw-medium text-primary"> Signup now </a> </p>
-                        <p>© 
+                        <p>©
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> All rights reserved. D’PRESIDENTIAL LUXXETOUR <i class="mdi mdi-heart text-danger"></i> 
+                            </script> All rights reserved. D’PRESIDENTIAL LUXXETOUR <i class="mdi mdi-heart text-danger"></i>
                         </p>
                     </div>
 

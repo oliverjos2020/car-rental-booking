@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -49,7 +51,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $roleId
         ]);
-
+        Mail::to($request->email)->send(new SendMail($request->name));
         event(new Registered($user));
 
         Auth::login($user);

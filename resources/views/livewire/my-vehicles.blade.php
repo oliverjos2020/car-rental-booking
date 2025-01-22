@@ -59,10 +59,10 @@
                                 <td>{{ $vehicle->airCondition }}</td>
                                 <td><span class="badge bg-{{ $vehicle->transmission == 'automatic' ? 'warning' : 'danger'}}">{{ $vehicle->transmission }}</span></td>
                                 <td>{{ $vehicle->seats }}</td>
-                                <td>{{ $vehicle->priceSetup->amount }}</td>
+                                <td>{{ $vehicle->priceSetup->amount ?? '' }}</td>
                                 <td>
                                     @if($vehicle->status == 1)
-                                        <a class="btn btn-primary btn-sm"><i class="fas fa-sync-alt"> Pending</a>
+                                        <a class="btn btn-primary btn-sm"><i class="fas fa-sync-alt"></i> Pending </a>
                                     @elseif($vehicle->status == 2)
                                         <a class="btn btn-success btn-sm"><i class="fa fa-check"></i> Approved</a>
                                     @elseif($vehicle->status == 3)

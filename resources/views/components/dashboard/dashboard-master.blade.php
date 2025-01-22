@@ -24,8 +24,9 @@
     <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
 
     <link href="{{asset('css/toastr.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+    <script src="{{asset('js/highChart.js')}}"></script>
     {{-- <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places"></script> --}}
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places" async defer></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places" async defer></script> --}}
 
     @livewireStyles
 <style>
@@ -41,6 +42,79 @@
     .get-items-centered {
         display: flex !important;
         align-items: center;
+    }
+    /* .get-items-centered {
+            display: flex !important;
+            align-items: center;
+        } */
+        .vehicle-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .vehicle-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+        }
+        .vehicle-card.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        .vehicle-details {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .vehicle-image {
+            width: 100px;
+            height: 100px;
+            margin-right: 15px;
+        }
+        .vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .vehicle-info {
+            flex-grow: 1;
+        }
+        .vehicle-stats {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .select-vehicle-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .select-vehicle-btn:hover {
+            background-color: #45a049;
+        }
+    .select-vehicle-btn.waiting {
+        background-color: #FFC107;
+        color: black;
+    }
+    .select-vehicle-btn.accepted {
+        background-color: #2196F3;
+        color: white;
+    }
+    .select-vehicle-btn.start-trip {
+        background-color: #4CAF50;
+        color: white;
     }
 </style>
 </head>
@@ -97,7 +171,7 @@
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     <img class="rounded-circle header-profile-user"
-                                        src="http://127.0.0.1:8000/assets/images/users/avatar-2.jpg" alt="Header Avatar">
+                                        src="{{asset('assets/images/users/avatar-2.jpg')}}" alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->name }}</span>
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
@@ -381,7 +455,7 @@
     <!-- form wizard init -->
     <script src="{{asset('assets/js/pages/form-wizard.init.js')}}"></script>
 
-    <script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script>
+    {{-- <script src="{{asset('assets/js/pages/dashboard.init.js')}}"></script> --}}
 
     <script src="{{asset('assets/js/app.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>

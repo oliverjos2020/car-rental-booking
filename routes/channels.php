@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+Broadcast::channel('drivers', function ($user) {
+    return true; // Replace with authorization logic as needed
+});

@@ -58,7 +58,7 @@ class RideResults extends Component
 
         return $response->json()['predictions'] ?? [];
      } catch (Exception $e) {
-        
+
         // Session::flash('error', $e->getMessage());
         $response= "";
         Session::flash('error', 'Could not resolve host issues with maps.googleapis.com. kindly check your internet');
@@ -76,13 +76,13 @@ class RideResults extends Component
         }
         $this->emit('locationSelected', $placeId);
     }
-    
+
 
 
     // public function selectSuggestion($field, $suggestion)
     // {
     //     $this->$field = $suggestion;
-    //     if ($field === 'location') { 
+    //     if ($field === 'location') {
     //         $this->suggestionsLocation = [];
     //     } elseif ($field === 'destination') {
     //         $this->suggestionsDestination = [];
@@ -174,13 +174,13 @@ class RideResults extends Component
         // $ratePerMile = 1.5; // Example rate per mile
         // $this->charge = $this->distance * $ratePerMile;
 
-        return view('livewire.ride-results', [
+        return view('livewire.test-directions', [
             // 'location' => $this->location,
             // 'destination' => $this->destination,
             // 'distance' => $this->distance,
             // 'charge' => $charge,
             // 'nearestDrivers' => $this->nearestDrivers,
-            // 'durationText' => $this->durationText, 
+            // 'durationText' => $this->durationText,
         ])->layout('components.home.home-master-ride');
     }
 }

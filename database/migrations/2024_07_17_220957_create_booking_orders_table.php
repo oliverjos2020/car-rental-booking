@@ -34,6 +34,7 @@ class CreateBookingOrdersTable extends Migration
             $table->string('selectedMenus')->nullable();
             $table->string('entertainment_date')->nullable();
             $table->char('entertainment', 1)->default('0');
+            $table->string('stop_location')->nullable();
             $table->timestamps();
         });
     }

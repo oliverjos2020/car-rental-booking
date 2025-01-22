@@ -126,15 +126,18 @@
 
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item ">
+                        {{-- <li class="nav-item ">
                             <a class="nav-link" href="#">About</a>
 
+                        </li> --}}
+                        <li class="nav-item ">
+                            <a class="nav-link" href="/listing">Hire a Car</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link" href="/listing">Car Rentals</a>
+                            <a class="nav-link" href="/booking">Book a Ride</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link" href="/entertainment-listing">Entertainment</a>
+                            <a class="nav-link" href="/entertainment-listing">Event and Entertainment Booking</a>
                         </li>
 
                         @if(!Auth::check())
@@ -178,9 +181,7 @@
                                     <i class="ic fas fa-envelope text-primary"></i> support@dpresidentialluxxetour.com
                                 </a>
                             </div>
-                            <div class="top-bar__item"><i class="ic fas fa-map-marker-alt text-primary"></i> Fairview
-                                Ave, El
-                                Monte, CA 91732</div>
+                            <div class="top-bar__item"><i class="ic fas fa-map-marker-alt text-primary"></i> Katy, Texas. 77494</div>
                         </div>
                         <form method="POST" action="{{ route('logout') }}">
                         <div class="col-auto">
@@ -225,8 +226,7 @@
                             <div class="header-contacts d-none d-md-block d-lg-none d-xl-block"><i
                                     class="ic text-primary fas fa-phone"></i><span class="header-contacts__inner"><span
                                         class="header-contacts__info">Call us for help</span><a
-                                        class="header-contacts__number" href="%2b2584037961.html">(258) 403
-                                        7961</a></span></div>
+                                        class="header-contacts__number" href="tel:+3465450047">+1 (346) 545 0047</a></span></div>
                             <!-- Mobile Trigger Start-->
                             <button class="menu-mobile-button js-toggle-mobile-slidebar toggle-menu-button d-lg-none"><i
                                     class="toggle-menu-button-icon"><span></span><span></span><span></span><span></span><span></span><span></span></i></button>
@@ -238,14 +238,17 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="/">Home</a>
                                     </li>
-                                    <li class="nav-item ">
+                                    {{-- <li class="nav-item ">
                                         <a class="nav-link" href="#">About</a>
+                                    </li> --}}
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/listing">Hire a Car</a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/listing">Car Rentals</a>
+                                        <a class="nav-link" href="/booking">Book a Ride</a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/entertainment-listing">Entertainment</a>
+                                        <a class="nav-link" href="/entertainment-listing">Event and Entertainment Booking</a>
                                     </li>
 
                                     @if(!Auth::check())
@@ -286,13 +289,50 @@
                             <div class="footer-section footer-section_info">
                                 <div class="footer__title"><img src="{{asset('logo/d-logo-light.png')}}" height="40"></div>
                                 {{-- <div class="footer__slogan">autos dealers</div> --}}
-                                <div class="footer-info">Eipisicing elit sed do eiusmod tempor laboe dolore magna aliqa Ut
-                                    enim ad
-                                    minim veniam quis nostrud exercitation ullam.</div>
+                                <br>
+                                <div class="footer-info">From economy cars to luxury vehicles, we offer a wide range of options to suit your needs and budget.</div>
+                               <p> Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <section class="footer-section footer-section_link">
+                                        <h3 class="footer-section__title">Links</h3><i class="ui-decor bg-primary"></i>
+                                        <ul class="footer-list list-unstyled">
+                                            {{-- <li><a href="/">Home</a></li> --}}
+                                            <li><a href="/booking">Book a Ride</a></li>
+                                            <li><a href="/listing">Hire a Car</a></li>
+                                            <li><a href="/entertainment-listing">Event & Entertainment</a></li>
+                                            {{-- <li><a href="/register">Register</a></li>
+                                            <li><a href="/login">Login</a></li> --}}
+                                    </section>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            {{-- <section class="footer-section footer-section_subscribe">
+                                <h3 class="footer-section__title">Feel Free to reach us</h3><i
+                                    class="ui-decor bg-primary"></i>
+                                <form class="footer-form">
+                                    <div class="footer-form__info">Drop us an email and we will reach you within 24 hours
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="footer-form__input form-control" type="email"
+                                            placeholder="your email">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary">Subscribe</button>
+                                </form>
+                            </section> --}}
+
                                 <div class="footer-contacts">
-                                    <div class="footer-contacts__item"><i
-                                            class="ic fas fa-map-marker-alt text-primary"></i>Fairview
-                                        Ave, El Monte, CA 91732</div>
+                                    <div class="footer-contacts__item">
+                                        <i class="ic fas fa-map-marker-alt text-primary"></i>Katy, Texas.
+                                    </div>
+                                    <div class="footer-contacts__item">
+                                        <i class="ic fas fa-map-marker-alt text-primary"></i>ZIP Code 77494
+                                    </div>
                                     <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
                                             href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a>
                                     </div>
@@ -302,59 +342,31 @@
                                         9:00am to 6:00pm
                                     </div> --}}
 
-                                    <a class="footer-contacts__phone" href="tel:2584037961">
-                                        (258) 403 7961
+                                    <a class="footer-contacts__phone" href="tel:+3465450047">
+                                        +1 (346) 545 0047
+                                    </a>
+                                    <a class="footer-contacts__phone" href="tel:+3463026329">
+                                        +1 (346) 302 6329
                                     </a>
                                     <div class="text-left">
                                         <ul class="footer-soc list-unstyled" style="margin-top:14px !important">
-                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                                        class="ic fab fa-twitter"></i></a></li>
-                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                                        class="ic fab fa-facebook"></i></a></li>
-                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#" target="_blank"><i
-                                                        class="ic fab fa-linkedin"></i></a></li>
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                    target="_blank"><i class="ic fab fa-twitter"></i></a></li>
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                    target="_blank"><i class="ic fab fa-facebook"></i></a></li>
+                                            <li class="footer-soc__item"><a class="footer-soc__link" href="#"
+                                                    target="_blank"><i class="ic fab fa-linkedin"></i></a></li>
 
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <section class="footer-section footer-section_link">
-                                        <h3 class="footer-section__title">Links</h3><i
-                                            class="ui-decor bg-primary"></i>
-                                        <ul class="footer-list list-unstyled">
-                                            <li><a href="#">Home</a></li>
-                                            <li><a href="#">About us</a></li>
-                                            <li><a href="#">Car Rentals</a></li>
-                                            <li><a href="#">Contact Us</a></li>
-                                    </section>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <section class="footer-section footer-section_subscribe">
-                                <h3 class="footer-section__title">Feel Free to reach us</h3><i
-                                    class="ui-decor bg-primary"></i>
-                                <form class="footer-form">
-                                    <div class="footer-form__info">Drop us an email and we will reach you within 24 hours</div>
-                                    <div class="form-group">
-                                        <input class="footer-form__input form-control" type="email"
-                                            placeholder="your email">
-                                    </div>
-                                    <button class="btn btn-sm btn-primary">Subscribe</button>
-                                </form>
-                            </section>
                         </div>
                     </div>
 
-                    <div class="footer-copyright">
+                    {{-- <div class="footer-copyright">
                         Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
                         <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
-                    </div>
+                    </div> --}}
                 </div>
             </footer>
         <!-- .footer-->

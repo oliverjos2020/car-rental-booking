@@ -22,8 +22,8 @@
                             <span class="input-group-text input-group-text-left">
                                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </span>
-                       
-                        
+
+
 
                         @if(count($suggestionsLocation) > 0)
                         <ul class="my-show-location">
@@ -48,9 +48,9 @@
                             </span>
                             <input type="text" id="location" wire:model.live.debounce.500ms="destination"
                                 class="form-control my-form-control" placeholder="Your Destination">
-                    
-                    
-                        
+
+
+
                         @if(count($suggestionsDestination) > 0)
                         <ul class="my-show-location">
                             @endif
@@ -88,9 +88,8 @@
                 <div class="row">
                     <div class="col-md-7">
                         <h6>Car Rental</h6>
-                        <div style="margin-bottom:15px;" class="text">Go anywhere with Uber. Request a ride, hop in, and
-                            go.</div>
-                        <a>More</a>
+                        <div style="margin-bottom:15px; text-align:left" class="text">Enjoy the freedom of the road with our flexible car rental services. Choose from a diverse fleet of vehicles tailored to your needs, whether for daily errands, business trips, or extended travels.</div>
+                        {{-- <a>More</a> --}}
                     </div>
                     <div class="col-md-4 get-items-centered">
                         <img src="{{asset('img/service1.png')}}" alt="home-image" style="max-height:130px;">
@@ -104,9 +103,8 @@
                 <div class="row">
                     <div class="col-md-7">
                         <h6>Car Booking</h6>
-                        <div style="margin-bottom:15px;" class="text">Go anywhere with Uber. Request a ride, hop in, and
-                            go.</div>
-                        <a>More</a>
+                        <div style="margin-bottom:15px;" class="text">Book rides seamlessly with our reliable and efficient service. From quick pickups to scheduled journeys, we ensure timely and comfortable transportation every time.</div>
+                        {{-- <a>More</a> --}}
                     </div>
                     <div class="col-md-4 get-items-centered">
                         <img src="{{asset('img/service2.png')}}" alt="home-image" style="max-height:130px;">
@@ -120,9 +118,8 @@
                 <div class="row">
                     <div class="col-md-7">
                         <h6>Entertainment</h6>
-                        <div style="margin-bottom:15px;" class="text">Go anywhere with Uber. Request a ride, hop in, and
-                            go.</div>
-                        <a>More</a>
+                        <div style="margin-bottom:15px;" class="text">We keep you entertained throughout your event, be it birthday, prom, bachelor’s party, wedding anniversary and all of your celebrations.</div>
+                        {{-- <a>More</a> --}}
                     </div>
                     <div class="col-md-4 get-items-centered">
                         <img src="{{asset('img/service3.png')}}" alt="home-image" style="max-height:130px;">

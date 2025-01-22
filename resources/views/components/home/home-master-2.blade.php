@@ -165,15 +165,18 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item ">
+                {{-- <li class="nav-item ">
                     <a class="nav-link" href="#">About</a>
 
+                </li> --}}
+                <li class="nav-item ">
+                    <a class="nav-link" href="/listing">Hire a Car</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="/listing">Car Rentals</a>
+                    <a class="nav-link" href="/booking">Book a Ride</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="/entertainment-listing">Entertainment Listing</a>
+                    <a class="nav-link" href="/entertainment-listing">Event and Entertainment Booking</a>
                 </li>
 
                 @if(!Auth::check())
@@ -200,7 +203,7 @@
                     @endif
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                 @if(Auth::check())
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" >
                     @csrf
                     <button style="padding-right: 20px; color: #333 !important; margin-top: 10px;" type="submit"
                         class="btn btn-light btn-sm nav-link">Logout</button>
@@ -244,15 +247,18 @@
                             <nav class="navbar navbar-expand-md justify-content-end" id="nav">
                                 <ul class="yamm main-menu navbar-nav">
                                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                                    <li class="nav-item ">
+                                    {{-- <li class="nav-item ">
                                         <a class="nav-link" href="#">About</a>
 
+                                    </li> --}}
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="/listing">Hire a Car</a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/listing">Car Rentals</a>
+                                        <a class="nav-link" href="/booking"> Book a Ride</a>
                                     </li>
                                     <li class="nav-item ">
-                                        <a class="nav-link" href="/entertainment-listing">Entertainment</a>
+                                        <a class="nav-link" href="/entertainment-listing">Event and Entertainment Booking</a>
                                     </li>
                                     @if(!Auth::check())
                                     <li class="nav-item ">
@@ -284,11 +290,11 @@
 
                                     @if(Auth::check())
 
-                                    <form method="POST" action="{{ route('logout') }}">
+                                    <form method="POST" action="{{ route('logout') }}" style="margin-top:13px">
                                         @csrf
                                         <a href="route('logout')"
                                             onclick="event.preventDefault(); this.closest('form').submit();"
-                                            style="color:#fffafa" class="btn btn-light btn-sm">LOGOUT</a>
+                                            style="color:#333; background:#fff; font-size:12px; padding: 8px; border-radius: 15px">LOGOUT</a>
                                     </form>
                                     @endif
 
@@ -309,16 +315,9 @@
                 <div class="row">
                     <div class="col-md-10 offset-md-1 text-center">
                         <div class="ui-subtitle">welcome to D’PRESIDENTIAL LUXXETOUR</div>
-                        <h2 class="ui-title text-uppercase">premium car hire company</h2>
+                        <h2 class="ui-title text-uppercase">premium car hire & booking company</h2>
                         <div class="ui-decor bg-primary"></div>
-                        <p>Et dolore magna aliqua ut enim ad minim veniam, quis nostrud exercitation ull laboris aliquip
-                            ex
-                            ea commodo consequat. Duis yirure dolorin reprehenderits volupta velit dolore fugiat nulla
-                            pariatur excepteur sint occaecat cupidatat. Non proident sunt ind culpa qudesa officia
-                            deserunt
-                            mollit anim est laborum sed per unde omnis iste natus error sit voluptatem accusantium
-                            dolore
-                            mque.</p>
+                        <p>Welcome to D’PRESIDENTIAL LUXXETOUR, where convenience meets comfort in car hire and booking services. We are your trusted partner for reliable and seamless transportation solutions, catering to individuals, families, and businesses. At D’PRESIDENTIAL LUXXETOUR, we pride ourselves on delivering exceptional customer service with a focus on safety, efficiency, and satisfaction. Whether you need a car for a day, a week, or longer, or you're booking a ride for a special occasion or everyday travel, we’ve got you covered.</p>
                     </div>
                 </div>
                 <div class="b-advantages-group row">
@@ -471,13 +470,50 @@
                         <div class="footer-section footer-section_info">
                             <div class="footer__title"><img src="{{asset('logo/d-logo-light.png')}}" height="40"></div>
                             {{-- <div class="footer__slogan">autos dealers</div> --}}
-                            <div class="footer-info">Eipisicing elit sed do eiusmod tempor laboe dolore magna aliqa Ut
-                                enim ad
-                                minim veniam quis nostrud exercitation ullam.</div>
+                            <br>
+                            <div class="footer-info">From economy cars to luxury vehicles, we offer a wide range of options to suit your needs and budget.</div>
+                           <p> Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <section class="footer-section footer-section_link">
+                                    <h3 class="footer-section__title">Links</h3><i class="ui-decor bg-primary"></i>
+                                    <ul class="footer-list list-unstyled">
+                                        {{-- <li><a href="/">Home</a></li> --}}
+                                        <li><a href="/booking">Book a Ride</a></li>
+                                        <li><a href="/listing">Hire a Car</a></li>
+                                        <li><a href="/entertainment-listing">Event & Entertainment</a></li>
+                                        {{-- <li><a href="/register">Register</a></li>
+                                        <li><a href="/login">Login</a></li> --}}
+                                </section>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        {{-- <section class="footer-section footer-section_subscribe">
+                            <h3 class="footer-section__title">Feel Free to reach us</h3><i
+                                class="ui-decor bg-primary"></i>
+                            <form class="footer-form">
+                                <div class="footer-form__info">Drop us an email and we will reach you within 24 hours
+                                </div>
+                                <div class="form-group">
+                                    <input class="footer-form__input form-control" type="email"
+                                        placeholder="your email">
+                                </div>
+                                <button class="btn btn-sm btn-primary">Subscribe</button>
+                            </form>
+                        </section> --}}
+
                             <div class="footer-contacts">
-                                <div class="footer-contacts__item"><i
-                                        class="ic fas fa-map-marker-alt text-primary"></i>Fairview
-                                    Ave, El Monte, CA 91732</div>
+                                <div class="footer-contacts__item">
+                                    <i class="ic fas fa-map-marker-alt text-primary"></i>Katy, Texas.
+                                </div>
+                                <div class="footer-contacts__item">
+                                    <i class="ic fas fa-map-marker-alt text-primary"></i>ZIP Code 77494
+                                </div>
                                 <div class="footer-contacts__item"><i class="ic fas fa-envelope text-primary"></i><a
                                         href="mailto:support@dpresidentialluxxetour.com">support@dpresidentialluxxetour.com</a>
                                 </div>
@@ -487,8 +523,11 @@
                                     9:00am to 6:00pm
                                 </div> --}}
 
-                                <a class="footer-contacts__phone" href="tel:2584037961">
-                                    (258) 403 7961
+                                <a class="footer-contacts__phone" href="tel:+3465450047">
+                                    +1 (346) 545 0047
+                                </a>
+                                <a class="footer-contacts__phone" href="tel:+3463026329">
+                                    +1 (346) 302 6329
                                 </a>
                                 <div class="text-left">
                                     <ul class="footer-soc list-unstyled" style="margin-top:14px !important">
@@ -502,44 +541,13 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <section class="footer-section footer-section_link">
-                                    <h3 class="footer-section__title">Links</h3><i class="ui-decor bg-primary"></i>
-                                    <ul class="footer-list list-unstyled">
-                                        <li><a href="#">Home</a></li>
-                                        <li><a href="#">About us</a></li>
-                                        <li><a href="#">Car Rentals</a></li>
-                                        <li><a href="#">Contact Us</a></li>
-                                </section>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <section class="footer-section footer-section_subscribe">
-                            <h3 class="footer-section__title">Feel Free to reach us</h3><i
-                                class="ui-decor bg-primary"></i>
-                            <form class="footer-form">
-                                <div class="footer-form__info">Drop us an email and we will reach you within 24 hours
-                                </div>
-                                <div class="form-group">
-                                    <input class="footer-form__input form-control" type="email"
-                                        placeholder="your email">
-                                </div>
-                                <button class="btn btn-sm btn-primary">Subscribe</button>
-                            </form>
-                        </section>
                     </div>
                 </div>
 
-                <div class="footer-copyright">
+                {{-- <div class="footer-copyright">
                     Copyrights (c) {{ date('Y')}} D’PRESIDENTIAL LUXXETOUR. All rights reserved.
                     <a class="footer-copyright__link" href="privacy-policy.html">Privacy Policy</a>
-                </div>
+                </div> --}}
             </div>
         </footer>
         <!-- .footer-->

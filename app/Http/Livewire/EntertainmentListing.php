@@ -23,6 +23,7 @@ class EntertainmentListing extends Component
     public $participants;
     public $hours;
     public $no_of_stops;
+    public $stop_location;
     public $selectedMenus = [];
     public $entertainment_date;
 
@@ -55,7 +56,8 @@ class EntertainmentListing extends Component
                 'hours' => ['required'],
                 'no_of_stops' => ['required'],
                 'selectedMenus' => ['array','required'],
-                'entertainment_date' => ['required']
+                'entertainment_date' => ['required'],
+                'stop_location' => ['required']
             ]);
 
             $data = [
@@ -70,7 +72,8 @@ class EntertainmentListing extends Component
                 'payment_status' => 0,
                 'status' => 0,
                 'amount' => $amount * $this->hours,
-                'entertainment' => 1
+                'entertainment' => 1,
+                'stop_location' => $this->stop_location
             ];
             // dd($data);
             BookingOrder::create($data);

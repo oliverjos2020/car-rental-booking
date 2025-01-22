@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterUser extends Component
 {
@@ -27,13 +29,14 @@ class RegisterUser extends Component
         if($this->image){
             $imageFile = $this->image->store('uploads', 'public');
         }
-        
+
         User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($validated['password']),
             'image' => $imageFile
         ]);
+        Mail::to($this->email)->send(new SendMail($this->name));
         $this->reset(['name', 'email', 'password', 'image']);
         request()->session()->flash('message','Created Successfully');
     }

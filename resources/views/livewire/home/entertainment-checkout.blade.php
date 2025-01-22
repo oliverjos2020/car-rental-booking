@@ -49,20 +49,18 @@
                         <h2 class="b-goods-f__title2">Pricing Details</h2>
                         <div class="table-responsive">
 
-                            <table class="b-goods-f__table table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Event</th>
-                                        <th>Address</th>
-                                        <th>Date</th>
-                                        <th>Hours</th>
-                                        <th>No of Stops</th>
-                                        <th>Selected Items</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+                            {{-- <table class="b-goods-f__table table table-striped table-bordered" style="text-align:left">
+
                                 @forelse($orders as $order)
+                                    <thead>
+                                        <tr style="font-weight:bold">
+                                            <th>Event</th>
+                                            <th>Address</th>
+                                            <th>Date</th>
+                                            <th>Hours</th>
+                                            <th>No of Stops</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
                                             <td>{{$order->event}}</td>
@@ -74,30 +72,57 @@
                                             <td>{{$order->hours}}</td>
 
                                             <td>{{$order->no_of_stops}}</td>
+                                        </tr>
 
-                                            <td>
+
                                                     @php
                                                         $menus = json_decode($order->selectedMenus, true)
+                                                        $totalAmount = 0;
                                                     @endphp
                                                     @forelse($menus as $menu)
+                                                    <tr style="text-align:left !important">
+                                                        <td colspan="1" style="text-align:left !important">
+                                                            @php
+                                                                $item = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('item')->first();
+                                                            @endphp
+                                                            {{ $item }}
+                                                        </td>
+                                                        <td colspan="1" style="text-align:left !important">
+                                                            @php
+                                                            $amount = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('amount')->first();
+                                                            $chargePerHour = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('charge_per_hour')->first();
+                                                            @endphp
+                                                            {{ $amount }} {{$chargePerHour == 1 ? ' (charged per hour)':''}}
+                                                        </td>
+                                                        <td>
+                                                            @if($chargePerHour == 1)
+                                                                = {{number_format($amount * $order->hours, 2)}}
+                                                            @else
+                                                                = {{$amount}}
+                                                            @endif
+                                                        </td>
+                                                    </tr>
 
-                                                    @php
-                                                    $item = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('item')->first();
-                                                    @endphp
-                                                    {{ $item }}
-
-                                                    @php
-                                                    $amount = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('amount')->first();
-                                                    @endphp
-                                                    ({{ $amount }}), <br>
                                                     @empty
                                                     @endforelse
-                                                </td>
+                                                    <tr>
+                                                        <td colspan="2" style="text-align:right;"> <strong>Total</strong></td>
+                                                        <td>
+                                                            @forelse($menus as $menu)
+                                                                @php
+                                                                    $amount = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('amount')->first();
+                                                                    $chargePerHour = \App\Models\EntertainmentMenu::where('id', $menu)->pluck('charge_per_hour')->first();
 
-                                        {{-- @empty
-                                        @endforelse --}}
-                                            </td>
-
+                                                                @endphp
+                                                                    @if($chargePerHour == 1)
+                                                                        {{$totalAmount += $amount * $order->hours}}
+                                                                    @else
+                                                                        {{$totalAmount += $amount}}
+                                                                    @endif
+                                                            @endforelse
+                                                            {{$totalAmount}}
+                                                        </td>
+                                                    </tr>
                                             <td>
                                                 @php
                                                     $subtotal = $order->amount/$order->hours
@@ -109,11 +134,84 @@
                                                 class="btn btn-danger btn-sm"
                                                 wire:click="deleteOrder({{ $order->id }})">Delete</button>
                                             </td>
-                                        </tr>
                                     </tbody>
                                 @empty
                                 @endforelse
+                            </table> --}}
+                            <table class="b-goods-f__table table table-striped table-bordered" style="text-align:left">
+                                @forelse($orders as $order)
+                                    <thead>
+                                        <tr style="font-weight:bold">
+                                            <th>Event</th>
+                                            <th>Address</th>
+                                            <th>Date</th>
+                                            <th>Hours</th>
+                                            <th>No of Stops</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ $order->event }}</td>
+                                            <td>{{ $order->address }}</td>
+                                            <td>{{ $order->entertainment_date }}</td>
+                                            <td rowspan="4">{{ $order->hours }}</td>
+                                            <td rowspan="5">{{ $order->no_of_stops }}</td>
+                                        </tr>
+
+                                        @php
+                                            $menus = json_decode($order->selectedMenus, true);
+                                            $totalAmount = 0;
+                                        @endphp
+
+                                        @forelse($menus as $menu)
+                                            @php
+                                                $menuDetails = \App\Models\EntertainmentMenu::find($menu);
+                                                $amount = $menuDetails->amount ?? 0;
+                                                $chargePerHour = $menuDetails->charge_per_hour ?? 0;
+
+                                                // Accumulate the total amount
+                                                if ($chargePerHour == 1) {
+                                                    $totalAmount += $amount * $order->hours;
+                                                } else {
+                                                    $totalAmount += $amount;
+                                                }
+                                            @endphp
+                                            <tr style="text-align:left !important">
+                                                <td colspan="1" style="text-align:left !important">
+                                                    {{ $menuDetails->item ?? 'Unknown Item' }}
+                                                </td>
+                                                <td colspan="1" style="text-align:left !important">
+                                                    {{ $amount }} {{ $chargePerHour == 1 ? ' (charged per hour)' : '' }}
+                                                </td>
+                                                <td>
+                                                    @if($chargePerHour == 1)
+                                                        = {{ number_format($amount * $order->hours, 2) }}
+                                                    @else
+                                                        = {{ $amount }}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" style="text-align:center;">No menus selected</td>
+                                            </tr>
+                                        @endforelse
+
+                                        <tr>
+                                            <td colspan="2" style="text-align:right;"><strong>Total</strong></td>
+                                            <td>{{ number_format($totalAmount, 2) }}</td>
+                                            <td><button type="submit" style="background:tomato; color:white;"
+                                                class="btn btn-danger btn-sm"
+                                                wire:click="deleteOrder({{ $order->id }})">Delete</button></td>
+                                        </tr>
+                                    </tbody>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" style="text-align:center;">No orders found</td>
+                                    </tr>
+                                @endforelse
                             </table>
+
                         </div>
                     </section>
                     @if(count($orders) > 0)

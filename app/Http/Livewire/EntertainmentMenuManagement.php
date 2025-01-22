@@ -17,10 +17,12 @@ class EntertainmentMenuManagement extends Component
     public $item;
     public $required = 0;
     public $amount;
+    public $charge_per_hour;
     public $editingID;
     public $editingItem;
     public $editingAmount;
     public $editingRequired;
+    public $editingChargePerHour;
     public $limit = '10';
 
     protected $queryString = ['limit', 'search'];
@@ -34,7 +36,7 @@ class EntertainmentMenuManagement extends Component
     {
         $this->resetPage();
     }
-    
+
 
     public function create()
     {
@@ -47,9 +49,10 @@ class EntertainmentMenuManagement extends Component
         EntertainmentMenu::create([
             'item' => $this->item,
             'amount' => $this->amount,
-            'required' => $this->required
+            'required' => $this->required ?? 0,
+            'charge_per_hour' => $this->charge_per_hour ?? 0,
         ]);
-        $this->reset(['item', 'amount', 'required']);
+        $this->reset(['item', 'amount', 'required', 'charge_per_hour']);
         $this->dispatchBrowserEvent('notify', [
             'type' => 'success',
             'message' => 'menu Created Successfully',
@@ -69,23 +72,25 @@ class EntertainmentMenuManagement extends Component
         $this->editingItem = EntertainmentMenu::find($id)->item;
         $this->editingAmount = EntertainmentMenu::find($id)->amount;
         $this->editingRequired = EntertainmentMenu::find($id)->required;
+        $this->editingChargePerHour = EntertainmentMenu::find($id)->charge_per_hour;
     }
 
     public function cancelEdit()
     {
-        $this->reset('editingID', 'editingItem', 'editingAmount', 'editingRequired');
+        $this->reset('editingID', 'editingItem', 'editingAmount', 'editingRequired', 'charge_per_hour');
     }
 
     public function update()
     {
         try {
-           
+
             $this->validateOnly('editingcategory', ['editingItem' => 'required','editingAmount' => 'required']);
             // dd($this->editingAmount);
             EntertainmentMenu::find($this->editingID)->update([
                 'item' => $this->editingItem,
                 'amount' => $this->editingAmount,
-                'required' => $this->editingRequired
+                'required' => $this->editingRequired,
+                'charge_per_hour' => $this->editingChargePerHour
             ]);
             $this->cancelEdit();
             $this->dispatchBrowserEvent('notify', [

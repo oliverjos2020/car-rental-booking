@@ -5,7 +5,7 @@
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-       
+
                 </ol>
             </div>
 
@@ -38,8 +38,8 @@
                     @endif
                 </div>
                 <div class="form-group mt-3">
-                    
-                    <input type="checkbox" value='1' wire:model="required"> Required<br>
+
+                    <input type="checkbox" value='1' wire:model="required"> Required <input type="checkbox" style="margin-left:25px;" value='1' wire:model="charge_per_hour"> Charged Per Hour<br>
                     <small for="required">(if checked will be added to client list automatically)</small>
                     @error('required')
                     <span class="text-danger"> {{ $message }} </span>
@@ -92,7 +92,7 @@
                             @forelse($entertainments as $ent)
                             <tr>
                                 <td>{{ ($entertainments->currentPage() - 1) * $entertainments->perPage() + $loop->iteration }}</td>
-                                <td>{{ $ent->item }} ({{$ent->required == 1 ? 'Required':'Not required'}})</td>
+                                <td>{{ $ent->item }} ({{$ent->required == 1 ? 'Required':'Not required'}}{{$ent->charge_per_hour == 1 ? ' & charged per hour':' & Not charged per hour'}})</td>
                                 <td>{{ $ent->amount }}</td>
                                 <td><a class="btn btn-primary btn-sm text-light" style="cursor:pointer;"
                                         wire:click="edit({{$ent->id}})"><i class="fa fa-edit"></i> Edit</a> </td>
@@ -112,23 +112,30 @@
                                         class="btn btn-success btn-sm">Update</button> <button type="submit"
                                         wire:click="cancelEdit" class="btn btn-danger btn-sm">Cancel</button>
                                 </td>
-                                <td colspan="2">
+                                <td colspan="1">
                                     <input type="number" {{$ent->required == 1 ? 'checked:checked': 'checked:notchecked'}} wire:model="editingAmount" placeholder="amount..." class="form-control mx-1">
-                                    
+
                                     @error('editingAmount')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </td>
                                 <td>
-                                    {{-- <input type="checkbox" value='1' wire:model="editingRequired"> Required --}}
-                                    <select wire:model="editingRequired" class="form-control">
+                                    <input type="checkbox" value='1' wire:model="editingRequired" {{$ent->required == 1 ? 'checked:checked': 'checked:notchecked'}}> Required
+                                    {{-- <select wire:model="editingRequired" class="form-control">
                                         <option value="0">Not Required</option>
                                         <option value="1">Required</option>
-                                    </select>
+                                    </select> --}}
+                                </td>
+                                <td>
+                                    <input type="checkbox" value='1' wire:model="editingChargePerHour" {{$ent->charge_per_hour == 1 ? 'checked:checked': 'checked:notchecked'}}> Charge Per Hour
+                                    {{-- <select wire:model="editingRequired" class="form-control">
+                                        <option value="0">Not Required</option>
+                                        <option value="1">Required</option>
+                                    </select> --}}
                                 </td>
                             </tr>
                             @endif
-                            
+
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center text-danger"> No record available</td>

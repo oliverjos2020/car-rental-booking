@@ -11,6 +11,7 @@ class EntertainmentMenu extends Model
     protected $fillable = [
         'item',
         'amount',
-        'required'
+        'required',
+        'charge_per_hour'
     ];
 }
