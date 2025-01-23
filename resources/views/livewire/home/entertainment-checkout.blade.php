@@ -138,7 +138,9 @@
                                 @empty
                                 @endforelse
                             </table> --}}
-
+                            @php
+                                $overallTotal = 0;
+                            @endphp
                                 @forelse($orders as $order)
                                 <table class="b-goods-f__table table table-striped table-bordered" style="text-align:left">
                                     <thead>
@@ -176,6 +178,7 @@
                                                 } else {
                                                     $totalAmount += $amount;
                                                 }
+
                                             @endphp
                                             <tr style="text-align:left !important">
                                                 <td colspan="1" style="text-align:left !important">
@@ -207,6 +210,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                @php
+                                    $overallTotal +=$totalAmount;
+                                @endphp
                                 @empty
                                     <tr>
                                         <td colspan="5" style="text-align:center;">No orders found</td>
@@ -217,13 +223,13 @@
                         </div>
                     </section>
                     @if(count($orders) > 0)
-                    <form method="GET" action="/processPaypalEntertainment/{{$totalAmount}}/">
+                    <form method="GET" action="/processPaypalEntertainment/{{$overallTotal}}/">
                         @csrf
-                        <input type="hidden" name="amount" value="{{$totalAmount}}">
+                        <input type="hidden" name="amount" value="{{$overallTotal}}">
                         <div class="text-right">
                             {{-- <a style="color:#fff" class="btn btn-secondary btn-sm mr-sm-2 mb-1 mb-sm-0"
                                 href="/review/">Cancel</a> --}}
-                            <button class="btn btn-primary btn-sm">Pay With Paypal ({{$totalAmount}})</button>
+                            <button class="btn btn-primary btn-sm">Pay With Paypal ({{$overallTotal}})</button>
                         </div>
                     </form>
                     @endif
