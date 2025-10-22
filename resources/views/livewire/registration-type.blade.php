@@ -211,10 +211,10 @@
                             {{-- @if($passport)
                             <img src="{{ $passport->temporaryUrl() }}" class="image" style="max-width: 300px">
                             @endif --}}
-                            @if ($passport instanceof \Livewire\TemporaryUploadedFile)
-                            <img src="{{ $passport->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                            @if ($passport)
+                                <img src="{{ asset($tempPreviewPassport) }}" class="image mt-3" style="max-width: 300px">
                             @elseif ($existingPassport)
-                            <img src="{{ asset($passport) }}" class="image mt-3" style="max-width: 300px">
+                                <img src="{{ asset($passport) }}" class="image mt-3" style="max-width: 300px">
                             @endif
                             <br>
                             <span class="text-warning">allowed extensions *jpg, jpeg, png</span>
@@ -244,8 +244,8 @@
                             {{-- @if($identificationDocument)
                             <img src="{{ empty($identificationDocument)? Auth::user()->identificationDocument : $identificationDocument->temporaryUrl()  }}" class="image" style="max-width: 300px">
                             @endif --}}
-                            @if ($identificationDocument instanceof \Livewire\TemporaryUploadedFile)
-                            <img src="{{ $identificationDocument->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                            @if ($identificationDocument)
+                            <img src="{{ $tempPreviewID }}" class="image mt-3" style="max-width: 300px">
                             @elseif ($existingDocument)
                             <img src="{{ asset($identificationDocument) }}" class="image mt-3" style="max-width: 300px">
                             @endif
@@ -326,13 +326,21 @@
                                         </div>
                                     @endforeach
                                 @endif --}}
+                                
+                                
                                 @if ($vehImage)
-                                    @foreach ($vehImage as $image)
-                                        @if ($image instanceof \Livewire\TemporaryUploadedFile)
-                                            <div class="col-md-3">
-                                                <img src="{{ $image->temporaryUrl() }}" class="img-fluid mb-2" style="max-width: 100%">
-                                            </div>
-                                        @endif
+                                    <!--@foreach ($vehImage as $image)-->
+                                    <!--    @if ($image instanceof \Livewire\TemporaryUploadedFile)-->
+                                    <!--        <div class="col-md-3">-->
+                                    <!--            <img src="{{ $image->temporaryUrl() }}" class="img-fluid mb-2" style="max-width: 100%">-->
+                                    <!--        </div>-->
+                                    <!--    @endif-->
+                                    <!--@endforeach-->
+                                     @foreach ($tempPreviewPhotos as $path)
+                                        <!--<img src="{{ asset($path) }}" width="200" class="mt-2 mr-2">-->
+                                        <div class="col-md-3">
+                                                <img src="{{ asset($path) }}" class="img-fluid mb-2" style="max-width: 100%">
+                                        </div>
                                     @endforeach
                                 @elseif ($existingvehImage)
                                     @foreach ($existingvehImage as $existingImage)

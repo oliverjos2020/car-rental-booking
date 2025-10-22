@@ -12,6 +12,7 @@ class EntertainmentMenu extends Model
         'item',
         'amount',
         'required',
-        'charge_per_hour'
+        'charge_per_hour',
+        'is_vehicle'
     ];
 }

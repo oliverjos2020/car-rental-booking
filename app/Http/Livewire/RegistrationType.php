@@ -50,6 +50,36 @@ class RegistrationType extends Component
     public $vehImage = [];
     public $existingvehImage = [];
     public $category = null;
+    public $tempPreviewPassport;
+    public $tempPreviewID;
+    public $tempPreviewPhotos = [];
+    
+    public function updatedPassport()
+    {
+        if($this->passport){
+            $path = $this->passport->store('passport', 'public');
+            $this->tempPreviewPassport = Storage::url($path);
+        }
+    }
+    
+    public function updatedIdentificationDocument()
+    {
+        if($this->identificationDocument){
+            $path = $this->identificationDocument->store('identificationDocument', 'public');
+            $this->tempPreviewID = Storage::url($path);
+        }
+    }
+    
+    public function updatedVehImage()
+    {
+           $this->tempPreviewPhotos = [];
+
+            foreach ($this->vehImage as $file) {
+                $path = $file->store('vehicle-photos', 'public');
+                $this->tempPreviewPhotos[] = Storage::url($path);
+            }
+    }
+    
     public function mount($type)
     {
         $vehicle = Vehicle::where('id', $this->vehID)->first();
@@ -242,6 +272,25 @@ class RegistrationType extends Component
                     ]);
                 endforeach;
             endif;
+            
+            if ($this->tempPreviewPassport) {
+                $relativePath = str_replace('/storage/', '', $this->tempPreviewPassport);
+                Storage::disk('public')->delete($relativePath);
+                
+                $relativePath1 = str_replace('/storage/', '', $this->tempPreviewID);
+                Storage::disk('public')->delete($relativePath1);
+                
+                
+                foreach($this->tempPreviewPhotos as $path){
+                    $relativePath2 = str_replace('/storage/', '', $path);
+                    Storage::disk('public')->delete($relativePath2);
+                }
+            }
+        
+            // Reset preview path
+            $this->tempPreviewPassport = null;
+            $this->tempPreviewID = null;
+            $this->tempPreviewPhotos = [];
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'success',
                 'message' => 'Registration completed Successfully',

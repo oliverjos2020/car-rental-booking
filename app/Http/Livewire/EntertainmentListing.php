@@ -17,7 +17,10 @@ class EntertainmentListing extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    public $pickedVehicle;
     public $selected;
+    public $vehicle;
+    public $selectedVehicle;
     public $event;
     public $address;
     public $participants;
@@ -37,11 +40,21 @@ class EntertainmentListing extends Component
         // $this->hours = "";
         // $this->no_of_stops = "";
     }
+    public function updatedSelectedVehicle($value)
+    {
+        $this->vehicle = \App\Models\EntertainmentMenu::find($value);
+    
+        if ($this->vehicle && !in_array($this->vehicle->id, $this->selectedMenus)) {
+            $this->selectedMenus[] = $this->vehicle->id;
+        }
+    }
+
+
 
     public function proceed(){
         // dd($this->selectedMenus);
         $amount = 0; // Initialize $ammount as an integer
-
+        // dd($this->selectedMenus);
         foreach ($this->selectedMenus as $id) {
             // Retrieve the amount for the given ID and add it to the total
             $menuAmount = EntertainmentMenu::where('id', $id)->value('amount');
@@ -95,8 +108,9 @@ class EntertainmentListing extends Component
         $categories = PriceSetup::all();
         $locations = Location::all();
         $hireTypes = Category::all();
-        $menus = EntertainmentMenu::all();
-            return view('livewire.home.entertainment-listing', compact('brands', 'categories', 'locations', 'hireTypes', 'menus'))
+        $menus = EntertainmentMenu::where('is_vehicle', '!=', 1)->get();
+        $isVehicles = EntertainmentMenu::where('is_vehicle', 1)->get();
+            return view('livewire.home.entertainment-listing', compact('brands', 'categories', 'locations', 'hireTypes', 'menus', 'isVehicles'))
     ->layout('components.home.home-master-3');
     }
 }

@@ -33,6 +33,8 @@ use App\Http\Livewire\EntertainmentCheckout;
 use App\Http\Controllers\RideOrderController;
 use App\Http\Livewire\BookingOrderManagement;
 use App\Http\Livewire\EntertainmentMenuManagement;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,18 +56,28 @@ Route::get('/processCancelEntertainment', [PaymentController::class, 'processCan
 
 
 
-Route::get('/trip-decideh', function () {
-    // return view('welcome');
+Route::get('/preview-temp/{filename}', function ($filename) {
+    $tmpPath = storage_path('framework/livewire-tmp');
 
-});
-Route::get('/link2', function(){
-    try{
-        Artisan::call('storage:link');
-         echo "linked successfully!";
-    } catch (Exception $e) {
-        echo "An error occurred: " . $e->getMessage();
+    // Create the directory if it doesn't exist
+    if (!File::exists($tmpPath)) {
+        File::makeDirectory($tmpPath, 0755, true);
     }
-});
+
+    $path = $tmpPath . '/' . $filename;
+
+    // Return 404 if the file still doesn't exist
+    if (!file_exists($path)) {
+        abort(404, 'Temp file not found.');
+    }
+
+    $mimeType = mime_content_type($path);
+
+    return Response::file($path, [
+        'Content-Type' => $mimeType,
+    ]);
+})->name('custom.preview');
+
 Route::get('/', Index::class)->name('index');
 Route::get('/listing', Listing::class)->name('listing');
 Route::get('/entertainment-listing', EntertainmentListing::class)->name('entertainmentListing');

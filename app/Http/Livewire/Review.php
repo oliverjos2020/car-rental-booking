@@ -23,12 +23,32 @@ class Review extends Component
     public $days = 0;
     public $hours = 0;
     public $insurance;
-    public $driversLicense;
+
     public $existingInsurance;
     public $existingdriversLicense;
     public $step = 1;
     public $catId;
     public $selectedMenus = [];
+    public $driversLicense;
+    public $tempPreviewPath;
+    public $tempPreviewInsurance;
+
+    public function updatedDriversLicense()
+    {
+        if ($this->driversLicense) {
+            $path = $this->driversLicense->store('drivers-licenses', 'public');
+            $this->tempPreviewPath = Storage::url($path);
+        }
+    }
+
+
+    public function updatedInsurance()
+    {
+        if ($this->insurance) {
+            $path = $this->insurance->store('insurance', 'public');
+            $this->tempPreviewInsurance = Storage::url($path);
+        }
+    }
 
 
     public function onApprove($details)
@@ -140,7 +160,7 @@ class Review extends Component
 
         $this->validate($rules);
         // dd($driverLicensePath);
-        if (empty($this->existingdriversLicense) || empty($this->existingInsurance)):
+        if ($this->driversLicense || $this->insurance):
             User::find(Auth()->User()->id)->update([
                 'driverLicense' => $driverLicensePath,
                 'insurance' => $insurancePath,
@@ -174,6 +194,15 @@ class Review extends Component
                 'status' => 0
             ]);
         // endif;
+        
+          if ($this->tempPreviewPath) {
+                $relativePath = str_replace('/storage/', '', $this->tempPreviewPath);
+                Storage::disk('public')->delete($relativePath);
+            }
+        
+            // Reset preview path
+            $this->tempPreviewPath = null;
+            $this->tempPreviewInsurance = null;
         if ($booking):
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'success',

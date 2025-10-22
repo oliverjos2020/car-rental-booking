@@ -36,7 +36,7 @@
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
-
+                <input type="text" name="extra_field" style="display:none">
                 <x-input id="password" class="block mt-1 w-full"
                                 type="password"
                                 name="password"

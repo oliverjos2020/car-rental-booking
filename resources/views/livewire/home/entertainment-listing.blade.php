@@ -15,6 +15,27 @@
                 <li><img src="{{ asset('img/slider1.jpg') }}" style="width: 100%;height: auto;"></li>
                 <li><img src="{{ asset('img/slider2.jpg') }}" style="width: 100%;height: auto;"></li>
                 <li><img src="{{ asset('img/slider3.jpg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/1.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/2.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/3.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/4.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/5.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/6.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/11.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/8.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/9.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/12.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/13.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/14.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/15.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/16.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/17.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/18.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/19.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/20.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/21.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/22.jpeg') }}" style="width: 100%;height: auto;"></li>
+                <li><img src="{{ asset('img/23.jpeg') }}" style="width: 100%;height: auto;"></li>
             </ul>
 
             <button type="button" class="slider-nav"></button>
@@ -28,6 +49,19 @@
         </div>
     </div>
     <div class="container">
+        <div class="b-filter__row mt-3">
+            <label for="vehicle">Select Vehicle</label>
+            <select class="review-input-ent" wire:model="selectedVehicle">
+                <option value="">::Select an option::</option>
+                @forelse($isVehicles as $isVehicle)
+                    <option value="{{$isVehicle->id}}">{{$isVehicle->item}}</option>
+                @empty
+                @endforelse
+            </select>
+            @error('vehicle')
+                <span style="color:red" class="text-danger"> {{ $message }} </span>
+            @enderror
+        </div>
         <div class="b-filter__row mt-3">
             <label for="event">Your Event</label>
             <input type="text" wire:model="event" placeholder="Your Event" class="review-input-ent">
@@ -89,6 +123,10 @@
             </div>
         @empty
         @endforelse
+ 
+    @if($vehicle)
+        <input type="checkbox" value="{{$vehicle->id}}" checked disabled> {{$vehicle->item}} [{{$vehicle->amount}}]<br>
+    @endif
         @if (Auth::check())
             <a style="color:#fff" class="btn btn-primary text-light btn-lg mt-3 mb-3"
                 wire:click="proceed"> Proceed</a>
@@ -98,5 +136,6 @@
         @endif
 
     </div>
+
 
 </div>

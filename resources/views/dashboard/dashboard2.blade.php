@@ -296,7 +296,7 @@
                                                             <p class="text-muted mt-1 mb-0">Pickup Date: {{ $order->pickupDate}}</p>
                                                             <p class="text-muted mt-1 mb-0">Pickup / Drop of Time: {{ $order->pickupTime}} / {{ $order->dropoffTime}}</p>
                                                             <p class="text-muted mt-1 mb-0">pick Up / Drop off Location: {{ $order->vehicle->location}}</p>
-                                                            <p class="text-muted mt-1 mb-0"><a href="/bookingOrder/pendingA" class="btn btn-primary btn-sm">View</a></p>
+                                                            <p class="text-muted mt-1 mb-0"><a href="/bookingOrder/pending" class="btn btn-primary btn-sm">View</a></p>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -95,7 +95,7 @@
 
                                     @empty
                                     <tr>
-                                        <td colspan="11" class="text-center text-danger"> No record available</td>
+                                        <td colspan="13" class="text-center text-danger"> No record available</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -157,7 +157,7 @@
                                             <td>
                                                 @if($order->status == 1)
                                                 <a class="btn btn-primary btn-sm" style="color:#fff;"><i
-                                                        class="fas fa-info-circle"></i> Trip Approved</a>
+                                                        class="fas fa-info-circle"></i> Pending Approval</a>
                                                 @elseif($order->status == 2)
                                                 <a class="btn btn-primary btn-sm" style="color:#fff;"><i class="fa fa-check"></i> Trip Ongoing</a>
                                                 @elseif($order->status == 3)
@@ -180,7 +180,7 @@
 
                                         @empty
                                         <tr>
-                                            <td colspan="11" class="text-center text-danger"> No record available</td>
+                                            <td colspan="13" class="text-center text-danger"> No record available</td>
                                         </tr>
                                         @endforelse
                                     </tbody>

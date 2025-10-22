@@ -23,6 +23,8 @@ class EntertainmentMenuManagement extends Component
     public $editingAmount;
     public $editingRequired;
     public $editingChargePerHour;
+    public $editingIsVehicle;
+    public $is_vehicle;
     public $limit = '10';
 
     protected $queryString = ['limit', 'search'];
@@ -51,8 +53,9 @@ class EntertainmentMenuManagement extends Component
             'amount' => $this->amount,
             'required' => $this->required ?? 0,
             'charge_per_hour' => $this->charge_per_hour ?? 0,
+            'is_vehicle' => $this->is_vehicle ?? 0
         ]);
-        $this->reset(['item', 'amount', 'required', 'charge_per_hour']);
+        $this->reset(['item', 'amount', 'required', 'charge_per_hour', 'is_vehicle']);
         $this->dispatchBrowserEvent('notify', [
             'type' => 'success',
             'message' => 'menu Created Successfully',
@@ -69,15 +72,17 @@ class EntertainmentMenuManagement extends Component
     public function edit($id)
     {
         $this->editingID = $id;
-        $this->editingItem = EntertainmentMenu::find($id)->item;
-        $this->editingAmount = EntertainmentMenu::find($id)->amount;
-        $this->editingRequired = EntertainmentMenu::find($id)->required;
-        $this->editingChargePerHour = EntertainmentMenu::find($id)->charge_per_hour;
+        $getRecords = EntertainmentMenu::find($id);
+        $this->editingItem = $getRecords->item;
+        $this->editingAmount = $getRecords->amount;
+        $this->editingRequired = $getRecords->required;
+        $this->editingChargePerHour = $getRecords->charge_per_hour;
+        $this->editingIsVehicle = $getRecords->is_vehicle == 1 ? true : false;
     }
 
     public function cancelEdit()
     {
-        $this->reset('editingID', 'editingItem', 'editingAmount', 'editingRequired', 'charge_per_hour');
+        $this->reset('editingID', 'editingItem', 'editingAmount', 'editingRequired', 'editingIsVehicle', 'editingIsVehicle');
     }
 
     public function update()
@@ -90,7 +95,8 @@ class EntertainmentMenuManagement extends Component
                 'item' => $this->editingItem,
                 'amount' => $this->editingAmount,
                 'required' => $this->editingRequired,
-                'charge_per_hour' => $this->editingChargePerHour
+                'charge_per_hour' => $this->editingChargePerHour,
+                'is_vehicle' => $this->editingIsVehicle
             ]);
             $this->cancelEdit();
             $this->dispatchBrowserEvent('notify', [

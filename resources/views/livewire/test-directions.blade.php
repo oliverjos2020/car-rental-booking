@@ -43,21 +43,211 @@
                 </div>
                 <div id="vehicleList"></div>
             </div>
-            <div class="col-md-7 p-3" id="map" style="height: 100vh;" wire:ignore></div>
+            {{-- <div class="col-md-7 p-3" id="map" style="height: 100vh;" wire:ignore></div> --}}
+            {{-- <div id="map2"></div> --}}
+            <div id="map2" style="width: 100%; height: 400px;"></div>
         </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_API_KEY')}}&libraries=places" async
-    defer></script>
+{{-- <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places" async defer>
+</script> --}}
 
 {{-- <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.0/dist/echo.iife.js"></script> --}}
 {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
-
 <script>
+    (g => {
+        var h, a, k, p = "The Google Maps JavaScript API",
+            c = "google",
+            l = "importLibrary",
+            q = "__ib__",
+            m = document,
+            b = window;
+        b = b[c] || (b[c] = {});
+        var d = b.maps || (b.maps = {}),
+            r = new Set,
+            e = new URLSearchParams,
+            u = () => h || (h = new Promise(async (f, n) => {
+                await (a = m.createElement("script"));
+                e.set("libraries", [...r] + "");
+                for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+                e.set("callback", c + ".maps." + q);
+                a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                d[q] = f;
+                a.onerror = () => h = n(Error(p + " could not load."));
+                a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                m.head.append(a)
+            }));
+        d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() =>
+            d[l](f, ...n))
+    })
+    ({
+        key: "{{ env('GOOGLE_API_KEY') }}",
+        v: "weekly"
+    });
+</script>
+</script>
+<script>
+    // Initialize and add the map
+    let map;
+    let userMarker;
+
+    async function initMap() {
+        // Start with a default position
+        const defaultPosition = {
+            lat: -25.344,
+            lng: 131.031
+        };
+
+        // Request needed libraries
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+        // Initialize the map with default position
+        map = new Map(document.getElementById("map2"), {
+            zoom: 15, // Closer zoom for user location
+            center: defaultPosition,
+            mapId: "map2",
+        });
+
+        // Create a marker that we'll reposition to the user's location
+        userMarker = new AdvancedMarkerElement({
+            map: map,
+            position: defaultPosition,
+            title: "Your Location",
+        });
+
+        // Add loading indicator to map
+        const loadingElement = document.createElement('div');
+        loadingElement.id = 'location-loading';
+        loadingElement.style.position = 'absolute';
+        loadingElement.style.top = '50%';
+        loadingElement.style.left = '50%';
+        loadingElement.style.transform = 'translate(-50%, -50%)';
+        loadingElement.style.backgroundColor = 'white';
+        loadingElement.style.padding = '10px 15px';
+        loadingElement.style.borderRadius = '4px';
+        loadingElement.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+        loadingElement.style.zIndex = '1';
+        loadingElement.innerHTML = 'Getting your location...';
+        document.getElementById("map2").appendChild(loadingElement);
+
+        // Try to get the user's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                // Success callback
+                (position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Center map on user location
+                    map.setCenter(userLocation);
+
+                    // Move the marker to user location
+                    userMarker.position = userLocation;
+
+                    // Remove loading indicator
+                    document.getElementById('location-loading')?.remove();
+
+                    console.log("Successfully got user location:", userLocation);
+                },
+                // Error callback
+                (error) => {
+                    console.error("Geolocation error:", error.code, error.message);
+
+                    // Update loading indicator with error
+                    const loadingEl = document.getElementById('location-loading');
+                    if (loadingEl) {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                loadingEl.innerHTML = 'Location access was denied.<br>Please enable location services in your browser settings.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                loadingEl.innerHTML = 'Your location is unavailable.<br>Please try again later.';
+                                break;
+                            case error.TIMEOUT:
+                                loadingEl.innerHTML = 'Location request timed out.<br>Please check your connection.';
+                                break;
+                            default:
+                                loadingEl.innerHTML = 'Could not determine your location.';
+                        }
+
+                        // Style as error
+                        loadingEl.style.backgroundColor = '#fff0f0';
+                        loadingEl.style.border = '1px solid #fcc';
+
+                        // Add a retry button
+                        const retryBtn = document.createElement('button');
+                        retryBtn.innerText = 'Try Again';
+                        retryBtn.style.marginTop = '10px';
+                        retryBtn.style.padding = '5px 10px';
+                        retryBtn.onclick = function() {
+                            initMap(); // Restart the process
+                        };
+                        loadingEl.appendChild(document.createElement('br'));
+                        loadingEl.appendChild(retryBtn);
+
+                        // Add manual location button
+                        const manualBtn = document.createElement('button');
+                        manualBtn.innerText = 'Select Location Manually';
+                        manualBtn.style.marginTop = '5px';
+                        manualBtn.style.marginLeft = '5px';
+                        manualBtn.style.padding = '5px 10px';
+                        manualBtn.onclick = function() {
+                            loadingEl.remove();
+
+                            // Display instruction
+                            const instructionEl = document.createElement('div');
+                            instructionEl.style.position = 'absolute';
+                            instructionEl.style.top = '10px';
+                            instructionEl.style.left = '50%';
+                            instructionEl.style.transform = 'translateX(-50%)';
+                            instructionEl.style.backgroundColor = 'white';
+                            instructionEl.style.padding = '8px 12px';
+                            instructionEl.style.borderRadius = '4px';
+                            instructionEl.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+                            instructionEl.style.zIndex = '1';
+                            instructionEl.innerHTML = 'Click on the map to set your location';
+                            document.getElementById("map2").appendChild(instructionEl);
+
+                            // Add click listener to map
+                            map.addListener('click', function(e) {
+                                userMarker.position = e.latLng;
+                                instructionEl.remove();
+                            });
+                        };
+                        loadingEl.appendChild(manualBtn);
+                    }
+                },
+                // Options for geolocation request
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            // Browser doesn't support geolocation
+            const loadingEl = document.getElementById('location-loading');
+            if (loadingEl) {
+                loadingEl.innerHTML = 'Geolocation is not supported by this browser.';
+                loadingEl.style.backgroundColor = '#fff0f0';
+                loadingEl.style.border = '1px solid #fcc';
+            }
+        }
+    }
+
+    // Initialize the map when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        initMap();
+    });
+</script>
+{{-- <script>
     Pusher.logToConsole = false;
-    var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
         cluster: 'eu'
     });
 
@@ -78,34 +268,34 @@
     //     alert('Your ride has been accepted by the driver!');
     // });
 
-channel.bind('RideAccepted', (data) => {
-    // console.log('Ride Accepted:', data);
-    // console.log('pickup:', data.pickupLocation);
-    // console.log('dropoff:', data.dropoffLocation);
-    // Preserve the existing route
-    const pickupLocation = JSON.parse(data.pickupLocation);
-    const dropoffLocation = JSON.parse(data.dropoffLocation);
+    channel.bind('RideAccepted', (data) => {
+        // console.log('Ride Accepted:', data);
+        // console.log('pickup:', data.pickupLocation);
+        // console.log('dropoff:', data.dropoffLocation);
+        // Preserve the existing route
+        const pickupLocation = JSON.parse(data.pickupLocation);
+        const dropoffLocation = JSON.parse(data.dropoffLocation);
 
-    // Update vehicle selection UI
-    $('.vehicle-card .select-vehicle-btn')
-        .text('Driver Accepted')
-        .prop('disabled', true)
-        .addClass('accepted');
+        // Update vehicle selection UI
+        $('.vehicle-card .select-vehicle-btn')
+            .text('Driver Accepted')
+            .prop('disabled', true)
+            .addClass('accepted');
 
-    // Start navigation
-    startNavigation(data.vehId, pickupLocation, dropoffLocation);
+        // Start navigation
+        startNavigation(data.vehId, pickupLocation, dropoffLocation);
 
-    // console.log('Ride Accepted:', data);
-    alert('Your ride has been accepted by the driver!');
-});
+        // console.log('Ride Accepted:', data);
+        alert('Your ride has been accepted by the driver!');
+    });
 
 
     function initMap() {
-
         if (!google || !google.maps || !google.maps.Map) {
-        console.error('Google Maps API not loaded');
-        return;
+            console.error('Google Maps API not loaded');
+            return;
         }
+
         // Initialize the map
         map = new google.maps.Map(document.getElementById('map'), {
             center: {
@@ -129,47 +319,112 @@ channel.bind('RideAccepted', (data) => {
         // Directions Service and Renderer for displaying the route
         directionsService = new google.maps.DirectionsService();
         directionsRenderer = new google.maps.DirectionsRenderer();
-        directionsRenderer.setMap(map); // Link the directions renderer to the map
+        directionsRenderer.setMap(map);
+
+        // Check if using Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        // Geolocation options with Safari-specific adjustments
+        const geoOptions = {
+            enableHighAccuracy: true,
+            timeout: isSafari ? 20000 : 10000, // Longer timeout for Safari
+            maximumAge: 0
+        };
 
         // Geolocation API to center the map on the user's current location
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
-                map.setCenter(userLocation);
-                // console.log('current location', userLocation);
-                markerLocation.setPosition(userLocation); // Set user's location marker
-            });
+            // Show loading indicator for geolocation
+            const locationStatus = document.createElement('div');
+            locationStatus.id = 'location-status';
+            locationStatus.style.position = 'absolute';
+            locationStatus.style.top = '10px';
+            locationStatus.style.left = '50%';
+            locationStatus.style.transform = 'translateX(-50%)';
+            locationStatus.style.backgroundColor = 'rgba(255,255,255,0.8)';
+            locationStatus.style.padding = '5px 10px';
+            locationStatus.style.borderRadius = '4px';
+            locationStatus.style.zIndex = '5';
+            locationStatus.innerHTML = 'Getting your location...';
+            document.getElementById('map').appendChild(locationStatus);
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Success handler
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setCenter(userLocation);
+                    markerLocation.setPosition(userLocation);
+
+                    // Remove loading indicator
+                    const status = document.getElementById('location-status');
+                    if (status) status.remove();
+
+                    console.log("Successfully got location: ", userLocation);
+                },
+                (error) => {
+                    // Error handler with improved logging
+                    console.error('Geolocation error code:', error.code, 'message:', error.message);
+
+                    // Update the status message instead of using alerts
+                    const status = document.getElementById('location-status');
+                    if (status) {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                status.innerHTML =
+                                    'Location access denied. Please enable location in your browser settings.';
+                                status.style.backgroundColor = 'rgba(255,200,200,0.9)';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                status.innerHTML = 'Location information unavailable. Check your connection.';
+                                status.style.backgroundColor = 'rgba(255,200,200,0.9)';
+                                break;
+                            case error.TIMEOUT:
+                                status.innerHTML = 'Location request timed out. Try again later.';
+                                status.style.backgroundColor = 'rgba(255,200,200,0.9)';
+                                break;
+                            default:
+                                status.innerHTML = 'Unknown error getting location.';
+                                status.style.backgroundColor = 'rgba(255,200,200,0.9)';
+                        }
+
+                        // Remove status message after 5 seconds
+                        setTimeout(() => {
+                            if (status) status.remove();
+                        }, 5000);
+                    }
+                },
+                geoOptions
+            );
+        } else {
+            alert('Geolocation is not supported by your browser.');
         }
 
-        // Initialize Google Places Autocomplete for Location
+        // Rest of your autocomplete code remains the same
         autocompleteLocation = new google.maps.places.Autocomplete(document.getElementById('location'));
         autocompleteLocation.addListener('place_changed', () => {
             const place = autocompleteLocation.getPlace();
-            if (!place.geometry) return; // If no place found, return early
+            if (!place.geometry) return;
 
             const location = place.geometry.location;
-            markerLocation.setPosition(location); // Update location marker
-            map.setCenter(location); // Center the map on location
-            map.setZoom(14); // Zoom in to location
-            @this.set('location', place.formatted_address); // Update Livewire model
+            markerLocation.setPosition(location);
+            map.setCenter(location);
+            map.setZoom(14);
+            @this.set('location', place.formatted_address);
         });
 
-        // Initialize Google Places Autocomplete for Destination
         autocompleteDestination = new google.maps.places.Autocomplete(document.getElementById('destination'));
         autocompleteDestination.addListener('place_changed', () => {
             const place = autocompleteDestination.getPlace();
-            if (!place.geometry) return; // If no place found, return early
+            if (!place.geometry) return;
 
             const destination = place.geometry.location;
-            markerDestination.setPosition(destination); // Update destination marker
-            map.setCenter(destination); // Center the map on destination
-            map.setZoom(14); // Zoom in to destination
-            @this.set('destination', place.formatted_address); // Update Livewire model
+            markerDestination.setPosition(destination);
+            map.setCenter(destination);
+            map.setZoom(14);
+            @this.set('destination', place.formatted_address);
 
-            // Now that we have both location and destination, calculate the route
             calculateRoute(markerLocation.getPosition(), destination);
         });
     }
@@ -197,158 +452,129 @@ channel.bind('RideAccepted', (data) => {
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-    // Get query parameters from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const location = urlParams.get('location');
-    const destination = urlParams.get('destination');
+        // Get query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const location = urlParams.get('location');
+        const destination = urlParams.get('destination');
 
-    if (location && destination) {
-        geocodeAndSetMarkers(location, destination);
-    }
-});
+        if (location && destination) {
+            geocodeAndSetMarkers(location, destination);
+        }
+    });
 
-function geocodeAndSetMarkers(location, destination) {
-    const geocoder = new google.maps.Geocoder();
+    function geocodeAndSetMarkers(location, destination) {
+        const geocoder = new google.maps.Geocoder();
 
-    // Geocode pickup location
-    geocoder.geocode({ address: location }, (results, status) => {
-        if (status === 'OK') {
-            const pickupCoords = results[0].geometry.location;
-            markerLocation.setPosition(pickupCoords);
-            map.setCenter(pickupCoords); // Optionally center map on pickup location
+        // Geocode pickup location
+        geocoder.geocode({
+            address: location
+        }, (results, status) => {
+            if (status === 'OK') {
+                const pickupCoords = results[0].geometry.location;
+                markerLocation.setPosition(pickupCoords);
+                map.setCenter(pickupCoords); // Optionally center map on pickup location
 
-            const pickupField = document.getElementById('location');
-            if (pickupField) {
-                pickupField.value = location;
+                const pickupField = document.getElementById('location');
+                if (pickupField) {
+                    pickupField.value = location;
+                } else {
+                    console.error("Pickup field not found in DOM.");
+                }
             } else {
-                console.error("Pickup field not found in DOM.");
+                console.error('Geocoding failed for location:', status);
+                alert('Failed to set pickup location.');
             }
-        } else {
-            console.error('Geocoding failed for location:', status);
-            alert('Failed to set pickup location.');
-        }
-    });
-
-    // Geocode dropoff location
-    geocoder.geocode({ address: destination }, (results, status) => {
-        if (status === 'OK') {
-            const dropoffCoords = results[0].geometry.location;
-            markerDestination.setPosition(dropoffCoords);
-
-            const dropoffField = document.getElementById('destination');
-            if (dropoffField) {
-                dropoffField.value = destination;
-            } else {
-                console.error("Dropoff field not found in DOM.");
-            }
-
-            // Draw route after setting both markers
-            calculateRoute(markerLocation.getPosition(), markerDestination.getPosition());
-        } else {
-            console.error('Geocoding failed for destination:', status);
-            alert('Failed to set dropoff location.');
-        }
-    });
-}
-
-function calculateRoute(pickup, dropoff) {
-    const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer();
-
-    directionsRenderer.setMap(map);
-
-    const request = {
-        origin: pickup,
-        destination: dropoff,
-        travelMode: google.maps.TravelMode.DRIVING,
-    };
-
-    directionsService.route(request, (result, status) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-            directionsRenderer.setDirections(result);
-        } else {
-            console.error('Failed to calculate route:', status);
-            alert('Could not calculate route.');
-        }
-    });
-}
-
-
-document.getElementById('bookRide').addEventListener('click', () => {
-    $("#bookRide").html('Processing...');
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const pickupPosition = markerLocation.getPosition();
-            const dropoffPosition = markerDestination.getPosition();
-
-            if (!pickupPosition || !dropoffPosition) {
-                alert("Please set both pickup and dropoff locations.");
-                $("#bookRide").html('Book Ride');
-                return;
-            }
-
-            const pickupLocation = {
-                lat: pickupPosition.lat(),
-                lng: pickupPosition.lng(),
-            };
-
-            const dropoffLocation = {
-                lat: dropoffPosition.lat(),
-                lng: dropoffPosition.lng(),
-            };
-
-            if (isNaN(pickupLocation.lat) || isNaN(pickupLocation.lng) ||
-                isNaN(dropoffLocation.lat) || isNaN(dropoffLocation.lng)) {
-                alert("Invalid pickup or dropoff location.");
-                console.error("Invalid coordinates:", {
-                    pickupLocation,
-                    dropoffLocation
-                });
-                $("#bookRide").html('Book Ride');
-                return;
-            }
-
-            const requestData = {
-                pickup: pickupLocation,
-                dropoff: dropoffLocation,
-                vehicle_id: 25, // Adjust as needed
-            };
-
-            fetch('/request-ride', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                            .getAttribute('content'),
-                    },
-                    body: JSON.stringify(requestData),
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        $("#bookRide").html('Book Ride');
-                        const rideId = data.rideRequest.id;
-                        getNearbyVehicles(pickupLocation.lat, pickupLocation.lng, rideId);
-                    } else {
-                        console.error('Error:', data.message);
-                        alert('Failed to request ride.');
-                        $("#bookRide").html('Book Ride');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error submitting ride request:', error);
-                    $("#bookRide").html('Book Ride');
-                });
-        }, (error) => {
-            alert("Unable to retrieve your location.");
-            console.error(error);
-            $("#bookRide").html('Book Ride');
         });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-        $("#bookRide").html('Book Ride');
+
+        // Geocode dropoff location
+        geocoder.geocode({
+            address: destination
+        }, (results, status) => {
+            if (status === 'OK') {
+                const dropoffCoords = results[0].geometry.location;
+                markerDestination.setPosition(dropoffCoords);
+
+                const dropoffField = document.getElementById('destination');
+                if (dropoffField) {
+                    dropoffField.value = destination;
+                } else {
+                    console.error("Dropoff field not found in DOM.");
+                }
+
+                // Draw route after setting both markers
+                calculateRoute(markerLocation.getPosition(), markerDestination.getPosition());
+            } else {
+                console.error('Geocoding failed for destination:', status);
+                alert('Failed to set dropoff location.');
+            }
+        });
     }
-});
+
+    function calculateRoute(pickup, dropoff) {
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+
+        directionsRenderer.setMap(map);
+
+        const request = {
+            origin: pickup,
+            destination: dropoff,
+            travelMode: google.maps.TravelMode.DRIVING,
+        };
+
+        directionsService.route(request, (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setDirections(result);
+            } else {
+                console.error('Failed to calculate route:', status);
+                alert('Could not calculate route.');
+            }
+        });
+    }
+
+
+    document.getElementById('bookRide').addEventListener('click', () => {
+        $("#bookRide").html('Processing...');
+
+        // Check if using Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        if (navigator.geolocation) {
+            // Add options object with higher timeout for Safari
+            const options = {
+                enableHighAccuracy: true,
+                timeout: isSafari ? 15000 : 5000, // Longer timeout for Safari
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                // Your existing success code
+                const pickupPosition = markerLocation.getPosition();
+                const dropoffPosition = markerDestination.getPosition();
+                // Rest of your code...
+
+            }, (error) => {
+                console.error("Geolocation error code:", error.code, "message:", error.message);
+
+                // More specific error messaging based on error code
+                if (error.code === 1) {
+                    alert(
+                        "Location access was denied. Please check your browser permissions and try again.");
+                } else if (error.code === 2) {
+                    alert("Location information is unavailable. Please try again later.");
+                } else if (error.code === 3) {
+                    alert("Location request timed out. Please try again.");
+                } else {
+                    alert("Unable to retrieve your location.");
+                }
+
+                $("#bookRide").html('Book Ride');
+            }, options); // Pass the options object
+        } else {
+            alert("Geolocation is not supported by this browser.");
+            $("#bookRide").html('Book Ride');
+        }
+    });
 
 
 
@@ -468,7 +694,9 @@ document.getElementById('bookRide').addEventListener('click', () => {
                     });
                 } else {
                     console.log('No vehicles found within 5km radius.');
-                    $('#vehicleList').html('<p style="padding: 25px; margin-top:15px; text-align: center; font-weight: bold; background: lightgray;">No vehicles available nearby</p>');
+                    $('#vehicleList').html(
+                        '<p style="padding: 25px; margin-top:15px; text-align: center; font-weight: bold; background: lightgray;">No vehicles available nearby</p>'
+                    );
                 }
             })
             .catch(error => console.error('Error fetching vehicles:', error));
@@ -549,245 +777,246 @@ document.getElementById('bookRide').addEventListener('click', () => {
     document.head.appendChild(style);
 
 
-function selectVehicle(vehicleId, rideId, distance, price) {
-    const requestData = {
-        vehicleId,
-        rideId,
-        distance,
-        price
-    };
+    function selectVehicle(vehicleId, rideId, distance, price) {
+        const requestData = {
+            vehicleId,
+            rideId,
+            distance,
+            price
+        };
 
-    // Remove all vehicle cards except the selected one
-    $('.vehicle-card').each(function() {
-        const currentVehicleId = $(this).data('vehicle-id');
-        if (currentVehicleId !== vehicleId) {
-            $(this).remove();
-        }
-    });
-
-    // Remove other vehicle markers from the map
-    // map.getObjects().forEach(function(obj) {
-    //     if (obj instanceof google.maps.Marker && obj.getTitle() !== 'Your Driver') {
-    //         obj.setMap(null);
-    //     }
-    // });
-
-    fetch('/select-vehicle', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify(requestData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the select button to "Start Trip"
-            const vehicleCard = $(`.vehicle-card[data-vehicle-id="${vehicleId}"]`);
-            vehicleCard.find('.select-vehicle-btn')
-                .text('Waiting for Driver')
-                .prop('disabled', true)
-                .addClass('waiting');
-        } else {
-            alert('Failed to select vehicle.');
-        }
-    })
-    .catch(error => console.error('Error selecting vehicle:', error));
-}
-
-
-function startNavigation(vehId, driverInitialLocation, destinationLocation) {
-    if (!google || !google.maps || !google.maps.Map) {
-        console.error('Google Maps API not loaded');
-        return;
-    }
-
-    if (!directionsService || !directionsRenderer) {
-        console.error('Directions services not initialized');
-        return;
-    }
-
-    // const pickup = JSON.parse(driverInitialLocation);
-    // const dropoff = JSON.parse(destinationLocation);
-    const pickup = driverInitialLocation;
-    const dropoff = destinationLocation;
-
-    if (!pickup?.lat || !pickup?.lng || !dropoff?.lat || !dropoff?.lng) {
-        console.error('Invalid coordinates', { pickup, dropoff });
-        return;
-    }
-
-    if (!map) {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: pickup,
-            zoom: 16
+        // Remove all vehicle cards except the selected one
+        $('.vehicle-card').each(function() {
+            const currentVehicleId = $(this).data('vehicle-id');
+            if (currentVehicleId !== vehicleId) {
+                $(this).remove();
+            }
         });
-    } else {
-        map.setCenter(pickup);
+
+        // Remove other vehicle markers from the map
+        // map.getObjects().forEach(function(obj) {
+        //     if (obj instanceof google.maps.Marker && obj.getTitle() !== 'Your Driver') {
+        //         obj.setMap(null);
+        //     }
+        // });
+
+        fetch('/select-vehicle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the select button to "Start Trip"
+                    const vehicleCard = $(`.vehicle-card[data-vehicle-id="${vehicleId}"]`);
+                    vehicleCard.find('.select-vehicle-btn')
+                        .text('Waiting for Driver')
+                        .prop('disabled', true)
+                        .addClass('waiting');
+                } else {
+                    alert('Failed to select vehicle.');
+                }
+            })
+            .catch(error => console.error('Error selecting vehicle:', error));
     }
-    directionsRenderer.setMap(null);
 
-    const pickupMarker = new google.maps.Marker({
-        map: map,
-        position: pickup,
-        title: 'Pickup Location'
-    });
 
-    const dropoffMarker = new google.maps.Marker({
-        map: map,
-        position: dropoff,
-        title: 'Dropoff Location'
-    });
-
-    let driverMarker = null;
-    let lastDriverPosition = null;
-    let driverAtPickup = false;
-
-    function updateDriverLocation(newLocation) {
-        if (!newLocation?.lat || !newLocation?.lng) {
-            console.error('Invalid new location', newLocation);
+    function startNavigation(vehId, driverInitialLocation, destinationLocation) {
+        if (!google || !google.maps || !google.maps.Map) {
+            console.error('Google Maps API not loaded');
             return;
         }
 
-        if (!driverMarker) {
-            driverMarker = new google.maps.Marker({
-                map: map,
-                position: newLocation,
-                icon: {
-                    url: 'img/car-icon.png',
-                    scaledSize: new google.maps.Size(50, 50)
-                },
-                title: 'Your Driver'
+        if (!directionsService || !directionsRenderer) {
+            console.error('Directions services not initialized');
+            return;
+        }
+
+        // const pickup = JSON.parse(driverInitialLocation);
+        // const dropoff = JSON.parse(destinationLocation);
+        const pickup = driverInitialLocation;
+        const dropoff = destinationLocation;
+
+        if (!pickup?.lat || !pickup?.lng || !dropoff?.lat || !dropoff?.lng) {
+            console.error('Invalid coordinates', {
+                pickup,
+                dropoff
+            });
+            return;
+        }
+
+        if (!map) {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: pickup,
+                zoom: 16
             });
         } else {
-            driverMarker.setPosition(newLocation);
+            map.setCenter(pickup);
         }
+        directionsRenderer.setMap(null);
 
-        const pickupDistance = google.maps.geometry.spherical.computeDistanceBetween(
-            new google.maps.LatLng(newLocation.lat, newLocation.lng),
-            new google.maps.LatLng(pickup.lat, pickup.lng)
-        );
+        const pickupMarker = new google.maps.Marker({
+            map: map,
+            position: pickup,
+            title: 'Pickup Location'
+        });
 
-        if (pickupDistance <= 100 && !driverAtPickup) {
-            driverAtPickup = true;
+        const dropoffMarker = new google.maps.Marker({
+            map: map,
+            position: dropoff,
+            title: 'Dropoff Location'
+        });
 
-            $('.vehicle-card .select-vehicle-btn')
-                .text('Start Trip')
-                .prop('disabled', false)
-                .removeClass('accepted')
-                .addClass('start-trip');
-        }
+        let driverMarker = null;
+        let lastDriverPosition = null;
+        let driverAtPickup = false;
 
-        const distanceMoved = lastDriverPosition
-            ? google.maps.geometry.spherical.computeDistanceBetween(
-                new google.maps.LatLng(lastDriverPosition.lat, lastDriverPosition.lng),
-                new google.maps.LatLng(newLocation.lat, newLocation.lng)
-            )
-            : Infinity;
+        function updateDriverLocation(newLocation) {
+            if (!newLocation?.lat || !newLocation?.lng) {
+                console.error('Invalid new location', newLocation);
+                return;
+            }
 
-        if (distanceMoved >= 100 || !lastDriverPosition) {
-            lastDriverPosition = newLocation;
-
-            const request = {
-                origin: new google.maps.LatLng(newLocation.lat, newLocation.lng),
-                // destination: new google.maps.LatLng(pickup.lat, pickup.lng),
-                destination: dropoff,
-                waypoints: [{
-                    location: pickup,
-                    stopover: true
-                }],
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-
-            directionsService.route(request, (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    directionsRenderer.setMap(map);
-                    directionsRenderer.setDirections(result);
-                } else {
-                    console.error('Directions request failed:', status);
-                }
-            });
-        }
-    }
-
-    const driverLocationChannel = pusher.subscribe(`ride.${vehId}`);
-    driverLocationChannel.bind('DriverLocation', (locationData) => {
-        // console.error('Drivers Location:', locationData);
-        try {
-            const parsedLocationData = typeof locationData === 'string'
-                ? JSON.parse(locationData)
-                : locationData;
-
-            if (parsedLocationData.latitude && parsedLocationData.longitude) {
-                updateDriverLocation({
-                    lat: parseFloat(parsedLocationData.latitude),
-                    lng: parseFloat(parsedLocationData.longitude)
+            if (!driverMarker) {
+                driverMarker = new google.maps.Marker({
+                    map: map,
+                    position: newLocation,
+                    icon: {
+                        url: 'img/car-icon.png',
+                        scaledSize: new google.maps.Size(50, 50)
+                    },
+                    title: 'Your Driver'
                 });
             } else {
-                console.error('Invalid location data:', parsedLocationData);
+                driverMarker.setPosition(newLocation);
             }
-        } catch (error) {
-            console.error('Error processing DriverLocation event:', error);
-        }
-    });
 
-    $(document).on('click', '.start-trip', function() {
-        if (driverMarker) {
-            driverMarker.setMap(null);
-        }
-        startUserTracking(dropoff);
-    });
-}
+            const pickupDistance = google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(newLocation.lat, newLocation.lng),
+                new google.maps.LatLng(pickup.lat, pickup.lng)
+            );
 
+            if (pickupDistance <= 100 && !driverAtPickup) {
+                driverAtPickup = true;
 
-function startUserTracking(dropoff) {
-    if (navigator.geolocation) {
-        const watchId = navigator.geolocation.watchPosition(
-            (position) => {
-                const userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+                $('.vehicle-card .select-vehicle-btn')
+                    .text('Start Trip')
+                    .prop('disabled', false)
+                    .removeClass('accepted')
+                    .addClass('start-trip');
+            }
 
-                // Update route to dropoff
+            const distanceMoved = lastDriverPosition ?
+                google.maps.geometry.spherical.computeDistanceBetween(
+                    new google.maps.LatLng(lastDriverPosition.lat, lastDriverPosition.lng),
+                    new google.maps.LatLng(newLocation.lat, newLocation.lng)
+                ) :
+                Infinity;
+
+            if (distanceMoved >= 100 || !lastDriverPosition) {
+                lastDriverPosition = newLocation;
+
                 const request = {
-                    origin: new google.maps.LatLng(userLocation.lat, userLocation.lng),
-                    destination: new google.maps.LatLng(dropoff.lat, dropoff.lng),
+                    origin: new google.maps.LatLng(newLocation.lat, newLocation.lng),
+                    // destination: new google.maps.LatLng(pickup.lat, pickup.lng),
+                    destination: dropoff,
+                    waypoints: [{
+                        location: pickup,
+                        stopover: true
+                    }],
                     travelMode: google.maps.TravelMode.DRIVING
                 };
 
                 directionsService.route(request, (result, status) => {
                     if (status === google.maps.DirectionsStatus.OK) {
+                        directionsRenderer.setMap(map);
                         directionsRenderer.setDirections(result);
-                        map.setCenter(userLocation);
+                    } else {
+                        console.error('Directions request failed:', status);
                     }
                 });
-
-                // Check if user is close to dropoff
-                const dropoffDistance = google.maps.geometry.spherical.computeDistanceBetween(
-                    new google.maps.LatLng(userLocation.lat, userLocation.lng),
-                    new google.maps.LatLng(dropoff.lat, dropoff.lng)
-                );
-
-                if (dropoffDistance <= 100) { // Within 100 meters
-                    navigator.geolocation.clearWatch(watchId);
-                    alert('You have arrived at your destination!');
-                    // Additional end-of-ride logic can be added here
-                }
-            },
-            (error) => {
-                console.error('Error tracking location:', error);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 30000,
-                timeout: 27000
             }
-        );
-    }
-}
+        }
 
-</script>
+        const driverLocationChannel = pusher.subscribe(`ride.${vehId}`);
+        driverLocationChannel.bind('DriverLocation', (locationData) => {
+            // console.error('Drivers Location:', locationData);
+            try {
+                const parsedLocationData = typeof locationData === 'string' ?
+                    JSON.parse(locationData) :
+                    locationData;
+
+                if (parsedLocationData.latitude && parsedLocationData.longitude) {
+                    updateDriverLocation({
+                        lat: parseFloat(parsedLocationData.latitude),
+                        lng: parseFloat(parsedLocationData.longitude)
+                    });
+                } else {
+                    console.error('Invalid location data:', parsedLocationData);
+                }
+            } catch (error) {
+                console.error('Error processing DriverLocation event:', error);
+            }
+        });
+
+        $(document).on('click', '.start-trip', function() {
+            if (driverMarker) {
+                driverMarker.setMap(null);
+            }
+            startUserTracking(dropoff);
+        });
+    }
+
+
+    function startUserTracking(dropoff) {
+        if (navigator.geolocation) {
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Update route to dropoff
+                    const request = {
+                        origin: new google.maps.LatLng(userLocation.lat, userLocation.lng),
+                        destination: new google.maps.LatLng(dropoff.lat, dropoff.lng),
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+
+                    directionsService.route(request, (result, status) => {
+                        if (status === google.maps.DirectionsStatus.OK) {
+                            directionsRenderer.setDirections(result);
+                            map.setCenter(userLocation);
+                        }
+                    });
+
+                    // Check if user is close to dropoff
+                    const dropoffDistance = google.maps.geometry.spherical.computeDistanceBetween(
+                        new google.maps.LatLng(userLocation.lat, userLocation.lng),
+                        new google.maps.LatLng(dropoff.lat, dropoff.lng)
+                    );
+
+                    if (dropoffDistance <= 100) { // Within 100 meters
+                        navigator.geolocation.clearWatch(watchId);
+                        alert('You have arrived at your destination!');
+                        // Additional end-of-ride logic can be added here
+                    }
+                },
+                (error) => {
+                    console.error('Error tracking location:', error);
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 30000,
+                    timeout: 27000
+                }
+            );
+        }
+    }
+</script> --}}
 
 <!-- Google Maps API Script -->

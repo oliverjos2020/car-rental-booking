@@ -46,7 +46,7 @@
                                     <tr>
                                         <td>
                                             {{-- <img src="{{asset('img/cars/c8.jpg')}}" style="max-height: 80px"> --}}
-                                            <img src="{{asset( $order->vehicle->photos->first()->image_path )}}"
+                                            <img src="{{asset( $order->vehicle->photos->first()->image_path ?? '/logo/d-logo-dark.png' )}}"
                                                 style="max-height: 80px" alt="{{ $order->vehicle->vehicleMake }}" />
                                         </td>
                                         <td>

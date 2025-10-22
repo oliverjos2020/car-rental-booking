@@ -194,11 +194,11 @@
                                                             <input type="file" wire:model="driversLicense"
                                                             accept="image/jpg, image/jpeg, image/png" class="review-input">
                                                             <br>
-                                                            {{-- @if ($driversLicense)
-                                                                <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
-                                                            @endif --}}
+                                                            <!--{{-- @if ($driversLicense)-->
+                                                            <!--    <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
+                                                            <!--@endif --}}-->
                                                             @if ($driversLicense instanceof \Livewire\TemporaryUploadedFile)
-                                                            <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            <!--<img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
                                                             @elseif ($existingdriversLicense)
                                                             <img src="{{ $existingdriversLicense }}" class="image mt-3" style="max-width: 300px">
                                                             @endif
@@ -215,10 +215,10 @@
                                                             accept="image/jpg, image/jpeg, image/png" class="review-inputx">
                                                             <br>
                                                             {{-- @if ($insurance)
-                                                                <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                                <!--<img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
                                                             @endif --}}
                                                             @if ($insurance instanceof \Livewire\TemporaryUploadedFile)
-                                                            <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            <!--<img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
                                                             @elseif ($existingInsurance)
                                                             <img src="{{ $existingInsurance }}" class="image mt-3" style="max-width: 300px">
                                                             @endif
@@ -310,10 +310,14 @@
                                                             {{-- @if ($driversLicense)
                                                                 <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
                                                             @endif --}}
-                                                            @if ($driversLicense instanceof \Livewire\TemporaryUploadedFile)
-                                                            <img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                            @if ($tempPreviewPath)
+                                                            <!--<img src="{{ $driversLicense->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
+                                                                <!--<img src="{{ route('custom.preview', basename($driversLicense->getFilename())) }}" alt="Preview" />-->
+                                                                <img src="{{ asset($tempPreviewPath) }}" width="200">
+                                                                
                                                             @elseif ($existingdriversLicense)
                                                             <img src="{{ $existingdriversLicense }}" class="image mt-3" style="max-width: 300px">
+                                                            
                                                             @endif
                                                             <br>
                                                             @error('driversLicense')
@@ -328,12 +332,12 @@
                                                             accept="image/jpg, image/jpeg, image/png" class="review-inputx">
                                                             <br>
                                                             {{-- @if ($insurance)
-                                                                <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                                <!--<img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">-->
                                                             @endif --}}
                                                             @if ($insurance instanceof \Livewire\TemporaryUploadedFile)
-                                                            <img src="{{ $insurance->temporaryUrl() }}" class="image mt-3" style="max-width: 300px">
+                                                                <img src="{{ asset($tempPreviewInsurance) }}" class="image mt-3" style="max-width: 300px">
                                                             @elseif ($existingInsurance)
-                                                            <img src="{{ $existingInsurance }}" class="image mt-3" style="max-width: 300px">
+                                                                <img src="{{ $existingInsurance }}" class="image mt-3" style="max-width: 300px">
                                                             @endif
                                                             <br>
                                                             @error('insurance')

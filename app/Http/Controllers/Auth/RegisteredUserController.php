@@ -35,9 +35,12 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->filled('extra_field')) {
+            abort(403, 'Bot detected');
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
             'phone_no' => ['required', 'max:15', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
