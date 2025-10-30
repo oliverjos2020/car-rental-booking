@@ -278,22 +278,17 @@
                 </div>
             </div>
         </header>
-        <div class="section-title-page area-bg area-bg_dark area-bg_op_60">
-            <div class="area-bg__inner">
+        <div class="section-title-page area-bg area-bg_dark area-bg_op_60" style="padding-top:0px !important; padding-bottom:0px !important">
+            {{-- <div class="area-bg__inner">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-md">
-                            {{-- <h1 class="b-title-page">Vehicle Listing</h1> --}}
+                            <h1 class="b-title-page">Vehicle Listing</h1>
                             <div class="ui-decor bg-primary"></div>
                         </div>
-                        {{-- <div class="col-md-auto"><a class="b-title-page__btn bg-primary" href="#">Smarter Way to
-                                Buy or
-                                Sell
-                                Cars</a>
-                            </div> --}}
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <!-- end .b-title-page-->
 

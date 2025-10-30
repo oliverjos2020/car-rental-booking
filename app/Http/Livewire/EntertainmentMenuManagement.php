@@ -75,8 +75,8 @@ class EntertainmentMenuManagement extends Component
         $getRecords = EntertainmentMenu::find($id);
         $this->editingItem = $getRecords->item;
         $this->editingAmount = $getRecords->amount;
-        $this->editingRequired = $getRecords->required;
-        $this->editingChargePerHour = $getRecords->charge_per_hour;
+        $this->editingRequired = $getRecords->required == 1 ? true : false;
+        $this->editingChargePerHour = $getRecords->charge_per_hour ==  1 ? true : false;
         $this->editingIsVehicle = $getRecords->is_vehicle == 1 ? true : false;
     }
 
@@ -90,11 +90,11 @@ class EntertainmentMenuManagement extends Component
         try {
 
             $this->validateOnly('editingcategory', ['editingItem' => 'required','editingAmount' => 'required']);
-            // dd($this->editingAmount);
+            // dd(($this->editingRequired ? 1 : 0));
             EntertainmentMenu::find($this->editingID)->update([
                 'item' => $this->editingItem,
                 'amount' => $this->editingAmount,
-                'required' => $this->editingRequired,
+                'required' => ($this->editingRequired ? 1 : 0),
                 'charge_per_hour' => $this->editingChargePerHour,
                 'is_vehicle' => $this->editingIsVehicle
             ]);

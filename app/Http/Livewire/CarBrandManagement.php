@@ -21,7 +21,7 @@ class CarBrandManagement extends Component
 
     protected $queryString = ['limit', 'search'];
 
-     public function updatingSearch()
+    public function updatingSearch()
     {
         $this->resetPage();
     }
@@ -30,7 +30,7 @@ class CarBrandManagement extends Component
     {
         $this->resetPage();
     }
-    
+
 
     public function createBrand()
     {

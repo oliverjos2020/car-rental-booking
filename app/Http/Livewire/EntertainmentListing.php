@@ -32,18 +32,17 @@ class EntertainmentListing extends Component
 
     public function mount()
     {
-        $this->selectedMenus = EntertainmentMenu::where('required', 1)->pluck('id')->toArray();
-        // $this->selected = 1;
-        // $this->event = "";
-        // $this->address = "";
-        // $this->participants = "";
-        // $this->hours = "";
-        // $this->no_of_stops = "";
+        // Pre-select all required menu items (these are mandatory and shown as checked/disabled in UI)
+        // Exclude vehicles (is_vehicle = 1) since vehicles are selected separately via dropdown
+        $this->selectedMenus = EntertainmentMenu::where('required', 1)
+            ->where('is_vehicle', '!=', 1)
+            ->pluck('id')
+            ->toArray();
     }
     public function updatedSelectedVehicle($value)
     {
         $this->vehicle = \App\Models\EntertainmentMenu::find($value);
-    
+
         if ($this->vehicle && !in_array($this->vehicle->id, $this->selectedMenus)) {
             $this->selectedMenus[] = $this->vehicle->id;
         }
@@ -53,14 +52,22 @@ class EntertainmentListing extends Component
 
     public function proceed(){
         // dd($this->selectedMenus);
-        $amount = 0; // Initialize $ammount as an integer
+        $totalAmount = 0; // Initialize total amount as an integer
         // dd($this->selectedMenus);
         foreach ($this->selectedMenus as $id) {
             // Retrieve the amount for the given ID and add it to the total
-            $menuAmount = EntertainmentMenu::where('id', $id)->value('amount');
-            $amount += $menuAmount;
+            $menuDetails = EntertainmentMenu::where('id', $id)->first();
+            $amount = $menuDetails->amount ?? 0;
+            $chargePerHour = $menuDetails->charge_per_hour ?? 0;
+
+            // If charged per hour, multiply by the hours from the booking form
+            if ($chargePerHour == 1) {
+                $totalAmount += $amount * $this->hours;
+            } else {
+                $totalAmount += $amount;
+            }
         }
-        // dd($amount);
+        // dd($totalAmount);
         // try{
             $this->validate([
                 'event' => ['required'],
@@ -84,9 +91,10 @@ class EntertainmentListing extends Component
                 'user_id' => auth()->user()->id,
                 'payment_status' => 0,
                 'status' => 0,
-                'amount' => $amount * $this->hours,
+                'amount' => $totalAmount,
                 'entertainment' => 1,
-                'stop_location' => $this->stop_location
+                'stop_location' => $this->stop_location,
+                'vehicle_id' => $this->vehicle->id
             ];
             // dd($data);
             BookingOrder::create($data);
@@ -114,4 +122,3 @@ class EntertainmentListing extends Component
     ->layout('components.home.home-master-3');
     }
 }
-

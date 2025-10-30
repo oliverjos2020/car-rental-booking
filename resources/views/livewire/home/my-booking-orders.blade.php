@@ -63,7 +63,7 @@
                                     <tr>
                                         <td>{{ ($myOrders->currentPage() - 1) * $myOrders->perPage() + $loop->iteration }}
                                         </td>
-                                        <td> <a href="@if(Auth::user()->role_id == 1) '/vendorManagement/approved/?uid={{ $order->vehicle->user->id }}&vehID={{$order->vehicle_id}}' @else # @endif">
+                                        <td> <a href="#">
                                             {{$order->event }}</a> </td>
                                         @if(Auth::user()->role_id == 1)
                                         <td>{{ $order->user->name }}</td>

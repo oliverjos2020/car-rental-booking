@@ -111,12 +111,12 @@
                                     @error('editingItem')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                    
+
                                 </td>
                                 </tr>
                                 <tr>
                                 <td colspan="5">
-                                    <input type="number" {{$ent->required == 1 ? 'checked:checked': 'checked:notchecked'}} wire:model="editingAmount" placeholder="amount..." class="form-control mx-1">
+                                    <input type="number" wire:model="editingAmount" placeholder="amount..." class="form-control mx-1">
 
                                     @error('editingAmount')
                                     <span class="text-danger">{{ $message }}</span>

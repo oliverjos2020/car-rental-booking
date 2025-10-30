@@ -311,6 +311,7 @@
                                     <li><a href="/brand">Car Brand</a></li>
                                     <li><a href="/priceSetup">Hire Price Setup</a></li>
                                     <li><a href="/entertainment-menu">Entertainment Menu</a></li>
+                                    <li><a href="/voucher">Voucher Setup</a></li>
                                 </ul>
                             </li>
                             <li>

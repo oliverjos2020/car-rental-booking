@@ -33,6 +33,7 @@ use App\Http\Livewire\EntertainmentCheckout;
 use App\Http\Controllers\RideOrderController;
 use App\Http\Livewire\BookingOrderManagement;
 use App\Http\Livewire\EntertainmentMenuManagement;
+use App\Http\Livewire\VoucherManagement;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
@@ -93,6 +94,7 @@ Route::get('/entertainment-listing', EntertainmentListing::class)->name('enterta
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/voucher', VoucherManagement::class)->name('voucher');
     Route::get('/booking', RideResults::class)->name('ride.results');
     Route::get('/test-direction', TestDirections::class)->name('testDirection');
     Route::get('/test-driver', TestDriver::class)->name('testDriver');

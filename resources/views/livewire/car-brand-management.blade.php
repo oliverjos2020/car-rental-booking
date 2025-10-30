@@ -5,23 +5,11 @@
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <!-- <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li> -->
-                    <!-- <li class="breadcrumb-item active">Welcome to Tax Drive Dashboard</li> -->
                 </ol>
             </div>
 
         </div>
     </div>
-
-
-    {{-- <div class="row mb-3">
-        <div class="col-md-2">
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal" id="addButtonx">
-                Create User
-            </button>
-        </div>
-
-    </div> --}}
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
